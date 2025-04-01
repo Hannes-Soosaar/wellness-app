@@ -1,4 +1,6 @@
+"use client";
 import React, { useState, useEffect } from 'react';
+import Button from './Button';
 
 interface UserProfile {
     id: string;
@@ -43,6 +45,9 @@ return (
       <h1 className="text-2xl font-semibold">{user?.name}</h1>
       <p>{user?.bio}</p>
       <p>Email: {user?.email}</p>
+      <Button label={'testButton'} onClick={function (): void {
+            throw new Error('Function not implemented.');
+        } }></Button>
     </div>
     );
 };

@@ -24,13 +24,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <header>This is the header</header>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        {/* Header */}
+        <header className ="header">  </header>
+          {/* Main content */}
+        <main className ="header">{children}</main>
+        {/* Footer */}
+        <footer className ="footer"></footer>
       </body>
-      <footer>This is the footer</footer>
     </html>
   );
 }
