@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
 interface UserProfile {
-
     id: string;
     name: string;
     email: string;
@@ -30,7 +29,6 @@ const UserProfile: React.FC = () => {
                 setLoading(false);
         } 
         };
-
         fetchUserData();
     }, []);
 
