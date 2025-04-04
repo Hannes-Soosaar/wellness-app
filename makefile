@@ -29,4 +29,7 @@ stopfe:
 
 #BE commands
 startbe:
+	cd backend && node server.js
 stopbe:
+
+#Python utils
