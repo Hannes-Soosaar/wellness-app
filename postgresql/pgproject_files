@@ -1,0 +1,2 @@
+The postgres server will be running in docker container, but will persist through volumes.
+
