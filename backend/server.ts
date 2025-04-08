@@ -1,9 +1,8 @@
 // launch the backend server.
 
-import express, { application } from 'express';
-import cors from 'cors';
-import jwt from 'jsonwebtoken';
-
+const express = require('express');
+const cors = require('cors');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 const secretKey ='secretKey'; // Replace with your actual secret key
@@ -20,7 +19,7 @@ app.use(cors({
 })
 );
 
-app.get('/api/test', (req, res) => {
+app.get('/api/login', (req, res) => {
     res.json({ message: 'Hello from the backend!' });
 });
 
