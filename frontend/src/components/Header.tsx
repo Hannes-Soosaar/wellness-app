@@ -1,5 +1,6 @@
 import React,{userEffect,userState, userContext, useEffect} from "react";
 import api from "../lib/axios";
+// import "./Header.css";
 
 
 const Header: React.FC = () => {
@@ -20,9 +21,20 @@ useEffect(() => {
         }
     };
     fetchData();
+}, [authToken]);
 
+
+return (
+    <header>
+      <nav>
+          <a href="/">Home</a>
+          <a href="/about">About</a>
+          <a href="/user">User</a>
+          <a href="/login">Login</a>
+      </nav>
+    </header>
+  );
 
 }
 
-}
-
+export default Header;
