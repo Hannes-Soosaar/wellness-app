@@ -15,21 +15,21 @@ const Login: React.FC = () => {
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     console.log("Login button clicked", email, password);
       event.preventDefault();  
+
       const loginData: LoginData = {
           email,
           password,
       };
       try{
-        const response = await api.post("/api/login", loginData);
+        const response = await api.post("/login", loginData);
         console.log(response.data);
         if (response.status === 200) {
           const { token } = response.data;
           localStorage.setItem("authToken", token);
-          window.location.href = "/dashboard";
+          window.location.href = "/";
         }else{
           console.error("Login failed:", response.data);
         }
-       
       } catch (error) {
         console.error("Login failed:", error);
       }

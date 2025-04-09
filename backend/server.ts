@@ -20,7 +20,7 @@ const pool = new Pool({
 app.use(express.json());
 
 app.use(cors({
-    origin: 'http://localhost:3000', // Adjust this to your frontend URL
+    origin: 'http://localhost:5173', // Adjust this to your frontend URL
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type'],
     credentials: true,
@@ -30,6 +30,11 @@ app.use(cors({
 app.get('/api/login', (req: any, res: any) => {
     console.log('Login endpoint hit');
     res.json({ message: 'Hello from the backend!' });
+});
+
+app.post('/api/login', (req: any, res: any) => {
+    console.log('Login endpoint hit', req.body);   // enter the logic for generating JWT token
+    res.json({ message: 'Hello from the backend!'});
 });
 
 app.get('/api/db-test', async (req: any, res: any) => {
