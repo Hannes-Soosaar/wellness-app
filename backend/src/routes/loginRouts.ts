@@ -8,6 +8,7 @@ dotenv.config();
 const router = Router();
 
 router.post('/login', async (req, res) => {
+  console.log('Login request received:', req.body);
   const { email, password } = req.body;
   try {
     const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
