@@ -52,6 +52,15 @@ return (
         <h2>Register</h2>
         <form>
         <div className="form-group">
+        <label htmlFor="username">Username</label>
+        <input type="username" 
+        id="username"
+         name="username" 
+         value ={username} 
+         onChange ={(e)=>setUsername(e.target.value)} 
+         required />
+      </div>
+        <div className="form-group">
         <label htmlFor="email">Email</label>
         <input type="email" 
         id="email"
@@ -60,7 +69,15 @@ return (
          onChange ={(e)=>setEmail(e.target.value)} 
          required />
       </div>
-
+        <div className="form-group">
+        <label htmlFor="confirm-email">Confirm Email</label>
+        <input type="confirm-email" 
+        id="confirm-email"
+         name="confirm-email" 
+         value ={confirmEmail} 
+         onChange ={(e)=>setConfirmEmail(e.target.value)} 
+         required />
+      </div>
       <div className="form-group">
         <label htmlFor="password">Password</label>
         <input type="password"
@@ -70,6 +87,16 @@ return (
           onChange ={(e)=>setPassword(e.target.value)}
         required />
       </div>
+      <div className="form-group">
+        <label htmlFor="confirm-password">Password</label>
+        <input type="confirm-password"
+         id="confirm-password"
+        name="confirm-password"
+          value ={confirmPassword}
+          onChange ={(e)=>setConfirmPassword(e.target.value)}
+        required />
+      </div>
+
 
       <button type="submit">Login</button>
 
