@@ -105,3 +105,5 @@ return (
 
 }
 
+export default Register;
+

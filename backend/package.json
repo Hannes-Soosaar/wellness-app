@@ -11,6 +11,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
+    "@types/cors": "^2.8.17",
     "@types/dotenv": "^8.2.3",
     "@types/express": "^5.0.1",
     "@types/express-session": "^1.18.1",
@@ -19,5 +20,9 @@
     "@types/pg": "^8.11.11",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "ts-node src/index.ts"
   }
 }

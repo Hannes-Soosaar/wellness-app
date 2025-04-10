@@ -1,50 +1,28 @@
+import pg from 'pg';
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+dotenv.config();
 
-
-const express = require('express');
-const cors = require('cors');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
-const {Pool} = require('pg');
-require('dotenv').config();
-const secretKey = process.env.SECRET_KEY;
-
+const { Pool } = pg;
 const app = express();
-
 const pool = new Pool({
-    user: process.env.DB_USER,
-    host: process.env.DB_HOST,
-    database: process.env.DB_NAME,
-    password: process.env.DB_PASSWORD,
-    port: Number(process.env.DB_PORT),
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
+  port: Number(process.env.DB_PORT),
 });
 
-app.use(express.json());
 
-app.use(cors({
-    origin: 'http://localhost:5173', // Adjust this to your frontend URL
+app.use(express.json());
+app.use(
+  cors({
+    origin: 'http://localhost:5173',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type'],
     credentials: true,
-})
+  })
 );
 
-app.get('/api/login', (req: any, res: any) => {
-    console.log('Login endpoint hit');
-    res.json({ message: 'Hello from the backend!' });
-});
-
-app.post('/api/login', (req: any, res: any) => {
-    console.log('Login endpoint hit', req.body);   // enter the logic for generating JWT token
-    res.json({ message: 'Hello from the backend!'});
-});
-
-app.get('/api/db-test', async (req: any, res: any) => {
-    const result = await pool.query('SELECT NOW()');
-    res.json({ message: 'Database connected successfully', time: result.rows[0].now });
-  });
-
-app.listen(5000, () => {
-    console.log('Server is running on http://localhost:5000');
-});
-
-
+export { app, pool };
