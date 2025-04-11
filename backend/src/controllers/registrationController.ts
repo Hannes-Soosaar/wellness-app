@@ -2,6 +2,7 @@ import { Request, Response, RequestHandler } from "express";
 import { v4 as uuidv4 } from "uuid";
 import pg from "../../server";
 import { hashPassword } from "../utils/crypto";
+import { sendVerificationEmail } from "../utils/emailService";
 
 const handleRegister: RequestHandler = async (req, res) => {
   console.log("We arrived at the register controller!");
@@ -43,6 +44,8 @@ const handleRegister: RequestHandler = async (req, res) => {
       messager: "Waiting for email confirmation",
       user: result.rows[0],
     });
+
+    sendVerificationEmail(email, verificationToken);
   } catch (err) {
     console.error("Error during user registration", err);
     res.status(500).json({ message: " Internal server error." });
