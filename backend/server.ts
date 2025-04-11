@@ -25,4 +25,4 @@ app.use(
   })
 );
 
-export { app, pool };
+export default {app, pool};

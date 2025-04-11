@@ -11,5 +11,18 @@
             "username": "hannes",
             "password": "secure!@#"
         }
-    ]
+    ],
+
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode" // Replace with your chosen formatter
+      },
+      "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode" // Replace with your chosen formatter
+      },
+      "github.copilot.enable": {
+        "*": false,
+        "plaintext": false,
+        "markdown": false,
+        "scminput": false
+      }
 }

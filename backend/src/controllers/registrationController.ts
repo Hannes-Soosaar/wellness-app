@@ -1,3 +1,8 @@
+import { Request, Response } from 'express';
+import pool from '../../server'
+import  hashPassword from '../utils/crypto'
+
+
 
 
 const handleRegister = (req, res) => {
