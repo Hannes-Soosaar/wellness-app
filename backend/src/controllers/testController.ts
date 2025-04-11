@@ -1,6 +1,6 @@
 import { Request, Response, RequestHandler } from "express";
 import pool from "../../server";
-import hashPassword from "../utils/crypto";
+import { hashPassword } from "../utils/crypto";
 
 const handleTest: RequestHandler = (req, res) => {
   console.log("We arrived at the test controller!");
