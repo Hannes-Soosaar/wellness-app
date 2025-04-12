@@ -44,8 +44,8 @@ const handleRegister: RequestHandler = async (req, res) => {
       messager: "Waiting for email confirmation",
       user: result.rows[0],
     });
-
-    sendVerificationEmail(email, verificationToken);
+    // TODO activate when moving on with User Verifications
+    // sendVerificationEmail(email, verificationToken);
   } catch (err) {
     console.error("Error during user registration", err);
     res.status(500).json({ message: " Internal server error." });
