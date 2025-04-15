@@ -2,7 +2,7 @@
 // Includes login, and register
 
 import { Router } from 'express'; 
-import handleLogin from '../controllers/loginController';
+import { handleLogin } from '../controllers/loginController';
 import handleRegister from '../controllers/registrationController';
 
 const apiRouter = Router();
