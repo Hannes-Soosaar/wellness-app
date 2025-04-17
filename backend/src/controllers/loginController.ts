@@ -28,6 +28,12 @@ const handleLogin: RequestHandler = async (req, res) => {
     const user = result.rows[0];
     const userPassword = await hashPassword(password);
 
+    if (user.password === userPassword) {
+      return res
+        .status(200)
+        .json({ message: "All good, user found", user: user });
+    }
+
     // TODO see if user exists, if it exists check if password is correct
     // TODO if password is correct, generate a JWT token and send it back to the client
     // TODO if password is not correct, send an error message
