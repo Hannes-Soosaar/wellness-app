@@ -1,6 +1,6 @@
 import { Request, Response, RequestHandler } from "express";
 import pg from "../../server";
-import { hashPassword } from "../utils/crypto";
+import { hashPassword, verifyPassword } from "../utils/crypto";
 import handleProfile from "./profileController";
 import { generateJWT, verifyJWT } from "../utils/tokens";
 
@@ -26,13 +26,34 @@ const handleLogin: RequestHandler = async (req, res) => {
     }
 
     const user = result.rows[0];
-    const userPassword = await hashPassword(password);
 
-    if (user.password === userPassword) {
-      return res
-        .status(200)
-        .json({ message: "All good, user found", user: user });
+    try {
+      const isValidUser: boolean = await verifyPassword(
+        password,
+        user.password
+      );
+      if (isValidUser) {
+        const token = generateJWT(user.id, user.email);
+        return res
+          .status(200)
+          .json({ message: "All good, user found", token, user: user.email });
+      }
+    } catch (error) {
+      console.error("Error verifying password:", error);
+      return res.status(401).json({
+        message: "Please check your login details, password not valid",
+      });
     }
+
+    console.log("found user", result.rows[0]);
+    // console.log("User password", userPassword);
+    console.log("DB password", user.password);
+
+    // if (user.password === userPassword) {
+    //   return res
+    //     .status(200)
+    //     .json({ message: "All good, user found", user: user });
+    // }
 
     // TODO see if user exists, if it exists check if password is correct
     // TODO if password is correct, generate a JWT token and send it back to the client
@@ -40,6 +61,7 @@ const handleLogin: RequestHandler = async (req, res) => {
   } catch (error) {
     console.error("Error during login:", error);
     res.status(500).json({ message: "Internal server error" });
+    return res;
   }
 
   // res.status(200).json({ message: "Task completed" });
