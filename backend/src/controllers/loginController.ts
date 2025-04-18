@@ -46,25 +46,12 @@ const handleLogin: RequestHandler = async (req, res) => {
     }
 
     console.log("found user", result.rows[0]);
-    // console.log("User password", userPassword);
     console.log("DB password", user.password);
-
-    // if (user.password === userPassword) {
-    //   return res
-    //     .status(200)
-    //     .json({ message: "All good, user found", user: user });
-    // }
-
-    // TODO see if user exists, if it exists check if password is correct
-    // TODO if password is correct, generate a JWT token and send it back to the client
-    // TODO if password is not correct, send an error message
   } catch (error) {
     console.error("Error during login:", error);
     res.status(500).json({ message: "Internal server error" });
     return res;
   }
-
-  // res.status(200).json({ message: "Task completed" });
 };
 
 const handleLogout: RequestHandler = async (req, res) => {

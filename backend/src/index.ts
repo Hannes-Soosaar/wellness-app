@@ -2,6 +2,7 @@ import server from '../server';
 import userRouter from './routes/userRouts';
 import apiRouter from './routes/apiRouts';
 import testRouter from './routes/testRouts'
+import authRouter from './routes/authRouts';
 
 // start the server
 server.app.listen(5000, () => {
@@ -11,7 +12,8 @@ server.app.listen(5000, () => {
 // handle routes 
 server.app.use('/api', apiRouter);
 server.app.use('/user', userRouter);
-server.app.use('/test',testRouter);
+server.app.use('/test', testRouter);
+server.app.use('/auth', authRouter);
 
 server.app.post('/test', async (req, res) => {
 console.log('Test request received:', req.body);

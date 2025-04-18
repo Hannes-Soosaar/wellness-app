@@ -1,5 +1,6 @@
 import React from "react";
 import api from "../lib/axios";
+import GoogleRegisterButton from "../components/GoogleRegisterButton";
 
 interface RegistrationForm {
   username: string;
@@ -106,6 +107,7 @@ const Register: React.FC = () => {
 
         <button type="submit">Register</button>
       </form>
+      <GoogleRegisterButton />
     </div>
   );
 };
