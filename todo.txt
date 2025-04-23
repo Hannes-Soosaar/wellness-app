@@ -1,1 +1,101 @@
 Fill up the todo
+
+
+The README file contains a clear project overview, setup instructions, and usage guide
+
+
+
+Student can explain how PII removal affects AI model's ability to generate personalized recommendations
+Student can explain their strategy for detecting and handling AI hallucinations in health recommendations
+Student can explain the security implications of access token duration in JWT authentication
+Student can explain how normalization of health metrics impacts data visualization accuracy
+Student can explain how BMI classifications affect wellness score calculation
+Student can explain their choice of AI model(s) based on response quality and latency requirements
+Student can explain what model capabilities were most important for their implementation
+Student can explain the difference between AI response caching and regeneration
+Student can explain how context length affects AI response quality in health recommendations
+Student can explain their prompt engineering approach to ensure consistent health recommendation format
+Student can explain the tradeoffs between zero-shot and few-shot prompting in their implementation
+Student can explain the impact of missing health data on AI recommendation accuracy
+Student can explain their approach to preventing API abuse through rate limiting
+Student can explain the tradeoffs of their chosen data visualization library
+
+DONE: User receives an email with verification link after registration
+DONE Access token expires after [x] minutes of inactivity
+DONE: The code is well-organized, properly commented, and follows best practices for the chosen programming language(s)
+
+PROGRESS: Authentication options include email-password and at least 2 OAuth providers (Google/GIt +  1 more)
+
+TODO: Password reset is handled via email
+
+TODO: Users can optinonally enable two-factor authentication
+TODO: Verify functionality of 2FA
+
+TODO: User cannot access protected routes without verifying email
+
+TODO: New access token is issued when valid refresh token is provided
+TODO: Verify receiving new access token by sending a request with expired access token and valid refresh token
+
+
+TODO: Platform provides clear data usage consent with explicit user approval before data collection
+        -At minimum, it includes what data is collected and how it's used
+
+----        
+
+TODO: Platform collects basic demographics, physical metrics, lifestyle indicators, dietary preferences and restrictions, wellness goals.
+TODO: User data is encrypted in transit and at rest
+TODO: Platform collects initial fitness assessment data
+TODO: Health metrics are converted to standard units before storage 
+TODO: Platform allows user to change their data sharing preferences. ? what does this mean ?
+TODO: Historical weight changes are tracked with timestamps
+TODO: Verify each weight entry has a unique timestamp by adding multiple entries and checking their history display
+TODO: System prevents duplicate activity entries for the same timestamp
+TODO: Wellness score changes when user updates their weekly activity frequency
+TODO: System recalculates wellness score components when any contributing metric changes
+TODO: Verify scores update when changing: BMI range, activity level, goal progress, or health habits
+TODO: System generates different health insights when user's goals change
+TODO: Verify insight adjustment after changing user goals from one type to another (e.g., weight loss to muscle gain)
+
+
+TODO: AI recommendations include specific references to user's stated fitness goals
+TODO: Verify recommendations explicitly mention and align with the specific fitness goal set in user profile
+TODO: AI health insights exclude any personally identifiable information
+TODO: System implements response validation to filter out recommendations that don't match user's health restrictions
+    - Ask the students to describe their approach
+
+TODO: System displays cached recommendations when AI service is unavailable
+TODO: Verify system shows most recent cached recommendations when AI service connection is disabled
+TODO: System generates weekly and monthly health summaries including progress and key metrics
+TODO: Verify health summary includes week's activity levels, wellness score changes, and progress towards goals
+TODO: Health Dashboard shows BMI, wellness score, progress towards goals and AI insights based on user data
+TODO: Progress chart shows weight tracking over time, wellness score evolution and activity level changes
+
+TODO: Goal progress includes milestone tracking
+    Miles tone example:
+        Weight: every 5% towards goal
+        Activity: each additional day/week
+        Habits: streak achievements
+        Comparison view shows current vs target metrics, weekly/monthly progress comparison, health trend analysis and AI recommendations
+
+
+TODO: AI insights are visually presented with priority-based highlighting
+TODO: Verify insights are displayed with high/medium/low priority indicators and include expandable details
+TODO: Weight progress chart displays goal weight as a reference line
+TODO: Charts resize without data loss on mobile devices
+TODO: Error messages appear without page reload when API requests fail
+
+TODO: Submit health profile form with invalid BMI value (e.g., -1) and verify error message appears without page refresh
+TODO: System blocks rapid-fire API requests from the same user
+TODO: Verify rate limit kicks in after [x] requests within 1 minute
+
+TODO: Health data export includes all historical metrics and timestamps
+TODO: Dashboard loads placeholder UI when data is being fetched
+
+
+
+Extra
+Quality of AI-generated health insights and progress evaluations during testing
+Insights and evaluations generated are accurate, relevant, actionable
+Relevance and practicality of AI-generated weekly and monthly health summaries and recommendations
+System's handling of AI service limitations during testing (rate limits, availability)
+Student has implemented additional technologies, security enhancements and/or features beyond the core requirements
