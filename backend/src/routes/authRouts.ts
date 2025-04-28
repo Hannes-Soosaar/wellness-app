@@ -1,8 +1,14 @@
 import { Router } from "express";
+import {
+  registerWithGoogle,
+  googleCallback,
+  test,
+} from "../controllers/authController";
 
 const authRouter = Router();
 
-authRouter.get("/auth/google/register", registerWithGoogle); // from Front End
-authRouter.get("/auth/google/callback", googleCallback);
+authRouter.get("/google/register", registerWithGoogle); // from Front End
+authRouter.get("/google/callback", googleCallback);
+authRouter.get("/google/test", test); // from Front End
 
 export default authRouter;

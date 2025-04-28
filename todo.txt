@@ -1,5 +1,3 @@
-Fill up the todo
-
 
 The README file contains a clear project overview, setup instructions, and usage guide
 

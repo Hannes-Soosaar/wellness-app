@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import pg from "../../server";
 import { hashPassword } from "../utils/crypto";
 import { sendVerificationEmail } from "../utils/emailService";
+import { GoogleUser } from "../models/googleUserModel";
 
 const handleRegister: RequestHandler = async (req, res) => {
   console.log("We arrived at the register controller!");
@@ -44,15 +45,66 @@ const handleRegister: RequestHandler = async (req, res) => {
       messager: "Waiting for email confirmation",
       user: result.rows[0],
     });
-    // TODO activate when moving on with User Verifications
-    // sendVerificationEmail(email, verificationToken);
+
+    sendVerificationEmail(email, verificationToken);
   } catch (err) {
     console.error("Error during user registration", err);
     res.status(500).json({ message: " Internal server error." });
   }
 };
 
-//TODO Add register with Oauth google
+
+
+
+
+export const handleRegisterWithGoogle = async (user: any): Promise<{ state: string,message: string} > => {
+
+  console.log("Register with google");
+  console.log("user to register", user);
+
+  let newUser: GoogleUser = {
+    id: user.id,
+    email: user.email,
+  }
+
+  console.log("new user", newUser);
+  try {
+    const existingUser = await pg.pool.query(
+      "SELECT * FROM users WHERE email= $1",
+      [newUser.email]
+    );
+  
+  
+    if (existingUser.rows.length > 0) {
+      console.log("User already exists");
+      return { state : "error", message : "User already exists" };
+    }
+    const verificationToken = uuidv4();
+
+    await pg.pool.query(
+      `
+      INSERT INTO users(google_id, email, verification_token)
+      VALUES ($1, $2)
+      `,
+      [newUser.id, newUser.email, verificationToken]
+    );
+    sendVerificationEmail(newUser.email, verificationToken);
+
+    return { state: "success", message: "new user created" };
+    
+  } catch (error) {
+    console.error("Error during user registration", error);
+    return { state: "error", message: "Internal server error" };
+  }
+  
+};
+
+export const handleRegisterWithGitHub = async (gitUser:any) Promise<{ state: string,message: string} > => { 
+  console.log("We are Registring with github register controller!");
+  console.log("user to register", gitUser);
+    return { state: "error", message: "Not implemented yet" };
+};
+
 //TODO add register with Oauth git
 
 export default handleRegister;

@@ -9,7 +9,7 @@ interface loginRequest {
   password: string;
 }
 
-const handleLogin: RequestHandler = async (req, res) => {
+const handleLogin: RequestHandler = async (req: Request, res: Response) => {
   console.log("We arrived at the login controller!");
   console.log("request body", req.body);
 
@@ -20,9 +20,10 @@ const handleLogin: RequestHandler = async (req, res) => {
       email,
     ]);
     if (result.rows.length === 0) {
-      return res
+      res
         .status(404)
         .json({ message: "Please check your login details, user not found" });
+      return;
     }
 
     const user = result.rows[0];
@@ -34,15 +35,17 @@ const handleLogin: RequestHandler = async (req, res) => {
       );
       if (isValidUser) {
         const token = generateJWT(user.id, user.email);
-        return res
+        res
           .status(200)
           .json({ message: "All good, user found", token, user: user.email });
+        return;
       }
     } catch (error) {
       console.error("Error verifying password:", error);
-      return res.status(401).json({
+      res.status(401).json({
         message: "Please check your login details, password not valid",
       });
+      return;
     }
 
     console.log("found user", result.rows[0]);
@@ -50,12 +53,13 @@ const handleLogin: RequestHandler = async (req, res) => {
   } catch (error) {
     console.error("Error during login:", error);
     res.status(500).json({ message: "Internal server error" });
-    return res;
+    return;
   }
 };
 
 const handleLogout: RequestHandler = async (req, res) => {
   console.log("Logout started");
   res.status(200).json({ message: "Task completed" });
+  return;
 };
 export { handleLogin, handleLogout };
