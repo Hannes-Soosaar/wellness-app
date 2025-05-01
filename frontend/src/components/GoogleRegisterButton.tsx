@@ -1,8 +1,10 @@
 import { FaGoogle } from "react-icons/fa";
+import api from "../lib/axios";
 
 const GoogleRegisterButton = () => {
-  const handleGoogleRegister = () => {
-    window.location.href = "/google/register";
+  const handleGoogleRegister = async () => {
+    console.log("Google Register button clicked");
+    window.location.href = "http://localhost:5000/auth/google/register"; //TODO: set this in the env file
   };
 
   return (

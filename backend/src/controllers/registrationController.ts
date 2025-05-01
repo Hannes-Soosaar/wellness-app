@@ -53,19 +53,16 @@ const handleRegister: RequestHandler = async (req, res) => {
   }
 };
 
-
-
-
-
-export const handleRegisterWithGoogle = async (user: any): Promise<{ state: string,message: string} > => {
-
+export const handleRegisterWithGoogle = async (
+  user: any
+): Promise<{ state: string; message: string }> => {
   console.log("Register with google");
   console.log("user to register", user);
 
   let newUser: GoogleUser = {
     id: user.id,
     email: user.email,
-  }
+  };
 
   console.log("new user", newUser);
   try {
@@ -73,11 +70,10 @@ export const handleRegisterWithGoogle = async (user: any): Promise<{ state: stri
       "SELECT * FROM users WHERE email= $1",
       [newUser.email]
     );
-  
-  
+
     if (existingUser.rows.length > 0) {
       console.log("User already exists");
-      return { state : "error", message : "User already exists" };
+      return { state: "error", message: "User already exists" };
     }
     const verificationToken = uuidv4();
 
@@ -91,19 +87,17 @@ export const handleRegisterWithGoogle = async (user: any): Promise<{ state: stri
     sendVerificationEmail(newUser.email, verificationToken);
 
     return { state: "success", message: "new user created" };
-    
   } catch (error) {
     console.error("Error during user registration", error);
     return { state: "error", message: "Internal server error" };
   }
-  
 };
 
-export const handleRegisterWithGitHub = async (gitUser:any) Promise<{ state: string,message: string} > => { 
-  console.log("We are Registring with github register controller!");
-  console.log("user to register", gitUser);
-    return { state: "error", message: "Not implemented yet" };
-};
+// export const handleRegisterWithGitHub = async (gitUser:any) Promise<{ state: string,message: string} > => {
+//   console.log("We are Registring with github register controller!");
+//   console.log("user to register", gitUser);
+//     return { state: "error", message: "Not implemented yet" };
+// };
 
 //TODO add register with Oauth git
 

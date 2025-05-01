@@ -41,9 +41,11 @@ TODO: Platform provides clear data usage consent with explicit user approval bef
 --        
 
 TODO: Platform collects basic demographics, physical metrics, lifestyle indicators, dietary preferences and restrictions, wellness goals.
+
 TODO: User data is encrypted in transit and at rest
+
 TODO: Platform collects initial fitness assessment data
-TODO: Health metrics are converted to standard units before storage 
+TODO: Health metrics are converted to standard units before storage.
 TODO: Platform allows user to change their data sharing preferences. ? what does this mean ?
 TODO: Historical weight changes are tracked with timestamps
 TODO: Verify each weight entry has a unique timestamp by adding multiple entries and checking their history display
@@ -57,6 +59,7 @@ TODO: Verify insight adjustment after changing user goals from one type to anoth
 
 TODO: AI recommendations include specific references to user's stated fitness goals
 TODO: Verify recommendations explicitly mention and align with the specific fitness goal set in user profile
+
 TODO: AI health insights exclude any personally identifiable information
 TODO: System implements response validation to filter out recommendations that don't match user's health restrictions
     - Ask the students to describe their approach

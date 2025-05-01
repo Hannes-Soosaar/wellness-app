@@ -12,7 +12,7 @@ import Register from "./pages/Register";
 const App: React.FC = () => {
   return (
     <div className="container">
-      <Header />
+      <Header/>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
@@ -20,7 +20,7 @@ const App: React.FC = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Routes>
-      <Footer />
+      <Footer/>
     </div>
   );
 };
