@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS users (
     failed_attempts INT DEFAULT 0,
     locked_until TIMESTAMP,
     email TEXT UNIQUE NOT NULL,
-    password TEXT NOT NULL,
+    password TEXT ,
     is_verified BOOLEAN DEFAULT FALSE,
     last_login TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -73,28 +73,26 @@ VALUES
 -- );
 
 
-CREATE TABLE IF NOT EXISTS fitness_goals (
-    id SERIAL PRIMARY KEY,
-    user_id UUID NOT NULL,
-    goal_type VARCHAR(50) NOT NULL, -- e.g., weight loss, muscle gain, endurance
-    target_value DECIMAL(10, 2) NOT NULL,
-    current_value DECIMAL(10, 2) NOT NULL,
-    start_date DATE NOT NULL,
-    end_date DATE NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-);
+-- CREATE TABLE IF NOT EXISTS fitness_goals (
+--     id SERIAL PRIMARY KEY,
+--     user_id UUID NOT NULL,
+--     goal_type VARCHAR(50) NOT NULL, -- e.g., weight loss, muscle gain, endurance
+--     target_value DECIMAL(10, 2) NOT NULL,
+--     current_value DECIMAL(10, 2) NOT NULL,
+--     start_date DATE NOT NULL,
+--     end_date DATE NOT NULL,
+--     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+-- );
 
-CREATE TABLE IF NOT EXISTS dietary_preferences (
-    id SERIAL PRIMARY KEY,
-    user_id UUID NOT NULL,
-    preference_type VARCHAR(50) NOT NULL, -- e.g., vegetarian, vegan, keto
-    description TEXT,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-);
+-- CREATE TABLE IF NOT EXISTS dietary_preferences (
+--     id SERIAL PRIMARY KEY,
+--     user_id UUID NOT NULL,
+--     preference_type VARCHAR(50) NOT NULL, -- e.g., vegetarian, vegan, keto
+--     description TEXT,
+--     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+-- );
 
-CREATE TABLE IF NOT EXISTS user_profile(
+-- CREATE TABLE IF NOT EXISTS user_profile(
 
-
-
-);
+-- );
 

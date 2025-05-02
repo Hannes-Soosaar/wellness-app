@@ -1,5 +1,4 @@
 import { FaGoogle } from "react-icons/fa";
-import api from "../lib/axios";
 
 const GoogleRegisterButton = () => {
   const handleGoogleRegister = async () => {
@@ -9,7 +8,7 @@ const GoogleRegisterButton = () => {
 
   return (
     <button onClick={handleGoogleRegister} className="google-register-button">
-      <FaGoogle className="mr-2" />
+      <FaGoogle />
       Register with Google
     </button>
   );

@@ -40,6 +40,8 @@ TODO: Platform provides clear data usage consent with explicit user approval bef
         -At minimum, it includes what data is collected and how it's used
 --        
 
+
+
 TODO: Platform collects basic demographics, physical metrics, lifestyle indicators, dietary preferences and restrictions, wellness goals.
 
 TODO: User data is encrypted in transit and at rest

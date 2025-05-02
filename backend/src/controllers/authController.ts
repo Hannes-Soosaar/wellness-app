@@ -6,9 +6,15 @@ import { handleRegisterWithGoogle } from "./registrationController";
 
 dotenv.config();
 
+// Google
 const redirectUri: string =
   process.env.REDIRECT_URL_GOOGLE ||
   "http://localhost:5000/auth/google/callback";
+
+// Discord
+const redirectUriDiscord: string =
+  process.env.REDIRECT_URL_DISCORD ||
+  "http://localhost:5000/auth/discord/callback";
 
 export const registerWithGoogle = (req: Request, res: Response): void => {
   console.log("Register with Google started");
@@ -30,6 +36,12 @@ export const registerWithGoogle = (req: Request, res: Response): void => {
     options as unknown as Record<string, string>
   ).toString(); // the URLSearchParams constructor expects a record of string key-value pairs hence a direct cast with the interface is not possible.
   res.redirect(`${rootUrl}?${qs}`);
+};
+
+export const registerWithDiscord = (req: Request, res: Response): void => {
+  console.log("Register with Discord started");
+  const rootUrl = "https://discord.com/api/oauth2/authorize";
+  res.status(200).json({ message: "Test function works" });
 };
 
 export const googleCallback = async (
@@ -76,9 +88,20 @@ export const googleCallback = async (
     const user = userInfoResponse.data;
 
     console.log("User info:", user);
-    handleRegisterWithGoogle(user);
+    const registrationResult = await handleRegisterWithGoogle(user);
 
-    res.json(user);
+    if (registrationResult.state === "success") {
+      // Redirect to the frontend login screen with a success message
+      res.redirect("http://localhost:5173/login");
+    } else {
+      // Redirect to the frontend login screen with an error message
+      res.redirect(
+        "http://localhost:5173/register?status=error&message=" +
+          encodeURIComponent(registrationResult.message)
+      );
+    }
+
+    // res.json(user);
   } catch (error) {
     console.error("Error during Google callback:", error);
     res.status(500).json({ message: "Internal server error" });

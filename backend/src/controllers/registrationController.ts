@@ -80,12 +80,11 @@ export const handleRegisterWithGoogle = async (
     await pg.pool.query(
       `
       INSERT INTO users(google_id, email, verification_token)
-      VALUES ($1, $2)
+      VALUES ($1, $2, $3)
       `,
       [newUser.id, newUser.email, verificationToken]
     );
     sendVerificationEmail(newUser.email, verificationToken);
-
     return { state: "success", message: "new user created" };
   } catch (error) {
     console.error("Error during user registration", error);
