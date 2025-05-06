@@ -3,7 +3,7 @@ import {
   registerWithDiscord,
   registerWithGoogle,
   googleCallback,
-  //   discordCallback,
+  discordCallback,
   test,
 } from "../controllers/authController";
 
@@ -14,6 +14,6 @@ authRouter.get("/google/callback", googleCallback);
 authRouter.get("/google/test", test); // from Front End
 authRouter.get("/discord/test", test); // from Front End
 authRouter.get("/discord/register", registerWithDiscord);
-// authRouter.get("/discord/callback", discordCallback);
+authRouter.get("/discord/callback", discordCallback);
 
 export default authRouter;

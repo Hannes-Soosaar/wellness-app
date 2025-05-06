@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import dotenv from "dotenv";
-import { GoogleAuthOptions } from "../models/authModels";
+import { DiscordAuthOptions, GoogleAuthOptions } from "../models/authModels";
 import axios from "axios";
 import { handleRegisterWithGoogle } from "./registrationController";
 
@@ -15,6 +15,8 @@ const redirectUri: string =
 const redirectUriDiscord: string =
   process.env.REDIRECT_URL_DISCORD ||
   "http://localhost:5000/auth/discord/callback";
+
+//Functions
 
 export const registerWithGoogle = (req: Request, res: Response): void => {
   console.log("Register with Google started");
@@ -34,14 +36,87 @@ export const registerWithGoogle = (req: Request, res: Response): void => {
   };
   const qs: string = new URLSearchParams(
     options as unknown as Record<string, string>
-  ).toString(); // the URLSearchParams constructor expects a record of string key-value pairs hence a direct cast with the interface is not possible.
+  ).toString();
   res.redirect(`${rootUrl}?${qs}`);
 };
 
 export const registerWithDiscord = (req: Request, res: Response): void => {
   console.log("Register with Discord started");
   const rootUrl = "https://discord.com/api/oauth2/authorize";
-  res.status(200).json({ message: "Test function works" });
+  const options: DiscordAuthOptions = {
+    redirect_uri: redirectUriDiscord,
+    client_id: process.env.DISCORD_CLIENT_ID || "1367455291721121865", // Replace with your Discord client ID
+    access_type: "offline",
+    response_type: "code",
+    prompt: "consent",
+    scope: ["identify", "email"].join(" "),
+  };
+
+  const qs: string = new URLSearchParams(
+    options as unknown as Record<string, string>
+  ).toString(); // the URLSearchParams constructor expects a record of string key-value pairs hence a direct cast with the interface is not possible.
+  res.redirect(`${rootUrl}?${qs}`);
+};
+
+export const discordCallback = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const code = req.query.code as string;
+
+  if (!code) {
+    res.status(400).json({ message: "Missing authorization code" });
+    return;
+  }
+
+  try {
+    const tokenPayload = new URLSearchParams();
+    tokenPayload.append("code", code);
+    tokenPayload.append("client_id", process.env.DISCORD_CLIENT_ID || "");
+    tokenPayload.append(
+      "client_secret",
+      process.env.DISCORD_CLIENT_SECRET || ""
+    );
+    tokenPayload.append("redirect_uri", redirectUriDiscord);
+    tokenPayload.append("grant_type", "authorization_code");
+
+    const tokenResponse = await axios.post(
+      "https://discord.com/api/oauth2/token",
+      tokenPayload.toString(),
+      {
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      }
+    );
+
+    const { access_token } = tokenResponse.data;
+
+    const userInfoResponse = await axios.get(
+      "https://discord.com/api/v10/users/@me",
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+    const user = userInfoResponse.data;
+
+    const registrationResult = await handleRegisterWithGoogle(user);
+
+    if (registrationResult.state === "success") {
+      res.redirect("http://localhost:5173/login");
+    } else {
+      res.redirect(
+        "http://localhost:5173/register?status=error&message=" +
+          encodeURIComponent(registrationResult.message)
+      );
+    }
+
+    console.log("User info:", user);
+  } catch (error) {
+    console.error("Error during Discord callback:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };
 
 export const googleCallback = async (
@@ -91,10 +166,8 @@ export const googleCallback = async (
     const registrationResult = await handleRegisterWithGoogle(user);
 
     if (registrationResult.state === "success") {
-      // Redirect to the frontend login screen with a success message
       res.redirect("http://localhost:5173/login");
     } else {
-      // Redirect to the frontend login screen with an error message
       res.redirect(
         "http://localhost:5173/register?status=error&message=" +
           encodeURIComponent(registrationResult.message)

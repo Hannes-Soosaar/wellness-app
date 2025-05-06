@@ -98,6 +98,11 @@ export const handleRegisterWithGoogle = async (
 //     return { state: "error", message: "Not implemented yet" };
 // };
 
-//TODO add register with Oauth git
+export const handleRegisterWithDiscord = async (
+  user: any
+): Promise<{ state: string; message: string }> => {
+  console.log("Register with discord");
+  console.log("user to register", user);
+};
 
 export default handleRegister;

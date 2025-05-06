@@ -34,7 +34,7 @@ const handleLogin: RequestHandler = async (req: Request, res: Response) => {
         user.password
       );
       if (isValidUser) {
-        const token = generateJWT(user.id, user.email);
+        const token = generateJWT(user.id);
         res
           .status(200)
           .json({ message: "All good, user found", token, user: user.email });

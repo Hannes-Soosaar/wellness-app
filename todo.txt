@@ -29,12 +29,10 @@ PROGRESS: Authentication options include email-password and at least 2 OAuth pro
 TODO: Password reset is handled via email
 TODO: Users can optinonally enable two-factor authentication
 TODO: Verify functionality of 2FA
-
-TODO: User cannot access protected routes without verifying email
+TODO: User cannot access protected routes without verifying email 
 
 TODO: New access token is issued when valid refresh token is provided
 TODO: Verify receiving new access token by sending a request with expired access token and valid refresh token
-
 
 TODO: Platform provides clear data usage consent with explicit user approval before data collection
         -At minimum, it includes what data is collected and how it's used
@@ -43,7 +41,6 @@ TODO: Platform provides clear data usage consent with explicit user approval bef
 
 
 TODO: Platform collects basic demographics, physical metrics, lifestyle indicators, dietary preferences and restrictions, wellness goals.
-
 TODO: User data is encrypted in transit and at rest
 
 TODO: Platform collects initial fitness assessment data
