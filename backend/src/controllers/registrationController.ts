@@ -16,6 +16,8 @@ const handleRegister: RequestHandler = async (req, res) => {
       return;
     }
 
+    console.log("Email to register", email);
+
     const existingUser = await pg.pool.query(
       "SELECT * FROM users WHERE email= $1",
       [email]
@@ -25,8 +27,9 @@ const handleRegister: RequestHandler = async (req, res) => {
       res.status(400).json({ message: "Error creating user" });
       return;
     }
-
+    console.log("Password to hash", password);
     const hashedPassword = await hashPassword(password);
+    console.log("hashed password", hashedPassword);
 
     const verificationToken = uuidv4();
 

@@ -8,4 +8,9 @@ const handleUser: RequestHandler = (req, res) => {
   res.status(200).json({ message: "Task completed" });
 };
 
-export default handleUser;
+const handleIsUser: RequestHandler = async (req, res) => {
+  res.status(200).json({ message: "Has token and is active user" });
+};
+
+export default { handleUser, handleIsUser };
+hann;

@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({ path: "../.env" });
 
 const SECRET_KEY: jwt.Secret = process.env.SECRET_KEY || "";
 const JWT_EXPIRATION = process.env.JWT_EXPIRATION || "1h";

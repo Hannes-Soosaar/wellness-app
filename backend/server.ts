@@ -2,7 +2,7 @@ import pg from "pg";
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({ path: "../.env" });
 
 const { Pool } = pg;
 const app = express();

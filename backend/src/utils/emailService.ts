@@ -1,6 +1,8 @@
 import { Resend } from "resend";
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({ path: "../.env" });
+
+console.log("Resend API Key:", process.env.RESEND_API);
 
 const resend = new Resend(process.env.RESEND_API);
 

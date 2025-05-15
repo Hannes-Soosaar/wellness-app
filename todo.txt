@@ -27,11 +27,15 @@ DONE: The code is well-organized, properly commented, and follows best practices
 PROGRESS: Authentication options include email-password and at least 2 OAuth providers (Google/GIt +  1 more)
 
 TODO: Password reset is handled via email
+
 TODO: Users can optinonally enable two-factor authentication
 TODO: Verify functionality of 2FA
-TODO: User cannot access protected routes without verifying email 
 
-TODO: New access token is issued when valid refresh token is provided
+TODO: User cannot access protected routes without verifying email // no login without being verified.
+
+TODO: New access token is issued when valid refresh token is provided // add token logic 
+
+
 TODO: Verify receiving new access token by sending a request with expired access token and valid refresh token
 
 TODO: Platform provides clear data usage consent with explicit user approval before data collection
