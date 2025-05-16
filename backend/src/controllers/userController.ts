@@ -13,4 +13,3 @@ const handleIsUser: RequestHandler = async (req, res) => {
 };
 
 export default { handleUser, handleIsUser };
-hann;
