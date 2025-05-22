@@ -13,7 +13,11 @@ import api from "./lib/axios";
 
 const App: React.FC = () => {
   const authToken = localStorage.getItem("authToken");
-  console.log("Auth token:", authToken);
+  console.log("Auth token from local storage:", authToken);
+
+  if (!authToken) {
+    console.log("No auth token found");
+  }
 
   useEffect(() => {
     if (!authToken || authToken === "undefined") {
@@ -22,7 +26,6 @@ const App: React.FC = () => {
     }
     const fetchData = async () => {
       try {
-        // This endpoint is not implemented
         const response = await api.get("/api/user", {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -50,5 +53,4 @@ const App: React.FC = () => {
     </div>
   );
 };
-
 export default App;

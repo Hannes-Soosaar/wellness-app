@@ -26,6 +26,7 @@ function verifyJWT(token: string): string | jwt.JwtPayload {
     throw new Error("Invalid token");
   }
 }
+
 function verifyJWTRefresh(token: string): string | jwt.JwtPayload {
   try {
     return jwt.verify(token, SECRET_KEY_REFRESH);

@@ -20,6 +20,7 @@ const handleLogin: RequestHandler = async (req: Request, res: Response) => {
       email,
     ]);
     if (result.rows.length === 0) {
+      console.log("user not found", result.rows);
       res
         .status(404)
         .json({ message: "Please check your login details, user not found" });
@@ -28,6 +29,7 @@ const handleLogin: RequestHandler = async (req: Request, res: Response) => {
 
     const user = result.rows[0];
 
+    console.log("user found", user);
     try {
       const isValidUser: boolean = await verifyPassword(
         password,
@@ -64,6 +66,5 @@ const handleLogout: RequestHandler = async (req, res) => {
 };
 export { handleLogin, handleLogout };
 
-
 //TODO: Login with discord
-//TODO: Login with google  
+//TODO: Login with google
