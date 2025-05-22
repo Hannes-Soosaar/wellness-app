@@ -3,7 +3,7 @@
 
 import { Router } from "express";
 import { handleLogin } from "../controllers/loginController";
-import handleRegister from "../controllers/registrationController";
+import { handleRegister } from "../controllers/registrationController";
 import { handleIsUser } from "../controllers/userController"; // Ensure isUserAuthenticated is a valid middleware
 
 const apiRouter = Router();

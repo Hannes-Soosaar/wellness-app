@@ -8,4 +8,4 @@ const handleTest: RequestHandler = (req, res) => {
   res.status(200).json({ message: "Task completed" });
 };
 
-export default handleTest;
+export { handleTest };

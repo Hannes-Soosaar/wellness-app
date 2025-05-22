@@ -63,3 +63,7 @@ const handleLogout: RequestHandler = async (req, res) => {
   return;
 };
 export { handleLogin, handleLogout };
+
+
+//TODO: Login with discord
+//TODO: Login with google  

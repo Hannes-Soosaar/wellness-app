@@ -9,6 +9,8 @@ CREATE TABLE IF NOT EXISTS users (
     locked_until TIMESTAMP,
     email TEXT UNIQUE NOT NULL,
     password TEXT ,
+    verification_token TEXT,
+    verification_token_expires TIMESTAMP,
     is_verified BOOLEAN DEFAULT FALSE,
     last_login TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

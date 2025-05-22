@@ -185,3 +185,16 @@ export const test = (req: Request, res: Response): void => {
   console.log("Test function called");
   res.status(200).json({ message: "Test function works" });
 };
+
+export const authenticateUser = (req: Request, res: Response): void => {
+  console.log("Authenticate user function called");
+  res.status(200).json({ message: "User authenticated" });
+};
+
+export const getBearerToken = (req: Request): string | null => {
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith("Bearer ")) {
+    return authHeader.split(" ")[1];
+  }
+  return null;
+};

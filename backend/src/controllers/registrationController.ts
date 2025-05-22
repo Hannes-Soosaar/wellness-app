@@ -56,7 +56,7 @@ const handleRegister: RequestHandler = async (req, res) => {
   }
 };
 
-export const handleRegisterWithGoogle = async (
+const handleRegisterWithGoogle = async (
   user: any
 ): Promise<{ state: string; message: string }> => {
   console.log("Register with google");
@@ -101,11 +101,12 @@ export const handleRegisterWithGoogle = async (
 //     return { state: "error", message: "Not implemented yet" };
 // };
 
-export const handleRegisterWithDiscord = async (
+const handleRegisterWithDiscord = async (
   user: any
 ): Promise<{ state: string; message: string }> => {
   console.log("Register with discord");
   console.log("user to register", user);
+  //TODO : Implement discord registration
 };
 
-export default handleRegister;
+export { handleRegister, handleRegisterWithDiscord, handleRegisterWithGoogle };
