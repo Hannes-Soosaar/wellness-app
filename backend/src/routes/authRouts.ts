@@ -15,6 +15,7 @@ authRouter.get("/google/test", test); // from Front End
 authRouter.get("/discord/test", test); // from Front End
 authRouter.get("/discord/register", registerWithDiscord);
 authRouter.get("/discord/callback", discordCallback);
-authRouter.get("/refresh"); // attempt to refresh the token
+authRouter.post("/refresh", test); // attempt to refresh the token
+authRouter.post("/logout", test); // logout
 
 export default authRouter;

@@ -182,7 +182,7 @@ export const googleCallback = async (
 };
 
 export const test = (req: Request, res: Response): void => {
-  console.log("Test function called");
+  console.log("Test function called", req.body);
   res.status(200).json({ message: "Test function works" });
 };
 

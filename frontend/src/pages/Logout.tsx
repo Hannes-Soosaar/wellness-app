@@ -4,7 +4,7 @@ import api from "../lib/axios";
 const Logout: React.FC = () => {
   const handleLogout = async () => {
     try {
-      const response = await api.post("api/logout");
+      const response = await api.post("auth/logout");
       console.log(response.data);
       if (response.status === 200) {
         localStorage.removeItem("authToken");
@@ -25,3 +25,5 @@ const Logout: React.FC = () => {
     </div>
   );
 };
+
+export default Logout;

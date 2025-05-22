@@ -7,6 +7,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import "./App.css";
 import Login from "./pages/Login";
+import Logout from "./pages/Logout";
 import Register from "./pages/Register";
 import { useEffect, useState } from "react";
 import api from "./lib/axios";
@@ -19,25 +20,25 @@ const App: React.FC = () => {
     console.log("No auth token found");
   }
 
-  useEffect(() => {
-    if (!authToken || authToken === "undefined") {
-      console.log("No auth token found aka not logged in");
-      return;
-    }
-    const fetchData = async () => {
-      try {
-        const response = await api.get("/api/user", {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        });
-        console.log(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchData();
-  }, [authToken]);
+  // useEffect(() => {
+  //   if (!authToken || authToken === "undefined") {
+  //     console.log("No auth token found aka not logged in");
+  //     return;
+  //   }
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await api.get("/api/user", {
+  //         headers: {
+  //           Authorization: `Bearer ${authToken}`,
+  //         },
+  //       });
+  //       console.log(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, [authToken]);
 
   return (
     <div className="container">
@@ -47,6 +48,7 @@ const App: React.FC = () => {
         <Route path="/about" element={<About />} />
         <Route path="/user" element={<User />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/logout" element={<Logout />} />
         <Route path="/register" element={<Register />} />
       </Routes>
       <Footer />
