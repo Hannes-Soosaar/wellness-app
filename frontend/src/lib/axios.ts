@@ -10,9 +10,10 @@ const api = axios.create({
 
 // Add the bearere token to all api requests
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("authToken");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
+    console.error("Intercept request", token);
   }
   return config;
 });
@@ -22,14 +23,15 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
+    console.error("Interceptor response error");
     const originalRequest = error.config;
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       const refreshToken = localStorage.getItem("refreshToken");
       if (!refreshToken) {
         console.error("No refresh token found");
-        localStorage.removeItem("token");
-        window.location.href = "/login";
+        localStorage.removeItem("authToken");
+        // window.location.href = "/login"; // this will cause an infinite loop
         return Promise.reject(error);
       }
 
@@ -37,19 +39,20 @@ api.interceptors.response.use(
         const res = await api.post("/auth/refresh", { token: refreshToken });
         {
           const newToken = res.data.token;
-          localStorage.setItem("token", newToken);
+          localStorage.setItem("authToken", newToken);
           api.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
           originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
           return api(originalRequest);
         }
       } catch (error) {
-        localStorage.removeItem("token");
+        localStorage.removeItem("authToken");
         localStorage.removeItem("refreshToken");
         window.location.href = "/login";
-        console.error("Error refreshing token:", error);
+        console.error("Error refreshing authToken:", error);
         return Promise.reject(error);
       }
     }
+    console.error("Checking if error ");
     return Promise.reject(error);
   }
 );

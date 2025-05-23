@@ -3,23 +3,23 @@ import api from "../lib/axios";
 // import "./Header.css";
 
 const Header: React.FC = () => {
-  // const authToken = localStorage.getItem("authToken");
+  const authToken = localStorage.getItem("authToken");
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await api.get("/api/user", {
-  //         headers: {
-  //           Authorization: `Bearer ${authToken}`,
-  //         },
-  //       });
-  //       console.log(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
-  //   fetchData();
-  // }, [authToken]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await api.get("/api/user", {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        });
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, [authToken]);
 
   return (
     <header>

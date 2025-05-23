@@ -20,25 +20,25 @@ const App: React.FC = () => {
     console.log("No auth token found");
   }
 
-  // useEffect(() => {
-  //   if (!authToken || authToken === "undefined") {
-  //     console.log("No auth token found aka not logged in");
-  //     return;
-  //   }
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await api.get("/api/user", {
-  //         headers: {
-  //           Authorization: `Bearer ${authToken}`,
-  //         },
-  //       });
-  //       console.log(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
-  //   fetchData();
-  // }, [authToken]);
+  useEffect(() => {
+    if (!authToken || authToken === "undefined") {
+      console.log("No auth token found aka not logged in");
+      return;
+    }
+    const fetchData = async () => {
+      try {
+        const response = await api.get("/api/user", {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        });
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, [authToken]);
 
   return (
     <div className="container">
