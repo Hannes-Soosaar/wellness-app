@@ -33,6 +33,7 @@ const handleRegister: RequestHandler = async (req, res) => {
 
     const verificationToken = uuidv4();
 
+    //TODO: add a new refresh token to the user
     const result = await pg.pool.query(
       `
       INSERT INTO users(email,password,verification_token)

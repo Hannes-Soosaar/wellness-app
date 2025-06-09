@@ -2,7 +2,7 @@ import { Request, Response, RequestHandler } from "express";
 import pg from "../../server";
 import { hashPassword, verifyPassword } from "../utils/crypto";
 import handleProfile from "./profileController";
-import { generateJWT, verifyJWT } from "../utils/tokens";
+import { generateJWT, generateRefreshToken, verifyJWT } from "../utils/tokens";
 
 interface loginRequest {
   email: string;

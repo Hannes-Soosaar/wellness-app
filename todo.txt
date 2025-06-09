@@ -26,6 +26,8 @@ DONE: The code is well-organized, properly commented, and follows best practices
 
 PROGRESS: Authentication options include email-password and at least 2 OAuth providers (Google/GIt +  1 more)
 
+
+
 TODO: Password reset is handled via email
 
 TODO: Users can optinonally enable two-factor authentication
