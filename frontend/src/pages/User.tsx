@@ -1,9 +1,18 @@
 import React from "react";
 
-const User: React.FC = () => {
-  const [];
+interface UserProfile {
+  id: number;
+  username: string;
+}
 
-  return <h1>User Profile</h1>;
+const User: React.FC = () => {
+  return (
+    <>
+      <h1>User Profile</h1>
+      <div className="menu-container"></div>
+      <div className="content-container"></div>
+    </>
+  );
 };
 
 export default User;
