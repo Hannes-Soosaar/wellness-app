@@ -43,8 +43,7 @@ const App: React.FC = () => {
   return (
     <div className="layout">
       <Header />
-
-      <main className="main-container">
+      <main className="main-content">
         <aside className="sidebar">{/* show only if logged in */}</aside>
         <section className="page-container">
           <Routes>
