@@ -41,16 +41,22 @@ const App: React.FC = () => {
   }, [authToken]);
 
   return (
-    <div className="container">
+    <div className="layout">
       <Header />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/user" element={<User />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/logout" element={<Logout />} />
-        <Route path="/register" element={<Register />} />
-      </Routes>
+
+      <main className="main-container">
+        <aside className="sidebar">{/* show only if logged in */}</aside>
+        <section className="page-container">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/user" element={<User />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/logout" element={<Logout />} />
+            <Route path="/register" element={<Register />} />
+          </Routes>
+        </section>
+      </main>
       <Footer />
     </div>
   );

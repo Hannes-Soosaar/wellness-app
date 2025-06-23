@@ -9,7 +9,6 @@ const User: React.FC = () => {
   return (
     <>
       <h1>User Profile</h1>
-      <div className="menu-container"></div>
       <div className="content-container"></div>
     </>
   );

@@ -32,4 +32,12 @@ startbe:
 	cd backend && node server.js
 stopbe:
 
+
+#Full launch
+
+launchApp:
+	cd frontend && npm run dev &
+	cd backend && npx nodemon --exec "npx tsx src/index.ts"
+
+
 #Python utils

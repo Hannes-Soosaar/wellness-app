@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import api from "../lib/axios";
-// import "./Header.css";
 
 const Header: React.FC = () => {
   const authToken = localStorage.getItem("authToken");
@@ -22,16 +21,14 @@ const Header: React.FC = () => {
   }, [authToken]);
 
   return (
-    <header>
-      <nav>
-        <a href="/">Home</a>
-        <a href="/about">About</a>
-        <a href="/user">User</a>
-        <a href="/login">Login</a>
-        <a href="/register">Register</a>
-        <a href="/logout">Logout</a>
-      </nav>
-    </header>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/about">About</a>
+      <a href="/user">User</a>
+      <a href="/login">Login</a>
+      <a href="/register">Register</a>
+      <a href="/logout">Logout</a>
+    </nav>
   );
 };
 

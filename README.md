@@ -12,3 +12,22 @@ You can only improve what you measure and track. So the only thing you need to w
 
 
 
+Color Schema
+
+| Purpose              | Color                    | Hex Code  | Notes                                      |
+| -------------------- | ------------------------ | --------- | ------------------------------------------ |
+| **Background**       | Soft White / Mist Gray   | `#F9FAF9` | Clean, soft base – keeps things light.     |
+| **Primary**          | Sage Green               | `#A8CABA` | Calming and organic, great for buttons.    |
+| **Accent**           | Blush Rose / Muted Coral | `#F3D9DC` | A gentle warmth – great for highlights.    |
+| **Text (Dark)**      | Charcoal / Graphite      | `#2E2E2E` | Clean and accessible on light backgrounds. |
+| **Secondary Text**   | Cool Gray                | `#7D8B8D` | Subtle contrast for labels, placeholders.  |
+| **Success / Active** | Fresh Mint               | `#BCE2D0` | Reinforces progress, calm energy.          |
+
+Button
+
+| Element         | Suggested Color | Hex       | Notes                                |
+| --------------- | --------------- | --------- | ------------------------------------ |
+| **Background**  | Sage Green      | `#A8CABA` | Main color of the button             |
+| **Text**        | White           | `#FFFFFF` | For contrast on the green background |
+| **Hover BG**    | Slightly darker | `#91B6A8` | Adds interactive feedback            |
+| **Disabled BG** | Light Gray      | `#E0E7E9` | Shows it’s not active or tappable    |
