@@ -1,7 +1,11 @@
 import React, { useEffect } from "react";
 import api from "../lib/axios";
 
-const Header: React.FC = () => {
+interface Props {
+  isLoggedIn: boolean;
+}
+
+const Header: React.FC<Props> = ({ isLoggedIn }) => {
   const authToken = localStorage.getItem("authToken");
 
   useEffect(() => {
@@ -23,11 +27,11 @@ const Header: React.FC = () => {
   return (
     <nav>
       <a href="/">Home</a>
-      <a href="/about">About</a>
-      <a href="/user">User</a>
-      <a href="/login">Login</a>
-      <a href="/register">Register</a>
-      <a href="/logout">Logout</a>
+      {isLoggedIn ? null : <a href="/about">About</a>}
+      {isLoggedIn ? <a href="/user">User</a> : null}
+      {isLoggedIn ? null : <a href="/login">Login</a>}
+      {isLoggedIn ? null : <a href="/register">Register</a>}
+      {isLoggedIn ? <a href="/logout">Logout</a> : null}
     </nav>
   );
 };

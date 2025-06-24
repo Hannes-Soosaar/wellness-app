@@ -30,7 +30,8 @@ nav a:hover {
 .main-content {
   display: flex;
   flex-direction: row;
-  flex: 1; /* fills remaining space between header & footer */
+  min-height: 600px;
+  /* flex: 1;  fills remaining space between header & footer */
 }
 
 .sidebar {
@@ -48,4 +49,30 @@ nav a:hover {
   width: 100%;
   height: 100%;
   overflow-y: auto;
+}
+
+.vertical-container {
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+}
+
+.login-container {
+  border: 1px solid #2e2e2e;
+  border-radius: 30px;
+  padding: 1.5rem;
+  background-color: #f9faf9;
+  width: 100%;
+  max-width: 400px;
+  margin: auto;
+}
+
+.register-container {
+  border: 1px solid #2e2e2e;
+  border-radius: 30px;
+  padding: 1.5rem;
+  background-color: #f9faf9;
+  width: 100%;
+  max-width: 400px;
+  margin: auto;
 }

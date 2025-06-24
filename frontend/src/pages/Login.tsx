@@ -35,7 +35,7 @@ const Login: React.FC = () => {
 
   return (
     <div className="login-container">
-      <h2>Login</h2>
+      <h3>Login</h3>
       <form onSubmit={handleLogin}>
         <div className="form-group">
           <label htmlFor="email">Email</label>
@@ -63,6 +63,10 @@ const Login: React.FC = () => {
 
         <button type="submit">Login</button>
       </form>
+      <div className="vertical-container">
+        <a className="reset-link">Reset Password</a>
+        <a className="register-link">Register a new account</a>
+      </div>
     </div>
   );
 };

@@ -31,3 +31,11 @@ Button
 | **Text**        | White           | `#FFFFFF` | For contrast on the green background |
 | **Hover BG**    | Slightly darker | `#91B6A8` | Adds interactive feedback            |
 | **Disabled BG** | Light Gray      | `#E0E7E9` | Shows it’s not active or tappable    |
+
+
+
+**Creating an account.**
+
+-Verify email.
+    Verification of your email address is required to start using your account
+-Request new password.

@@ -44,15 +44,18 @@ const App: React.FC = () => {
 
   return (
     <div className="layout">
-      <Header />
+      <Header isLoggedIn={isLoggedIn} />
       <LoginButton isLoggedIn={isLoggedIn} setIsLoggingIn={setIsLoggingIn} />
       <main className="main-content">
-        <aside className="sidebar">{/* show only if logged in */}</aside>
+        {isLoggedIn ? (
+          <aside className="sidebar">{/* show only if logged in */}</aside>
+        ) : null}
         <section className="page-container">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
-            <Route path="/user" element={<User />} />
+            {/* the clicking the /user element logs out */}
+            {isLoggedIn ? <Route path="/user" element={<User />} /> : null} /
             <Route path="/login" element={<Login />} />
             <Route path="/logout" element={<Logout />} />
             <Route path="/register" element={<Register />} />
