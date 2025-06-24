@@ -1,6 +1,29 @@
 .form-group {
-  display: flex;
+  /* display: flex;
   justify-content: flex-start;
   align-items: flex-start;
-  text-align: left;
+  text-align: left; */
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: center;
+  width: 100%;
+  max-width: 300px;
+  margin: auto;
+}
+label {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+input {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
