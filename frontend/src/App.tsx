@@ -3,18 +3,20 @@ import { Routes, Route, Link } from "react-router-dom";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import User from "./pages/User";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+import Header from "./pages/Header";
+import Footer from "./pages/Footer";
 import "./App.css";
 import Login from "./pages/Login";
 import Logout from "./pages/Logout";
 import Register from "./pages/Register";
+import LoginButton from "./components/LoginButton";
 import { useEffect, useState } from "react";
 import api from "./lib/axios";
 
 const App: React.FC = () => {
   const authToken = localStorage.getItem("authToken");
   console.log("Auth token from local storage:", authToken);
+  const [isLoggedIn, setIsLoggingIn] = useState<boolean>(false);
 
   if (!authToken) {
     console.log("No auth token found");
@@ -43,6 +45,7 @@ const App: React.FC = () => {
   return (
     <div className="layout">
       <Header />
+      <LoginButton isLoggedIn={isLoggedIn} setIsLoggingIn={setIsLoggingIn} />
       <main className="main-content">
         <aside className="sidebar">{/* show only if logged in */}</aside>
         <section className="page-container">
