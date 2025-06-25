@@ -39,3 +39,7 @@ Button
 -Verify email.
     Verification of your email address is required to start using your account
 -Request new password.
+
+    ** a link will be sent to the email you registered with or that you provided **
+
+    The Wellness app is an app to help you become the best and healthiest version of yourself. To achieve this I have crafted a system that has worked. The system is simple set your goal, plot a path to your goal, measure and track your progress. Knowing full well how hard it can be to achieve your goal your wellness app will hold your hand during the journey by utilizing and leveraging Ai to help w

@@ -9,6 +9,7 @@ import "./App.css";
 import Login from "./pages/Login";
 import Logout from "./pages/Logout";
 import Register from "./pages/Register";
+import Menu from "./pages/Menu";
 import LoginButton from "./components/LoginButton";
 import { useEffect, useState } from "react";
 import api from "./lib/axios";
@@ -48,7 +49,9 @@ const App: React.FC = () => {
       <LoginButton isLoggedIn={isLoggedIn} setIsLoggingIn={setIsLoggingIn} />
       <main className="main-content">
         {isLoggedIn ? (
-          <aside className="sidebar">{/* show only if logged in */}</aside>
+          <aside className="sidebar">
+            <Menu />
+          </aside>
         ) : null}
         <section className="page-container">
           <Routes>
