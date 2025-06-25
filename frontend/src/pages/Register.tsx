@@ -18,30 +18,36 @@ const Register: React.FC = () => {
   const [confirmEmail, setConfirmEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
+  const [agreed, setAgreed] = React.useState(false);
 
   const handleRegister = async (event: React.FormEvent<HTMLFormElement>) => {
-    console.log("Register button clicked", email, password);
-    event.preventDefault();
-    console.log("Register button clicked", username, email, password);
+    if (agreed) {
+      console.log("Register button clicked", email, password);
+      event.preventDefault();
+      console.log("Register button clicked", username, email, password);
 
-    const registerData: RegistrationForm = {
-      username,
-      email,
-      confirmEmail,
-      password,
-      confirmPassword,
-    };
+      const registerData: RegistrationForm = {
+        username,
+        email,
+        confirmEmail,
+        password,
+        confirmPassword,
+      };
 
-    try {
-      const response = await api.post("api/register", registerData);
-      console.log(response.data);
-      if (response.status === 200) {
-        window.location.href = "/login";
-      } else {
-        console.error("Registration failed:", response.data);
+      try {
+        const response = await api.post("api/register", registerData);
+        console.log(response.data);
+        if (response.status === 200) {
+          window.location.href = "/login";
+        } else {
+          console.error("Registration failed:", response.data);
+        }
+      } catch (error) {
+        console.error("Registration failed:", error);
+        alert("Registartion Failed: " + error || "An error occurred");
       }
-    } catch (error) {
-      console.error("Registration failed:", error);
+    } else {
+      alert("Please agree to the Terms and Conditions and Privacy Policy.");
     }
   };
 
@@ -104,11 +110,27 @@ const Register: React.FC = () => {
             required
           />
         </div>
-
         <button type="submit">Register</button>
       </form>
       <GoogleRegisterButton />
       <DiscordRegisterButton />
+      <label style={{ display: "block", marginTop: "1rem" }}>
+        <input
+          type="checkbox"
+          checked={agreed}
+          onChange={(e) => setAgreed(e.target.checked)}
+          required
+        />{" "}
+        I agree to the{" "}
+        <a href="/terms" target="_blank" rel="noopener noreferrer">
+          Terms and Conditions
+        </a>{" "}
+        and{" "}
+        <a href="/privacy" target="_blank" rel="noopener noreferrer">
+          Privacy Policy
+        </a>
+        .
+      </label>
     </div>
   );
 };

@@ -1,9 +1,12 @@
 import { FaGoogle } from "react-icons/fa";
 
+
+//TODO: Need to add the prop if T and C is Accepted
+
 const GoogleRegisterButton = () => {
   const handleGoogleRegister = async () => {
     console.log("Google Register button clicked");
-    window.location.href = "http://localhost:5000/auth/google/register"; //TODO: set this in the env file
+    window.location.href = "http://localhost:5000/auth/google/register"; 
   };
 
   return (

@@ -1,5 +1,7 @@
 import { FaDiscord } from "react-icons/fa";
 
+//TODO: Need to add the prop if T and C is Accepted
+
 const DiscordRegisterButton = () => {
   const handleDiscordRegister = async () => {
     console.log("Discord Register button clicked");

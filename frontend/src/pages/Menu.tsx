@@ -1,21 +1,36 @@
 import React from "react";
 
+interface MenuProps {
+  userName: string;
+}
+
+let userName: string = "John Doe";
+
 const Menu: React.FC = () => {
   return (
     <>
-      <nav className="vertical-menu">
+      <nav className="vertical-container">
         <ul>
-          <h2>Profile</h2>
+          <h3>{userName}</h3>
           <li>
-            <a href="/user">Overview</a>
+            <a href="/user/">Profile</a>
+          </li>
+          <li>
+            <a href="/user/overview">Overview</a>
           </li>
           <li>
             <a href="/user/settings">Settings</a>
           </li>
+          <li>
+            <a href="/user/advice">Advice</a>
+          </li>
         </ul>
 
-        <h2>Update</h2>
+        <h3>Update</h3>
         <ul>
+          <li>
+            <a href="/user/goals">Goals</a>
+          </li>
           <li>
             <a href="/user/activity">Activity</a>
           </li>
@@ -25,17 +40,8 @@ const Menu: React.FC = () => {
           <li>
             <a href="/user/meal">Meal</a>
           </li>
-        </ul>
-        <h2></h2>
-        <ul>
           <li>
-            <a href="/user">User</a>
-          </li>
-          <li>
-            <a href="/user/goals">Goals</a>
-          </li>
-          <li>
-            <a href="/user/advice">Advice</a>
+            <a href="/user/restrictions">Restrictions</a>
           </li>
         </ul>
       </nav>

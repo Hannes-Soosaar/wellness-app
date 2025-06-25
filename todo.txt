@@ -63,14 +63,20 @@ TODO: AI recommendations include specific references to user's stated fitness go
 TODO: Verify recommendations explicitly mention and align with the specific fitness goal set in user profile
 
 TODO: AI health insights exclude any personally identifiable information
+
 TODO: System implements response validation to filter out recommendations that don't match user's health restrictions
     - Ask the students to describe their approach
 
 TODO: System displays cached recommendations when AI service is unavailable
+
 TODO: Verify system shows most recent cached recommendations when AI service connection is disabled
+
 TODO: System generates weekly and monthly health summaries including progress and key metrics
+
 TODO: Verify health summary includes week's activity levels, wellness score changes, and progress towards goals
+
 TODO: Health Dashboard shows BMI, wellness score, progress towards goals and AI insights based on user data
+
 TODO: Progress chart shows weight tracking over time, wellness score evolution and activity level changes
 
 TODO: Goal progress includes milestone tracking
