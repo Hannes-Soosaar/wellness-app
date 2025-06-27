@@ -12,6 +12,7 @@ import Register from "./pages/Register";
 import Menu from "./pages/Menu";
 import LoginButton from "./components/LoginButton";
 import { useEffect, useState } from "react";
+import Modal from "./components/Modal";
 import api from "./lib/axios";
 
 const App: React.FC = () => {
@@ -62,6 +63,7 @@ const App: React.FC = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/logout" element={<Logout />} />
             <Route path="/register" element={<Register />} />
+            {/*add more routes  different pages*/}
           </Routes>
         </section>
       </main>

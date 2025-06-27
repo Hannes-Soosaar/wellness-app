@@ -31,7 +31,9 @@ function Modal({ modalIsOpen, closeModal, children }: ModalProps) {
             event.stopPropagation()
           }
         >
-          <span className="modal-close-btn" onClick={closeModal}></span>
+          <span className="modal-close-btn" onClick={closeModal}>
+            X
+          </span>
           {children}
         </div>
       </div>
