@@ -10,8 +10,8 @@ const Menu: React.FC = () => {
   return (
     <>
       <nav className="vertical-container">
+        <h3>{userName}</h3>
         <ul>
-          <h3>{userName}</h3>
           <li>
             <a href="/user/">Profile</a>
           </li>

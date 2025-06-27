@@ -106,3 +106,37 @@ Insights and evaluations generated are accurate, relevant, actionable
 Relevance and practicality of AI-generated weekly and monthly health summaries and recommendations
 System's handling of AI service limitations during testing (rate limits, availability)
 Student has implemented additional technologies, security enhancements and/or features beyond the core requirements
+
+
+occupation type
+activity level
+weight loss, muscle gain, general fitness, desired activity level
+
+Initial fitness assessment:
+
+Current weekly activity frequency (0-7 days)
+Exercise types (cardio, strength, flexibility, sports)
+Average session duration (15-30min, 30-60min, 60+ min)
+Self-assessed fitness level (beginner/intermediate/advanced)
+Preferred exercise environment (home, gym, outdoors)
+Time of day preference to exercise (morning, afternoon, evening)
+Current endurance level (can run/walk for X minutes)
+Basic strength indicators (can do X pushups/squats)
+...
+
+
+Profile Management:
+
+Edit/update health metrics 
+
+View historical changes
+
+Export personal data including historical metrics
+
+Privacy settings and data sharing preferences
+
+What data can be used
+What data is visible publicly
+
+Email notification preferences
+

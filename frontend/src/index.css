@@ -5,6 +5,7 @@
 @import "./styles/text.css";
 @import "./styles/links.css";
 @import "./styles/lists.css";
+@import "./styles/modal.css";
 
 :root {
   margin: 0 auto;

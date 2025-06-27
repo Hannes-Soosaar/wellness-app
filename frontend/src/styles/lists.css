@@ -1,0 +1,13 @@
+ul {
+  list-style: none;
+  padding-left: 0px;
+}
+li {
+  text-align: left;
+  padding-left: 0px;
+}
+
+li :hover {
+  color: #a8caba;
+  cursor: pointer;
+}
