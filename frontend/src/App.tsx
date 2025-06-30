@@ -63,7 +63,8 @@ const App: React.FC = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/logout" element={<Logout />} />
             <Route path="/register" element={<Register />} />
-            {/*add more routes  different pages*/}
+            {/*Example of links routing*/}
+            <Route path="/user" element={<User />} />
           </Routes>
         </section>
       </main>

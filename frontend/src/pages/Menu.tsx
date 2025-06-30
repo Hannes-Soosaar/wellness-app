@@ -1,5 +1,5 @@
 import React from "react";
-
+import { Link } from "react-router-dom";
 interface MenuProps {
   userName: string;
 }
@@ -13,35 +13,35 @@ const Menu: React.FC = () => {
         <h3>{userName}</h3>
         <ul>
           <li>
-            <a href="/user/">Profile</a>
+            <Link to="/user">Profile</Link>
           </li>
           <li>
-            <a href="/user/overview">Overview</a>
+            <Link to="/user/overview">Overview</Link>
           </li>
           <li>
-            <a href="/user/settings">Settings</a>
+            <Link to="/user/settings">Settings</Link>
           </li>
           <li>
-            <a href="/user/advice">Advice</a>
+            <Link to="/user/advice">Advice</Link>
           </li>
         </ul>
 
         <h3>Update</h3>
         <ul>
           <li>
-            <a href="/user/goals">Goals</a>
+            <Link to="/user/goals">Goals</Link>
           </li>
           <li>
-            <a href="/user/activity">Activity</a>
+            <Link to="/user/activity">Activity</Link>
           </li>
           <li>
-            <a href="/user/progress">Progress</a>
+            <Link to="/user/progress">Progress</Link>
           </li>
           <li>
-            <a href="/user/meal">Meal</a>
+            <Link to="/user/meal">Meal</Link>
           </li>
           <li>
-            <a href="/user/restrictions">Restrictions</a>
+            <Link to="/user/restrictions">Restrictions</Link>
           </li>
         </ul>
       </nav>
