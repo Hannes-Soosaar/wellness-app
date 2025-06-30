@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import User from "./pages/User";
@@ -10,6 +10,17 @@ import Login from "./pages/Login";
 import Logout from "./pages/Logout";
 import Register from "./pages/Register";
 import Menu from "./pages/Menu";
+import Overview from "./pages/Overview";
+import Settings from "./pages/Settings";
+import Advice from "./pages/Advice";
+import Goals from "./pages/Goals";
+import Activity from "./pages/Activity";
+import Progress from "./pages/Progress";
+import Meal from "./pages/Meal";
+
+import Profile from "./pages/Profile";
+import Restrictions from "./pages/Restrictions";
+
 import LoginButton from "./components/LoginButton";
 import { useEffect, useState } from "react";
 import Modal from "./components/Modal";
@@ -64,7 +75,22 @@ const App: React.FC = () => {
             <Route path="/logout" element={<Logout />} />
             <Route path="/register" element={<Register />} />
             {/*Example of links routing*/}
-            <Route path="/user" element={<User />} />
+            {isLoggedIn ? (
+              <Route path="/user" element={<User />}>
+                <Route index element={<User />} />
+                <Route path="profile" element={<Profile />} />
+                <Route path="overview" element={<Overview />} />
+                <Route path="settings" element={<Settings />} />
+                <Route path="advice" element={<Advice />} />
+                <Route path="goals" element={<Goals />} />
+                <Route path="activity" element={<Activity />} />
+                <Route path="progress" element={<Progress />} />
+                <Route path="meal" element={<Meal />} />
+                <Route path="restrictions" element={<Restrictions />} />
+              </Route>
+            ) : (
+              <Route path="/" element={<Home />} />
+            )}
           </Routes>
         </section>
       </main>

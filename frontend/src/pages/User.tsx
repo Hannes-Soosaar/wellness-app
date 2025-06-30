@@ -1,4 +1,5 @@
 import React from "react";
+import { Outlet } from "react-router-dom";
 
 interface UserProfile {
   id: number;
@@ -8,12 +9,14 @@ interface UserProfile {
 const User: React.FC = () => {
   return (
     <>
-      <h1>User Profile</h1>
-      <div className="content-container">
-        {" "}
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illum vero
-        voluptatem eum, quis, aliquid a laudantium deserunt recusandae omnis,
-        labore fugit soluta aut! Porro error vel laboriosam quidem, beatae illo.
+      <div className="vertical-container">
+        <h3>User</h3>
+        <p>
+          Stuff that is meant to remain constant withing the user path goes here
+        </p>
+        <br />
+
+        <Outlet />
       </div>
     </>
   );

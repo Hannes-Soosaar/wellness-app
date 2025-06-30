@@ -1,5 +1,7 @@
 import React from "react";
 import Modal from "../components/Modal";
+import Terms from "./TermsAndConditions";
+import Privacy from "./Privacy";
 // import api from "../lib/axios";
 
 type ModalContent = "terms" | "privacy" | null;
@@ -29,14 +31,13 @@ const Footer: React.FC = () => {
       <Modal modalIsOpen={!!isModalOpen} closeModal={closeModal}>
         {isModalOpen === "terms" && (
           <>
-            <h2>Terms and Conditions</h2>
-            <p>...</p>
+            <Terms />
+            {/* Add the  element */}
           </>
         )}
         {isModalOpen === "privacy" && (
           <>
-            <h2>Privacy Policy</h2>
-            <p>...</p>
+            <Privacy />
           </>
         )}
       </Modal>

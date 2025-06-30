@@ -13,7 +13,7 @@ const Menu: React.FC = () => {
         <h3>{userName}</h3>
         <ul>
           <li>
-            <Link to="/user">Profile</Link>
+            <Link to="/user/profile">Profile</Link>
           </li>
           <li>
             <Link to="/user/overview">Overview</Link>

@@ -46,7 +46,7 @@ nav a:hover {
 
 .page-container {
   display: flex;
-  justify-content: center;
+  justify-items: center;
   align-items: center;
   flex: 1;
   width: 100%;
