@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { FaPray } from "react-icons/fa";
-
 interface UserData {
   id: string;
   userName: string;
@@ -32,10 +30,10 @@ const Profile: React.FC = () => {
     wellnessScore: 100,
   });
 
-  const [formData, setFromData] = useState<UserData>(user);
+  const [formData, setFormData] = useState<UserData>(user);
 
   const handleEditClick = () => {
-    setFromData(user);
+    setFormData(user);
     setIsEditing(true);
   };
 
@@ -50,13 +48,13 @@ const Profile: React.FC = () => {
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFromData({ ...formData, [event.target.name]: event.target.value });
+    setFormData({ ...formData, [event.target.name]: event.target.value });
     //TODO add more values here -
   };
 
   return (
     <>
-      <h1>User Profile</h1>
+      <h3>Wellness Score: {user.wellnessScore}</h3>
       {!isEditing ? (
         <>
           <p>
@@ -83,7 +81,7 @@ const Profile: React.FC = () => {
             <strong>Height: </strong>
             {user.height}
           </p>
-          {/* <button onClick={handleEditClick}>Update profile</button> */}
+          <button onClick={handleEditClick}>Update profile</button>
         </>
       ) : (
         <>
@@ -104,6 +102,23 @@ const Profile: React.FC = () => {
               onChange={handleChange}
             ></input>
           </label>
+          <label>
+            Gender:
+            <input
+              name="gender"
+              value={formData.gender}
+              onChange={handleChange}
+            ></input>
+          </label>
+          <label>
+            Weight:
+            <input
+              name="weight"
+              value={formData.weight}
+              onChange={handleChange}
+            ></input>
+          </label>
+
           <br />
           <button onClick={handleSave}>Save</button>
           <button onClick={handleCancel}>Cancel</button>

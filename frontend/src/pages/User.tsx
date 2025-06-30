@@ -6,16 +6,16 @@ interface UserProfile {
   username: string;
 }
 
+let user: UserProfile = {
+  id: 1,
+  username: "hannes@gmail.com",
+};
+
 const User: React.FC = () => {
   return (
     <>
       <div className="vertical-container">
-        <h3>User</h3>
-        <p>
-          Stuff that is meant to remain constant withing the user path goes here
-        </p>
-        <br />
-
+        <p>Welcome {user.username}</p>
         <Outlet />
       </div>
     </>

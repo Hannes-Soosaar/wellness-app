@@ -1,12 +1,105 @@
-import React from "react";
+import React, { useState } from "react";
+
+interface UserSettings {
+  id: string;
+  userName: string;
+  emailNotifications?: boolean;
+  acceptedPrivacy?: boolean;
+  twoFactorAuthentication?: boolean;
+  enableAI?: boolean;
+}
 
 const Settings: React.FC = () => {
+  const [isEditing, setIsEditing] = useState(false);
+
+  const [userSetting, setUserSetting] = useState<UserSettings>({
+    id: "aa21231",
+    userName: "hannes@gmail.com",
+    emailNotifications: false,
+    acceptedPrivacy: false,
+    twoFactorAuthentication: false,
+    enableAI: false,
+  });
+
+  const [formData, setFormData] = useState<UserSettings>(userSetting);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = event.target;
+    setFormData({
+      ...formData,
+      [name]: checked,
+    });
+  };
+
+  const handleSave = () => {
+    setUserSetting(formData);
+    setIsEditing(false);
+    //Update BE via API
+  };
+
   return (
     <>
-      <h1>User Settings</h1>
+      <h3>User Settings</h3>
       <p>General settings</p>
+      <div className="settings-container">
+        <label>
+          <input
+            type="checkbox"
+            name="emailNotifications"
+            checked={formData.emailNotifications}
+            onChange={handleChange}
+          ></input>
+          <strong> Enable Email notifications </strong>
+        </label>
+      </div>
+
+      <div className="settings-container">
+        <label>
+          <input
+            type="checkbox"
+            name="acceptedPrivacy"
+            checked={formData.acceptedPrivacy}
+            onChange={handleChange}
+          ></input>
+          <strong>I accept the privacy policy</strong>
+        </label>
+      </div>
+
+      <div className="settings-container">
+        <label>
+          <input
+            type="checkbox"
+            name="twoFactorAuthentication"
+            checked={formData.twoFactorAuthentication}
+            onChange={handleChange}
+          ></input>
+          <strong>Two factor authentication</strong>
+        </label>
+      </div>
+
+      <div className="settings-container">
+        <label>
+          <input
+            type="checkbox"
+            name="enableAI"
+            checked={formData.enableAI}
+            onChange={handleChange}
+          ></input>
+          <strong>Enable AI </strong>
+        </label>
+      </div>
+
+      <br />
+
+      <button onClick={() => setIsEditing(true)}>Edit</button>
+
+      {isEditing && (
+        <>
+          <button onClick={handleSave}>Save</button>
+          <button onClick={() => setIsEditing(false)}>Cancel</button>
+        </>
+      )}
     </>
   );
 };
-
 export default Settings;
