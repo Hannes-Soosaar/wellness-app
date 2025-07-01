@@ -31,7 +31,7 @@ const Profile: React.FC = () => {
     wellnessScore: 100,
   });
 
-  const [userAssesment, setUserAssessment] = useState<UserAssessmentData>;
+  const [userAssesment, setUserAssessment] = useState<UserAssessmentData>({});
 
   const [formData, setFormData] = useState<UserData>(user);
 

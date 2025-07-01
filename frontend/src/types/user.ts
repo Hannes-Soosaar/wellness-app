@@ -1,67 +1,40 @@
 // Current weekly activity frequency (0-7 days)
-export interface WeeklyActivityList {
-  frequency: number;
-}
+export type WeeklyActivityList = number;
 
 // Exercise types (cardio, strength, flexibility, sports)
-export interface ExerciseTypeList {
-  option1: string;
-  option2: string;
-  option3: string;
-  option4: string;
-}
+export type ExerciseTypeList = "cardio" | "strength" | "flexibility" | "sports";
 
 // Average session duration (15-30min, 30-60min, 60+ min)
-export interface SessionDuration {
-  option1: string;
-  option2: string;
-  option3: string;
-}
+export type SessionDuration = "15" | "30" | "45" | "60" | "90" | "120+";
 
 // Self-assessed fitness level (beginner/intermediate/advanced)
-export interface FitnessLevel {
-  option1: string;
-  option2: string;
-  option3: string;
-}
+export type FitnessLevel = "beginner" | "intermediate" | "advanced" | "athlete";
 
 // Current endurance level (can run/walk for X minutes)
-export interface EnduranceLevel {
-  option1: string;
-  option2: string;
-  option3: string;
-}
+export type EnduranceLevel = number;
 
 // Basic strength indicators (can do X pushups/squats)
-export interface StrengthIndicator {
-  option1: string;
-  option2: string;
-  option3: string;
-}
+export type StrengthIndicator = number;
 
 // Time of day preference to exercise (morning, afternoon, evening)
-export interface TimeOfDayAvailability {
-  option1: string;
-  option2: string;
-  option3: string;
-}
+export type TimeOfDayAvailability =
+  | "mornings"
+  | "afternoon"
+  | "evening"
+  | "nights";
 
 // Preferred exercise environment (home, gym, outdoors)
-export interface ExerciseEnvironment {
-  option1: string;
-  option2: string;
-  option3: string;
-}
+export type ExerciseEnvironment = "home" | "gym" | "outdoors" | "fitness club";
 
 export interface UserAssessmentData {
-  weeklyActivityList: WeeklyActivityList;
-  exerciseTypeList: ExerciseTypeList;
-  sessionDuration: SessionDuration;
-  fitnessLevel: FitnessLevel;
-  enduranceLevel: EnduranceLevel;
-  strengthIndicator: StrengthIndicator;
-  timeOfDayAvailability: TimeOfDayAvailability;
-  exerciseEnvironment: ExerciseEnvironment;
+  weeklyActivityList?: WeeklyActivityList[];
+  exerciseTypeList?: ExerciseTypeList[];
+  sessionDuration?: SessionDuration[];
+  fitnessLevel?: FitnessLevel[];
+  enduranceLevel?: EnduranceLevel[];
+  strengthIndicator?: StrengthIndicator[];
+  timeOfDayAvailability?: TimeOfDayAvailability[];
+  exerciseEnvironment?: ExerciseEnvironment[];
 }
 
 export interface UserData {
