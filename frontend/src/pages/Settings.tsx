@@ -61,7 +61,7 @@ const Settings: React.FC = () => {
             checked={formData.acceptedPrivacy}
             onChange={handleChange}
           ></input>
-          <strong>I accept the privacy policy</strong>
+          <strong>Allow data sharing with third parties</strong>
         </label>
       </div>
 

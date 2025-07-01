@@ -28,7 +28,7 @@ const data: WeightDataPoint[] = [
 const Overview: React.FC = () => {
   return (
     <>
-      <ResponsiveContainer width="100%" height={300}>
+      <ResponsiveContainer width="80%" height={300}>
         <LineChart
           data={data}
           margin={{ top: 10, right: 30, left: 0, bottom: 0 }}

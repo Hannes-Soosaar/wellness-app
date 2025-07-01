@@ -43,3 +43,14 @@ Button
     ** a link will be sent to the email you registered with or that you provided **
 
     The Wellness app is an app to help you become the best and healthiest version of yourself. To achieve this I have crafted a system that has worked. The system is simple set your goal, plot a path to your goal, measure and track your progress. Knowing full well how hard it can be to achieve your goal your wellness app will hold your hand during the journey by utilizing and leveraging Ai to help w
+
+
+
+    - Allow data sharing with third parties. Limits the use of AI.
+
+    - Wellness score changes when user updates their weekly activity frequency. The system is based on actual activity any change will update the score.
+
+
+    -Verify scores update when changing: BMI range, activity level, goal, progress, or health habits
+        -Dependent calculated parameters:  BMI, progress.
+        -Modifiable parameters: Activity, goal, caloreis (healt habits)

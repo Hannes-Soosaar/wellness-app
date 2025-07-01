@@ -4,7 +4,7 @@ const Meal: React.FC = () => {
   return (
     <>
       <h1>Add a new meal</h1>
-      <p>Add a meal to your diet</p>
+      <p>Add during the second module</p>
     </>
   );
 };
