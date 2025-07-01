@@ -53,4 +53,29 @@ export interface ExerciseEnvironment {
   option3: string;
 }
 
+export interface UserAssessmentData {
+  weeklyActivityList: WeeklyActivityList;
+  exerciseTypeList: ExerciseTypeList;
+  sessionDuration: SessionDuration;
+  fitnessLevel: FitnessLevel;
+  enduranceLevel: EnduranceLevel;
+  strengthIndicator: StrengthIndicator;
+  timeOfDayAvailability: TimeOfDayAvailability;
+  exerciseEnvironment: ExerciseEnvironment;
+}
+
+export interface UserData {
+  id: string;
+  userName: string;
+  firstName: string;
+  lastName: string;
+  // gender needs to be a number
+  gender: string;
+  age: number;
+  weight: number;
+  height: number;
+  BMI: number;
+  fatPercentage: number;
+  wellnessScore: number;
+}
 // Use this for initially assess the person.

@@ -1,20 +1,19 @@
 import React, { useState } from "react";
-interface UserData {
-  id: string;
-  userName: string;
-  firstName: string;
-  lastName: string;
-  // gender needs to be a number
-  gender: string;
-  age: number;
-  weight: number;
-  height: number;
-  BMI: number;
-  fatPercentage: number;
-  wellnessScore: number;
-}
-
-interface UserAssessmentData {}
+import { UserAssessmentData, UserData } from "../types/user";
+// interface UserData {
+//   id: string;
+//   userName: string;
+//   firstName: string;
+//   lastName: string;
+//   // gender needs to be a number
+//   gender: string;
+//   age: number;
+//   weight: number;
+//   height: number;
+//   BMI: number;
+//   fatPercentage: number;
+//   wellnessScore: number;
+// }
 
 const Profile: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -32,7 +31,7 @@ const Profile: React.FC = () => {
     wellnessScore: 100,
   });
 
-  const [userAssesment, setUserAssessment] = useState<>;
+  const [userAssesment, setUserAssessment] = useState<UserAssessmentData>;
 
   const [formData, setFormData] = useState<UserData>(user);
 
