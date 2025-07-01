@@ -54,3 +54,6 @@ Button
     -Verify scores update when changing: BMI range, activity level, goal, progress, or health habits
         -Dependent calculated parameters:  BMI, progress.
         -Modifiable parameters: Activity, goal, caloreis (healt habits)
+
+Initial fitness assessment: None as it adds zero insight?
+

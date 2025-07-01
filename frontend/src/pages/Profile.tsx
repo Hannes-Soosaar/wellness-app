@@ -14,6 +14,8 @@ interface UserData {
   wellnessScore: number;
 }
 
+interface UserAssessmentData {}
+
 const Profile: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [user, setUser] = useState<UserData>({
@@ -29,6 +31,8 @@ const Profile: React.FC = () => {
     fatPercentage: 21,
     wellnessScore: 100,
   });
+
+  const [userAssesment, setUserAssessment] = useState<>;
 
   const [formData, setFormData] = useState<UserData>(user);
 
