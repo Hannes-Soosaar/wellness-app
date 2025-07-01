@@ -11,7 +11,7 @@ form {
   align-items: left;
   justify-content: center;
   width: 100%;
-  max-width: 300px;
+  max-width: auto;
   margin: auto;
 }
 label {
@@ -20,10 +20,17 @@ label {
   margin-bottom: 0.5rem;
   font-weight: bold;
 }
+label.stacked {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
 input {
-  width: 100%;
   padding: 0.5rem;
-  margin-bottom: 1rem;
+  margin: 5px;
   border: 1px solid #ccc;
   border-radius: 4px;
 }

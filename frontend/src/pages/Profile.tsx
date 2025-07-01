@@ -85,7 +85,7 @@ const Profile: React.FC = () => {
         </>
       ) : (
         <>
-          <label>
+          <label className="stacked">
             First name:
             <input
               name="firstName"
@@ -94,7 +94,7 @@ const Profile: React.FC = () => {
             ></input>
           </label>
           <br />
-          <label>
+          <label className="stacked">
             Last name:
             <input
               name="lastName"
@@ -102,7 +102,7 @@ const Profile: React.FC = () => {
               onChange={handleChange}
             ></input>
           </label>
-          <label>
+          <label className="stacked">
             Gender:
             <input
               name="gender"
@@ -110,7 +110,7 @@ const Profile: React.FC = () => {
               onChange={handleChange}
             ></input>
           </label>
-          <label>
+          <label className="stacked">
             Weight:
             <input
               name="weight"

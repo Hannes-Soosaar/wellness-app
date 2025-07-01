@@ -58,6 +58,7 @@ nav a:hover {
   display: flex;
   flex-direction: column;
   justify-items: left;
+  width: 100%;
   text-align: left;
   padding: 1px;
 }

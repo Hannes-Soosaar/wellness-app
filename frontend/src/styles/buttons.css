@@ -6,6 +6,8 @@ button {
   margin: 20px;
   font-size: 1em;
   font-weight: 500;
+  max-width: fit-content;
+  min-width: 100px;
   font-family: inherit;
   background-color: #91b6a8;
   cursor: pointer;
