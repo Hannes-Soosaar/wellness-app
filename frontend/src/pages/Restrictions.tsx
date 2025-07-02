@@ -4,6 +4,13 @@ import { USER_RESTRICTION_OPTIONS } from "../types/tempMockConstants";
 
 import CheckboxMenu from "../components/CheckboxMenu";
 const Restrictions: React.FC = () => {
+  const LABELS: Record<string, string> = {
+    foodsIngredients: "Foods & Ingredients",
+    exercises: "Exercises",
+    caloriesMacros: "Calories & Macros",
+    exercisesTimes: "Exercise Times",
+    exerciseDuration: "Exercise Duration",
+  };
   // TODO:
 
   const [selectedOptionsByGroup, setSelectedOptionsByGroup] = useState(
@@ -40,7 +47,7 @@ const Restrictions: React.FC = () => {
           options={options}
           selectedValues={selectedOptionsByGroup[key]}
           onChange={(selected) => handleGroupChange(key, selected)}
-          label={key}
+          label={LABELS[key] || key}
         />
       ))}
       <button onClick={saveUserRestrictions}>Save</button>
