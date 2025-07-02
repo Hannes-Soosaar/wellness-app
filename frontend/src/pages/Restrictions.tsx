@@ -1,22 +1,49 @@
 import React from "react";
 import { useState } from "react";
-import { USER_RESTRICTION_OPTIONS } from "../types/tempMockConstansts";
-import { FOOD_INGREDIENTS } from "../types/tempMockConstansts";
-import CheckboxMenu from "../components/CheckboxMenu";
+import { USER_RESTRICTION_OPTIONS } from "../types/tempMockConstants";
 
+import CheckboxMenu from "../components/CheckboxMenu";
 const Restrictions: React.FC = () => {
-  // the Selected foods need to be populated from the user DB
-  const [selectedFoods, setSelectedFoods] = useState<string[]>([]);
+  // TODO:
+
+  const [selectedOptionsByGroup, setSelectedOptionsByGroup] = useState(
+    Object.keys(USER_RESTRICTION_OPTIONS).reduce((acc, key) => {
+      acc[key] = [] as string[];
+      return acc;
+    }, {} as Record<string, string[]>)
+  );
+  // Modify to save to the backend
+  const saveUserRestrictions = () => {
+    try {
+      const serializedState = JSON.stringify(selectedOptionsByGroup);
+      localStorage.setItem("userRestrictions", serializedState);
+      alert("Saved successfully!");
+    } catch (error) {
+      console.error("Failed to save", error);
+      alert("Failed to save your restrictions.");
+    }
+  };
+
+  const handleGroupChange = (key: string, selected: string[]) => {
+    setSelectedOptionsByGroup((prev) => ({
+      ...prev,
+      [key]: selected,
+    }));
+  };
 
   return (
     <>
-      <p>Add and review your limitations and restrictions</p>
-      <CheckboxMenu
-        options={FOOD_INGREDIENTS}
-        selectedValues={selectedFoods}
-        onChange={setSelectedFoods}
-        label="Restricted Foods"
-      />
+      <p>Any checked item will not be excluded from your suggestions </p>
+      {Object.entries(USER_RESTRICTION_OPTIONS).map(([key, options]) => (
+        <CheckboxMenu
+          key={key}
+          options={options}
+          selectedValues={selectedOptionsByGroup[key]}
+          onChange={(selected) => handleGroupChange(key, selected)}
+          label={key}
+        />
+      ))}
+      <button onClick={saveUserRestrictions}>Save</button>
     </>
   );
 };
