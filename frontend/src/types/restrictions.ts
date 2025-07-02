@@ -1,3 +1,5 @@
+// Deffiniton of data shape
+
 export interface UserRestrictions {
   foodsIngredients?: FoodsIngredients[];
   exercises?: Exercise[];
