@@ -16,6 +16,9 @@ const Menu: React.FC = () => {
             <Link to="/user/profile">Profile</Link>
           </li>
           <li>
+            <Link to="/user/Assessment">Assessment</Link>
+          </li>
+          <li>
             <Link to="/user/overview">Overview</Link>
           </li>
           <li>

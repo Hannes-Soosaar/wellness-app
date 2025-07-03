@@ -11,7 +11,6 @@ const Restrictions: React.FC = () => {
     exercisesTimes: "Exercise Times",
     exerciseDuration: "Exercise Duration",
   };
-  // TODO:
 
   const [selectedOptionsByGroup, setSelectedOptionsByGroup] = useState(
     Object.keys(USER_RESTRICTION_OPTIONS).reduce((acc, key) => {

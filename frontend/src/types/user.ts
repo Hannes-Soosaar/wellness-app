@@ -1,5 +1,5 @@
 // Current weekly activity frequency (0-7 days)
-export type WeeklyActivityList = number;
+export type WeeklyActivityList = string;
 
 // Exercise types (cardio, strength, flexibility, sports)
 export type ExerciseTypeList = "cardio" | "strength" | "flexibility" | "sports";
@@ -13,10 +13,10 @@ export type UserSessionDuration = "15" | "30" | "45" | "60" | "90" | "120+";
 export type FitnessLevel = "beginner" | "intermediate" | "advanced" | "athlete";
 
 // Current endurance level (can run/walk for X minutes)
-export type EnduranceLevel = number;
+export type EnduranceLevel = string;
 
 // Basic strength indicators (can do X pushups/squats)
-export type StrengthIndicator = number;
+export type StrengthIndicator = string;
 
 // Time of day preference to exercise (morning, afternoon, evening)
 export type TimeOfDayAvailability =
@@ -33,8 +33,8 @@ export interface UserAssessmentData {
   exerciseTypeList?: ExerciseTypeList[];
   userSessionDuration?: UserSessionDuration;
   fitnessLevel?: FitnessLevel[];
-  enduranceLevel?: number;
-  strengthIndicator?: number;
+  enduranceLevel?: EnduranceLevel[];
+  strengthIndicator?: StrengthIndicator[];
   timeOfDayAvailability?: TimeOfDayAvailability[];
   exerciseEnvironment?: ExerciseEnvironment[];
 }

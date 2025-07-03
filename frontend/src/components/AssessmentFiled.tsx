@@ -34,7 +34,7 @@ const AssessmentField: React.FC<AssessmentFieldProps> = ({
               name={label}
               value={option}
               checked={selected === option}
-              onChange={() => handleChange}
+              onChange={() => handleChange(option)}
             />
             {" " + option}
           </label>

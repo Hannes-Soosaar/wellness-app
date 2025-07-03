@@ -25,6 +25,7 @@ import LoginButton from "./components/LoginButton";
 import { useEffect, useState } from "react";
 import Modal from "./components/Modal";
 import api from "./lib/axios";
+import UserAssessment from "./pages/UserAssesment";
 
 const App: React.FC = () => {
   const authToken = localStorage.getItem("authToken");
@@ -79,6 +80,7 @@ const App: React.FC = () => {
               <Route path="/user" element={<User />}>
                 <Route index element={<User />} />
                 <Route path="profile" element={<Profile />} />
+                <Route path="assessment" element={<UserAssessment />} />
                 <Route path="overview" element={<Overview />} />
                 <Route path="settings" element={<Settings />} />
                 <Route path="advice" element={<Advice />} />
