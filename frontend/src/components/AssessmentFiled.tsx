@@ -5,7 +5,7 @@ import { useState } from "react";
 interface AssessmentFieldProps {
   options: readonly string[];
   selectedValue: string;
-  onChange?: (selected: string[]) => void;
+  onChange?: (selected: string) => void;
   label: string;
 }
 
@@ -15,18 +15,11 @@ const AssessmentField: React.FC<AssessmentFieldProps> = ({
   onChange,
   label,
 }) => {
-  // I will request the props  from the BE in the next iterations
   const [selected, setIsSelected] = useState<string>(selectedValue);
 
-  const toggleOption = (option: string) => {
-    let newSelected: string[];
-    if (selected.includes(option)) {
-      newSelected = selected.filter((v) => v !== option);
-    } else {
-      newSelected = [...selected, option];
-    }
-    setIsSelected(newSelected);
-    if (onChange) onChange(newSelected);
+  const handleChange = (option: string) => {
+    setIsSelected(option);
+    if (onChange) onChange(option);
   };
 
   return (
@@ -37,10 +30,11 @@ const AssessmentField: React.FC<AssessmentFieldProps> = ({
         {options.map((option) => (
           <label key={option} className="radiobox-menu-labels">
             <input
-              type="radiobutton"
+              type="radio"
+              name={label}
               value={option}
-              checked={selected.includes(option)}
-              onChange={() => toggleOption(option)}
+              checked={selected === option}
+              onChange={() => handleChange}
             />
             {" " + option}
           </label>
