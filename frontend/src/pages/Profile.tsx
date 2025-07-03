@@ -31,8 +31,6 @@ const Profile: React.FC = () => {
     wellnessScore: 100,
   });
 
-  const [userAssesment, setUserAssessment] = useState<UserAssessmentData>({});
-
   const [formData, setFormData] = useState<UserData>(user);
 
   const handleEditClick = () => {
@@ -84,7 +82,7 @@ const Profile: React.FC = () => {
             <strong>Height: </strong>
             {user.height}
           </p>
-          <button onClick={handleEditClick}>Update profile</button>
+          <button onClick={handleEditClick}>Edit Profile</button>
         </>
       ) : (
         <>

@@ -1,5 +1,7 @@
 // these constants might be handy when testing. The real values are going to be coming from the backend eventually
 
+// USER LIMITATIONS //
+
 export const FOOD_INGREDIENTS = [
   "dairy",
   "nuts",
@@ -49,3 +51,13 @@ export type Exercise = (typeof EXERCISES)[number];
 export type CaloriesMacros = (typeof CALORIES_MACROS)[number];
 export type ExerciseTimes = (typeof EXERCISE_TIMES)[number];
 export type ExerciseDuration = (typeof EXERCISE_DURATION)[number];
+
+// USER ASSEMENT //
+
+export const WEEKLY_ACTIVITY_LIST = {};
+
+export const EXERCISE_TYPE_LIST = {};
+
+export const USER_SESSION_DURATION = {};
+
+export const USER_FITNESS_LEVEL = {};

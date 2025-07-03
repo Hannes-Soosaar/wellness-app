@@ -40,7 +40,7 @@ const Restrictions: React.FC = () => {
 
   return (
     <>
-      <p>Any checked item will not be excluded from your suggestions </p>
+      <p>Any checked item will not be excluded from your suggestions</p>
       {Object.entries(USER_RESTRICTION_OPTIONS).map(([key, options]) => (
         <CheckboxMenu
           key={key}

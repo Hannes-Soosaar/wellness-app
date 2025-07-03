@@ -10,8 +10,6 @@ interface UserSettings {
 }
 
 const Settings: React.FC = () => {
-  const [isEditing, setIsEditing] = useState(false);
-
   const [userSetting, setUserSetting] = useState<UserSettings>({
     id: "aa21231",
     userName: "hannes@gmail.com",
@@ -33,7 +31,14 @@ const Settings: React.FC = () => {
 
   const handleSave = () => {
     setUserSetting(formData);
-    setIsEditing(false);
+    try {
+      const serializedFromData = JSON.stringify(formData);
+      localStorage.setItem("userSettings", serializedFromData);
+      alert("Updated user settings successfully!");
+    } catch (error) {
+      console.log("failed to save userSettings", error);
+      alert("Updating user settings failed " + error);
+    }
     //Update BE via API
   };
 
@@ -61,7 +66,7 @@ const Settings: React.FC = () => {
             checked={formData.acceptedPrivacy}
             onChange={handleChange}
           ></input>
-          <strong>Allow data sharing with third parties</strong>
+          <strong>Allow data sharing with third parties </strong>
         </label>
       </div>
 
@@ -91,14 +96,7 @@ const Settings: React.FC = () => {
 
       <br />
 
-      <button onClick={() => setIsEditing(true)}>Edit</button>
-
-      {isEditing && (
-        <>
-          <button onClick={handleSave}>Save</button>
-          <button onClick={() => setIsEditing(false)}>Cancel</button>
-        </>
-      )}
+      <button onClick={handleSave}>Save</button>
     </>
   );
 };
