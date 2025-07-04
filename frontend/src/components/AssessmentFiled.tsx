@@ -24,7 +24,10 @@ const AssessmentField: React.FC<AssessmentFieldProps> = ({
 
   return (
     <>
-      <fieldset className="box-field">
+      <fieldset
+        className="box-field"
+        title="Please provide feedback to get the initial assessment of your physical ability"
+      >
         {" "}
         {<legend className="legend-title">{label}</legend>}
         {options.map((option) => (

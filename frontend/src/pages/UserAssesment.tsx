@@ -43,8 +43,8 @@ const UserAssessment: React.FC = () => {
           options={options}
           selectedValue={selectedOptionsByGroup[key]}
           onChange={(selected) => handleGroupChange(key, selected)}
-        //   label={LABELS[key] || key}
-          label={ key}
+          //   label={LABELS[key] || key}
+          label={key}
         />
       ))}
 

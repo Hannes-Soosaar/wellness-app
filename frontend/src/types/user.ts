@@ -63,4 +63,9 @@ export interface UserActivity {
 export interface UserMeal {
   id: string;
 }
-// Use this for initially assess the person.
+
+export interface UserGoal {
+  id: string;
+  title: string;
+  description: string;
+}

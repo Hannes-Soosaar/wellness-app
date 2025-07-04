@@ -53,7 +53,67 @@ Button
 
     -Verify scores update when changing: BMI range, activity level, goal, progress, or health habits
         -Dependent calculated parameters:  BMI, progress.
-        -Modifiable parameters: Activity, goal, caloreis (healt habits)
+        -Modifiable parameters: Activity, goal, calories (health habits)
 
-Initial fitness assessment: None as it adds zero insight?
+# Wellness-app
+In version 1.0 the wellness app is designed to help you get into shape with an focus on gathering body composition and weight related metrics. All advice and prompts are curated and carefully crafted to give broad and good advice on how to achieve your goals.
 
+
+## Profile page 
+The profile page holds your basic metrics, that will be used to calculate your progress and metrics.
+
+## Assessment page
+
+The Assessment tab is a stand alone, service and is meant not to track your progress but give an assessment of the form you are currently in.
+
+It does not take into account your age for in this version.
+
+## Overview page
+
+Give you a graphical view of your progress and wellness.
+
+## Settings page
+
+Here you can toggle the settings related to your account with the wellness-app
+
+## Advice page
+
+This page is meant fo you to get AI generated advice the questions are hardcoded and meant for the 1.0 version of the app. The chat functionality will be added in version 3.0
+
+## Progress page
+
+Your progress currently has two categories it tracks.
+
+- *Your weight and measures as the most important metrics to determine BMI and body composition meaning lean mass and fat.*
+
+- *Your energy balance meaning calories in and calories out.*
+
+
+## Goals page
+
+You can choose from one of the following goals.
+
+* Targe body weight.
+* Targe body fat %.
+* Targe calories balance.
+* Target strength.
+* Target endurance.
+
+All goals need to have a deadline, that the user must choose.
+Only one goal can be the focus as working on any of the goals as will have an effect on all other attributes.
+
+## Activity page
+
+On the activity page you can add activities that will count towards your goal.
+
+## Progress page
+
+Here you are prompted to enter you physical metrics that should be measured in the real world. like weight and body measures.
+
+## Meal page
+
+The meal page will let you update your calories intake In version 1.0 . In version 2.0 food menus and meal prep will be added.
+
+## Restrictions page
+
+On the restrictions page you can add restrictions that will be taken into account giving advice and suggestions. Any food restrictions are not used in version 1.0

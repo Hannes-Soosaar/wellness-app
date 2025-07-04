@@ -1,5 +1,7 @@
 // USER LIMITATIONS //
 
+import { UserGoal } from "./user";
+
 export const FOOD_INGREDIENTS = [
   "dairy",
   "nuts",
@@ -129,7 +131,38 @@ export const USER_STRENGTH_LEVEL = [
 export const USER_ASSESSMENT_OPTIONS = {
   weeklyActivityList: USER_WEEKLY_ACTIVITY_LIST, // gives 0 to 10 points
   sessionDuration: USER_SESSION_DURATION, // gives 1 to 3 points multiplier
+  userTargeHeartRate: USER_TARGET_HEART_RATE,
   userFitnessLevel: USER_FITNESS_LEVEL, // gives 0 points
   strengthIndicator: USER_STRENGTH_LEVEL, // gives 2 to 10 points
   enduranceLevel: USER_ENDURANCE_LEVEL, //gives 2 to 10 points
 };
+
+// GOALS
+
+export const USER_GOALS: UserGoal[] = [
+  {
+    id: "weigh",
+    title: "Reach a desired weight",
+    description: "Would like to increase or decrease body weight",
+  },
+  {
+    id: "fat",
+    title: "Reach a certain body fat percentage",
+    description: "Your target body fat percentage",
+  },
+  {
+    id: "calories",
+    title: "Observe calorie intake",
+    description: "What is your weekly calorie intake goal?",
+  },
+  {
+    id: "strength",
+    title: "Strength Training",
+    description: "how many pushups would you like to do in one set?",
+  },
+  {
+    id: "endurance",
+    title: "Endurance Training",
+    description: "How long would you like to be able to walk for?",
+  },
+];
