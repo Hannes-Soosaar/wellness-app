@@ -17,11 +17,11 @@ const GoalCard: React.FC<GoalCardProps> = ({
 }) => {
   const getDefaultDate = () => {
     const today = new Date();
-    today.setDate(today.getDate() + 7); // +7 days
-    return today.toISOString().split("T")[0]; // Format YYYY-MM-DD
+    today.setDate(today.getDate() + 7);
+    return today.toISOString().split("T")[0];
   };
 
-  const [date, setDate] = useState(getDefaultDate()); // start with 1 week from today.
+  const [date, setDate] = useState(getDefaultDate());
   const [targetValue, setTargetValue] = useState<number>(0);
 
   const handleSelect = () => {
@@ -29,7 +29,6 @@ const GoalCard: React.FC<GoalCardProps> = ({
       alert("Please enter a goal value");
       return;
     }
-
     onSelect(option, date, targetValue);
   };
 

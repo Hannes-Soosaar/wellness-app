@@ -1,33 +1,32 @@
 import React, { useState } from "react";
 import GoalCard from "../components/GoalCard";
 import { USER_GOALS } from "../types/tempMockConstants";
-import DateSelector from "../components/DateSelector";
 
 interface GoalPost {
   option: string;
   targetDate: string;
+  targetValue: number;
 }
 
 const Goals: React.FC = () => {
   const [selectedGoal, setSelectedGoal] = useState<{
     option: string;
     targetDate: string;
+    targetValue: number;
   } | null>(null);
-  const [goalPost, setGoalPost] = useState<GoalPost>([]);
 
-  const handleGoalSelect = (option: string, targetDate: string) => {
+  const handleGoalSelect = (
+    option: string,
+    targetDate: string,
+    targetValue: number
+  ) => {
     const goalData: GoalPost = {
       option,
       targetDate,
+      targetValue,
     };
     setSelectedGoal(goalData);
     saveGoal(goalData);
-  };
-
-  const handleDateSelect = (targetDate: string) => {
-    if (!selectedGoal) return;
-    const newGoal: GoalPost = { option: selectedGoal, targetDate: targetDate };
-    saveGoal(newGoal);
   };
 
   const saveGoal = (goal: GoalPost) => {
@@ -57,10 +56,6 @@ const Goals: React.FC = () => {
             onSelect={handleGoalSelect}
           />
         ))}
-        <DateSelector
-          onDateSelect={handleDateSelect}
-          label={`Set target date for "${selectedGoal}"`}
-        ></DateSelector>
       </div>
     </>
   );
