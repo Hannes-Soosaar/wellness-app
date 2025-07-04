@@ -165,4 +165,4 @@ export const USER_GOALS: UserGoal[] = [
     title: "Endurance Training",
     description: "How long would you like to be able to walk for?",
   },
-];
+] as const;

@@ -41,6 +41,7 @@ const CheckboxMenu: React.FC<CheckboxMenuProps> = ({
               checked={selected.includes(option)}
               onChange={() => toggleOption(option)}
             />
+
             {" " + option}
           </label>
         ))}
