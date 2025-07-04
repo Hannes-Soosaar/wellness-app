@@ -86,3 +86,16 @@ nav a:hover {
 .header-menu {
   background-color: #a8caba;
 }
+
+.card-container {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #2e2e2e;
+  border-radius: 30px;
+  padding: 30px;
+  margin: 10px;
+  max-width: 800px;
+}
+.active-card {
+  background-color: #a8caba;
+}
