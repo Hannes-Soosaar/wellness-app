@@ -1,44 +1,45 @@
 import React, { useState } from "react";
 interface ActivityPost {
   id: string;
-  activityType: string;
-  activityDuration: number;
-  activityIntensity: string;
-  activityDate: string;
+  weight: number;
+  neckCircumference: number;
+  waistCircumference: number;
+  hipCircumference: number;
+  progressDate: string;
   activityNote?: string;
 }
 
 const Progress: React.FC = () => {
-  const [activityType, setActivityType] = useState("");
-  const [activityDuration, setActivityDuration] = useState<number>(0);
-  const [activityIntensity, setActivityIntensity] = useState("");
-  const [activityDate, setActivityDate] = useState("");
+  const [weight, setWeight] = useState<number>(0);
+  const [neckCircumference, setNeckCircumference] = useState<number>(0);
+  const [waistCircumference, setWaistCircumference] = useState<number>(0);
+  const [progressDate, setProgressDate] = useState("");
   const [activityNote, setActivityNote] = useState("");
 
   const handleSave = () => {
-    const newActivityPost = {
+    const newProgress = {
       id: crypto.randomUUID(),
-      activityType,
-      activityDuration,
-      activityIntensity,
-      activityDate,
+      userWeight: weight,
+      userNeckCircumference: neckCircumference,
+      userWaistCircumference: waistCircumference,
+      userProgressDate: progressDate,
       activityNote,
     };
 
     try {
-      console.log("Saving activity:", newActivityPost);
-      localStorage.setItem("latestActivity", JSON.stringify(newActivityPost));
+      console.log("Saving activity:", newProgress);
 
-      alert("Activity saved successfully!");
+      localStorage.setItem("newUserProgress", JSON.stringify(newProgress));
 
-      setActivityType("");
-      setActivityDuration(0);
-      setActivityIntensity("");
-      setActivityDate("");
+      alert("Progress saved successfully!");
+
+      setWeight(0);
+      setNeckCircumference(0);
+      setWaistCircumference(0);
       setActivityNote("");
     } catch (error) {
       console.error("Failed to save activity:", error);
-      alert("Failed to save activity.");
+      alert("Failed to save Progress.");
     }
   };
 
@@ -48,51 +49,44 @@ const Progress: React.FC = () => {
         <h3 className="activity-heading">Log Progress</h3>
 
         <label className="activity-label">
-          Activity Type:
-          <select
-            value={activityType}
-            onChange={(e) => setActivityType(e.target.value)}
-            className="activity-input"
-          >
-            <option value="">Select Intensity</option>
-            <option value="cardio">Cardio</option>
-            <option value="strength">Strength</option>
-            <option value="hit">HIT</option>
-            <option value="mixed">Mixed</option>
-            <option value="running">Running</option>
-          </select>
-        </label>
-
-        <label className="activity-label">
-          Duration (minutes):
+          Weight in (kg):
           <input
             type="text"
-            value={activityType}
-            onChange={(e) => setActivityType(e.target.value)}
+            step="0.01"
+            value={weight}
+            onChange={(e) => setWeight(parseFloat(e.target.value))}
             className="activity-input"
           />
         </label>
 
         <label className="activity-label">
-          Intensity:
-          <select
-            value={activityIntensity}
-            onChange={(e) => setActivityIntensity(e.target.value)}
+          Neck Circumference (cm):
+          <input
+            type="text"
+            step="any"
+            value={neckCircumference}
+            onChange={(e) => setNeckCircumference(Number(e.target.value))}
             className="activity-input"
-          >
-            <option value="">Select Intensity</option>
-            <option value="Low">Low</option>
-            <option value="Moderate">Moderate</option>
-            <option value="High">High</option>
-          </select>
+          />
+        </label>
+
+        <label className="activity-label">
+          Waist Circumference (cm):
+          <input
+            type="text"
+            step="any"
+            value={waistCircumference}
+            onChange={(e) => setWaistCircumference(Number(e.target.value))}
+            className="activity-input"
+          />
         </label>
 
         <label className="activity-label">
           Date:
           <input
             type="date"
-            value={activityDate}
-            onChange={(e) => setActivityDate(e.target.value)}
+            value={progressDate}
+            onChange={(e) => setProgressDate(e.target.value)}
           />
         </label>
 
