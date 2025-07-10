@@ -18,7 +18,7 @@ const Restrictions: React.FC = () => {
       return acc;
     }, {} as Record<string, string[]>)
   );
-  // Modify to save to the backend
+
   const saveUserRestrictions = () => {
     try {
       const serializedState = JSON.stringify(selectedOptionsByGroup);
@@ -39,7 +39,7 @@ const Restrictions: React.FC = () => {
 
   return (
     <>
-      <p>Any checked item will not be excluded from your suggestions</p>
+      <p>Any checked item will be excluded from your suggestions</p>
       {Object.entries(USER_RESTRICTION_OPTIONS).map(([key, options]) => (
         <CheckboxMenu
           key={key}

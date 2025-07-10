@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { MdHealthAndSafety } from "react-icons/md";
+import { ErrorBar } from "recharts";
+import ErrorMessage from "../components/ErrorMessage";
 
 interface MealPost {
   id: string;
@@ -48,6 +49,10 @@ const Meal: React.FC = () => {
     return /^-?\d+(\.\d+)?$/.test(normalized.trim());
   };
 
+  const handleErrorClose = () => {
+    setError("");
+  };
+
   return (
     <>
       <div className="meal-container">
@@ -67,7 +72,7 @@ const Meal: React.FC = () => {
             <option value="Dessert">Dessert</option>
           </select>
         </label>
-
+        <ErrorMessage errorMessage={error} onClose={handleErrorClose} />
         <label className="meal-label">
           Meal Calories (kcal)
           <input

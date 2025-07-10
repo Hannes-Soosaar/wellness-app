@@ -22,13 +22,15 @@ const Profile: React.FC = () => {
     userName: "hannes@gmail.com",
     firstName: "Hannes",
     lastName: "Soosaar",
-    gender: "male",
+    sex: "male",
     age: 41,
     weight: 131,
     height: 185,
     BMI: 28,
     fatPercentage: 21,
     wellnessScore: 100,
+    neckCircumference: "50",
+    waistCircumference: "118",
   });
 
   const [formData, setFormData] = useState<UserData>(user);
@@ -67,12 +69,16 @@ const Profile: React.FC = () => {
             {user.userName}
           </p>
           <p>
-            <strong>Gender: </strong>
-            {user.gender}
+            <strong>Sex: </strong>
+            {user.sex}
           </p>
           <p>
             <strong>Weight: </strong>
             {user.weight}
+          </p>
+          <p>
+            <strong>Body fat: </strong>
+            {user.fatPercentage}
           </p>
           <p>
             <strong>Age: </strong>
@@ -87,16 +93,15 @@ const Profile: React.FC = () => {
       ) : (
         <>
           <label className="stacked">
-            First name:
+            First Name:
             <input
               name="firstName"
               value={formData.firstName}
               onChange={handleChange}
             ></input>
           </label>
-          <br />
           <label className="stacked">
-            Last name:
+            Last Name :
             <input
               name="lastName"
               value={formData.lastName}
@@ -104,18 +109,43 @@ const Profile: React.FC = () => {
             ></input>
           </label>
           <label className="stacked">
-            Gender:
+            Neck Circumference: (cm):
             <input
-              name="gender"
-              value={formData.gender}
+              name="neckCircumference"
+              value={formData.neckCircumference}
+              onChange={handleChange}
+            ></input>
+          </label>
+          <br />
+          <label className="stacked">
+            Waist Circumference: (cm) :
+            <input
+              name="waistCircumference"
+              value={formData.waistCircumference}
               onChange={handleChange}
             ></input>
           </label>
           <label className="stacked">
-            Weight:
+            Weight (kg):
             <input
               name="weight"
               value={formData.weight}
+              onChange={handleChange}
+            ></input>
+          </label>
+          <label className="stacked">
+            Height (cm):
+            <input
+              name="height"
+              value={formData.height}
+              onChange={handleChange}
+            ></input>
+          </label>
+          <label className="stacked">
+            Sex:
+            <input
+              name="sex"
+              value={formData.sex}
               onChange={handleChange}
             ></input>
           </label>

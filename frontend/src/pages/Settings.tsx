@@ -42,6 +42,8 @@ const Settings: React.FC = () => {
     //Update BE via API
   };
 
+  const handleUpdatePassword = () => {};
+
   return (
     <>
       <h3>User Settings</h3>
@@ -95,8 +97,10 @@ const Settings: React.FC = () => {
       </div>
 
       <br />
-
-      <button onClick={handleSave}>Save</button>
+      <div>
+        <button onClick={handleSave}>Save</button>
+        <button onClick={handleUpdatePassword}>Update Password </button>
+      </div>
     </>
   );
 };

@@ -45,13 +45,15 @@ export interface UserData {
   firstName: string;
   lastName: string;
   // gender needs to be a number
-  gender: string;
+  sex: string;
   age: number;
   weight: number;
   height: number;
   BMI: number;
   fatPercentage: number;
   wellnessScore: number;
+  neckCircumference: string;
+  waistCircumference: string;
 }
 
 export interface UserActivity {

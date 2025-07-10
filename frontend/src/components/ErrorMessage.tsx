@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 interface ErrorProps {
   errorMessage: string;
@@ -6,11 +6,13 @@ interface ErrorProps {
 }
 
 const ErrorMessage: React.FC<ErrorProps> = ({ errorMessage, onClose }) => {
+  if (!errorMessage) return null;
+
   return (
     <>
       <div className="error-container">
-        <h3 className="error-heading">{errorMessage}</h3>
-        <button className="close Error" onClick={onClose}>
+        <p className="error-content">{errorMessage}</p>
+        <button className="error-button" onClick={onClose}>
           Close
         </button>
       </div>
