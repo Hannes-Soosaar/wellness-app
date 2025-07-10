@@ -11,9 +11,14 @@ interface MealPost {
 }
 
 const Meal: React.FC = () => {
+  const getTodayString = () => {
+    const today = new Date();
+    return today.toISOString().split("T")[0];
+  };
+
   const [meal, setMeal] = useState("");
   const [mealCalories, setMealCalories] = useState("");
-  const [mealDate, setMealDate] = useState("");
+  const [mealDate, setMealDate] = useState(getTodayString());
   const [mealNote, setMealNote] = useState("");
   const [error, setError] = useState("");
 
@@ -80,6 +85,16 @@ const Meal: React.FC = () => {
             type="text"
             value={mealCalories}
             onChange={(e) => setMealCalories(e.target.value)}
+          />
+        </label>
+
+        <label className="date-label">
+          Target Date:
+          <input
+            type="date"
+            value={mealDate}
+            onChange={(e) => setMealDate(e.target.value)}
+            className="date-input"
           />
         </label>
 

@@ -10,10 +10,22 @@ interface ActivityPost {
 }
 
 const Activity: React.FC = () => {
+  const getTodayString = () => {
+    const today = new Date();
+    return today.toISOString().split("T")[0];
+  };
+
+  const isValidNumber = (stringValue: string) => {
+    if (stringValue === "") return true;
+    const parsed = parseFloat(stringValue);
+    if (parsed < 0) return false;
+    return !isNaN(parsed) && isFinite(parsed);
+  };
+
   const [activityType, setActivityType] = useState("");
   const [activityDuration, setActivityDuration] = useState<number>(0);
   const [activityIntensity, setActivityIntensity] = useState("");
-  const [activityDate, setActivityDate] = useState("");
+  const [activityDate, setActivityDate] = useState(getTodayString());
   const [activityNote, setActivityNote] = useState("");
   const [error, setError] = useState("");
 
@@ -40,13 +52,6 @@ const Activity: React.FC = () => {
       console.error("Failed to save activity:", error);
       alert("Failed to save activity.");
     }
-  };
-
-  const isValidNumber = (stringValue: string) => {
-    if (stringValue === "") return true;
-    const parsed = parseFloat(stringValue);
-    if (parsed < 0) return false;
-    return !isNaN(parsed) && isFinite(parsed);
   };
 
   return (

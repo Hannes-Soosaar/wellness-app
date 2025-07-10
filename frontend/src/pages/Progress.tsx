@@ -10,10 +10,15 @@ interface ActivityPost {
 }
 
 const Progress: React.FC = () => {
+  const getTodayString = () => {
+    const today = new Date();
+    return today.toISOString().split("T")[0];
+  };
+
   const [weight, setWeight] = useState("");
   const [neckCircumference, setNeckCircumference] = useState("");
   const [waistCircumference, setWaistCircumference] = useState("");
-  const [progressDate, setProgressDate] = useState("");
+  const [progressDate, setProgressDate] = useState(getTodayString());
   const [activityNote, setActivityNote] = useState("");
   const [error, setError] = useState("");
 

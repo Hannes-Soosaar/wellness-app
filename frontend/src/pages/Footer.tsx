@@ -32,7 +32,6 @@ const Footer: React.FC = () => {
         {isModalOpen === "terms" && (
           <>
             <Terms />
-            {/* Add the  element */}
           </>
         )}
         {isModalOpen === "privacy" && (
