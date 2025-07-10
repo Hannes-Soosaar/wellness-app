@@ -23,14 +23,9 @@ Student can explain the tradeoffs of their chosen data visualization library
 DONE: User receives an email with verification link after registration
 DONE Access token expires after [x] minutes of inactivity
 DONE: The code is well-organized, properly commented, and follows best practices for the chosen programming language(s)
-
-
 PROGRESS: Authentication options include email-password and at least 2 OAuth providers (Google/GIt +  1 more)
+
 TODO: Password reset is handled via email
-
-
-
-PROGRESS (FE implement): Users can optinonally enable two-factor authentication
 TODO: Verify functionality of 2FA
 
 TODO: User cannot access protected routes without verifying email // no login without being verified.
@@ -40,26 +35,23 @@ TODO: Verify receiving new access token by sending a request with expired access
 TODO: Platform provides clear data usage consent with explicit user approval before data collection
         -At minimum, it includes what data is collected and how it's used
 --        
-
+DONE: (FE implement): Users can optinonally enable two-factor authentication
 
 
 DONE: Platform collects basic demographics, physical metrics, lifestyle indicators, dietary preferences and restrictions, wellness goals.
 TODO: User data is encrypted in transit and at rest (https and User data encrypted in SQL)
 
-
-
 DONE: Platform collects initial fitness assessment data
 TODO: Health metrics are converted to standard units before storage.
 
-
 DONE: Platform allows user to change their data sharing preferences. ? what does this mean ? // Available to switch off AI.
-
 TODO: Historical weight changes are tracked with timestamps
 
 DONE: Verify each weight entry has a unique timestamp by adding multiple entries and checking their history display // all entires have time stamps
 DONE: System prevents duplicate activity entries for the same timestamp: Time will be added as now.
 DONE: Wellness score changes when user updates their weekly activity frequency
 DONE: System recalculates wellness score components when any contributing metric changes
+
 
 TODO: Verify scores update when changing: BMI range, activity level, goal, progress, or health habits
 
@@ -69,6 +61,7 @@ AI section
 TODO: System generates different health insights when user's goals change
 TODO: Verify insight adjustment after changing user goals from one type to another (e.g., weight loss to muscle gain)
 TODO: AI recommendations include specific references to user's stated fitness goals
+
 TODO: Verify recommendations explicitly mention and align with the specific fitness goal set in user profile
 TODO: AI health insights exclude any personally identifiable information
 TODO: System implements response validation to filter out recommendations that don't match user's health restrictions
@@ -90,8 +83,9 @@ TODO: Goal progress includes milestone tracking
         Comparison view shows current vs target metrics, weekly/monthly progress comparison, health trend analysis and AI recommendations
 
 
-TODO: Health Dashboard shows BMI, wellness score, progress towards goals and AI insights based on user data  // this is the User main header element.
 
+
+TODO: Health Dashboard shows BMI, wellness score, progress towards goals and AI insights based on user data  // this is the User main header element.
 
 TODO: AI insights are visually presented with priority-based highlighting
 TODO: Verify insights are displayed with high/medium/low priority indicators and include expandable details // dunno what this mean.
