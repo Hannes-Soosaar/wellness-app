@@ -1,20 +1,21 @@
 import React, { useState } from "react";
 interface ActivityPost {
   id: string;
-  weight: number;
-  neckCircumference: number;
-  waistCircumference: number;
-  hipCircumference: number;
+  weight: string;
+  neckCircumference: string;
+  waistCircumference: string;
+  hipCircumference: string;
   progressDate: string;
   activityNote?: string;
 }
 
 const Progress: React.FC = () => {
-  const [weight, setWeight] = useState<number>(0);
-  const [neckCircumference, setNeckCircumference] = useState<number>(0);
-  const [waistCircumference, setWaistCircumference] = useState<number>(0);
+  const [weight, setWeight] = useState("");
+  const [neckCircumference, setNeckCircumference] = useState("");
+  const [waistCircumference, setWaistCircumference] = useState("");
   const [progressDate, setProgressDate] = useState("");
   const [activityNote, setActivityNote] = useState("");
+  const [error, setError] = useState("");
 
   const handleSave = () => {
     const newProgress = {
@@ -26,16 +27,25 @@ const Progress: React.FC = () => {
       activityNote,
     };
 
+    if (!isValidNumber(weight)) {
+      setError("Weight must be a valid number!");
+      alert(error);
+      return error;
+    }
+
+    if (!isValidNumber(neckCircumference)) {
+      setError("Neck Circumference must be a valid number!");
+      alert(error);
+      return error;
+    }
+
     try {
       console.log("Saving activity:", newProgress);
-
       localStorage.setItem("newUserProgress", JSON.stringify(newProgress));
-
       alert("Progress saved successfully!");
-
-      setWeight(0);
-      setNeckCircumference(0);
-      setWaistCircumference(0);
+      setWeight("");
+      setNeckCircumference("");
+      setWaistCircumference("");
       setActivityNote("");
     } catch (error) {
       console.error("Failed to save activity:", error);
@@ -43,54 +53,61 @@ const Progress: React.FC = () => {
     }
   };
 
+  const isValidNumber = (stringValue: string) => {
+    if (stringValue === "") return true;
+    const parsed = parseFloat(stringValue);
+    if (parsed < 0) return false;
+    return !isNaN(parsed) && isFinite(parsed);
+  };
+
   return (
     <>
-      <div className="activity-container">
-        <h3 className="activity-heading">Log Progress</h3>
+      <div className="progress-container">
+        <h3 className="progress-heading">Log Progress</h3>
 
-        <label className="activity-label">
+        <label className="progress-label">
           Weight in (kg):
           <input
             type="text"
-            step="0.01"
             value={weight}
-            onChange={(e) => setWeight(parseFloat(e.target.value))}
-            className="activity-input"
+            onChange={(e) => setWeight(e.target.value)}
+            className="progress-input"
           />
         </label>
 
-        <label className="activity-label">
+        <label className="progress-label">
           Neck Circumference (cm):
           <input
             type="text"
             step="any"
             value={neckCircumference}
-            onChange={(e) => setNeckCircumference(Number(e.target.value))}
-            className="activity-input"
+            onChange={(e) => setNeckCircumference(e.target.value)}
+            className="progress-input"
           />
         </label>
 
-        <label className="activity-label">
+        <label className="progress-label">
           Waist Circumference (cm):
           <input
             type="text"
             step="any"
             value={waistCircumference}
-            onChange={(e) => setWaistCircumference(Number(e.target.value))}
-            className="activity-input"
+            onChange={(e) => setWaistCircumference(e.target.value)}
+            className="progress-input"
           />
         </label>
 
-        <label className="activity-label">
+        <label className="progress-label">
           Date:
           <input
             type="date"
             value={progressDate}
             onChange={(e) => setProgressDate(e.target.value)}
+            className="progress-date"
           />
         </label>
 
-        <label className="activity-label">
+        <label className="progress-label">
           Notes:
           <textarea
             value={activityNote}
@@ -98,7 +115,7 @@ const Progress: React.FC = () => {
           />
         </label>
 
-        <button onClick={handleSave}>Save Activity</button>
+        <button onClick={handleSave}>Update Progress</button>
       </div>
     </>
   );

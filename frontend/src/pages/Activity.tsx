@@ -15,6 +15,7 @@ const Activity: React.FC = () => {
   const [activityIntensity, setActivityIntensity] = useState("");
   const [activityDate, setActivityDate] = useState("");
   const [activityNote, setActivityNote] = useState("");
+  const [error, setError] = useState("");
 
   const handleSave = () => {
     const newActivityPost = {
@@ -29,9 +30,7 @@ const Activity: React.FC = () => {
     try {
       console.log("Saving activity:", newActivityPost);
       localStorage.setItem("latestActivity", JSON.stringify(newActivityPost));
-
       alert("Activity saved successfully!");
-
       setActivityType("");
       setActivityDuration(0);
       setActivityIntensity("");
@@ -43,11 +42,17 @@ const Activity: React.FC = () => {
     }
   };
 
+  const isValidNumber = (stringValue: string) => {
+    if (stringValue === "") return true;
+    const parsed = parseFloat(stringValue);
+    if (parsed < 0) return false;
+    return !isNaN(parsed) && isFinite(parsed);
+  };
+
   return (
     <>
       <div className="activity-container">
         <h3 className="activity-heading">Log New Activity</h3>
-
         <label className="activity-label">
           Activity Type:
           <select
@@ -96,7 +101,6 @@ const Activity: React.FC = () => {
             onChange={(e) => setActivityDate(e.target.value)}
           />
         </label>
-
         <label className="activity-label">
           Notes:
           <textarea
@@ -104,7 +108,6 @@ const Activity: React.FC = () => {
             onChange={(e) => setActivityNote(e.target.value)}
           />
         </label>
-
         <button onClick={handleSave}>Save Activity</button>
       </div>
     </>

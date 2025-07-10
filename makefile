@@ -22,15 +22,14 @@ clear:
 
 #FE commands
 
-startfe:
+startFe:
 	cd frontend && npm run dev
-stopfe:
+stopFe:
 
 
 #BE commands
-startbe:
+startBe:
 	cd backend && node server.js
-stopbe:
 
 
 #Full launch
