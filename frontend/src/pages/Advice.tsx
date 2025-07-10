@@ -9,6 +9,7 @@ const Advice: React.FC = () => {
         blanditiis. Tempora nisi distinctio omnis architecto sit modi, rem
         perspiciatis deleniti, numquam perferendis aliquid ab, deserunt ex
         laboriosam culpa dolorum eveniet?
+        <button className="advice-button">Last</button>
       </p>
     </>
   );

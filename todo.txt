@@ -26,10 +26,9 @@ DONE: The code is well-organized, properly commented, and follows best practices
 
 
 PROGRESS: Authentication options include email-password and at least 2 OAuth providers (Google/GIt +  1 more)
-
-
-
 TODO: Password reset is handled via email
+
+
 
 PROGRESS (FE implement): Users can optinonally enable two-factor authentication
 TODO: Verify functionality of 2FA
@@ -44,50 +43,43 @@ TODO: Platform provides clear data usage consent with explicit user approval bef
 
 
 
-TODO: Platform collects basic demographics, physical metrics, lifestyle indicators, dietary preferences and restrictions, wellness goals.
+DONE: Platform collects basic demographics, physical metrics, lifestyle indicators, dietary preferences and restrictions, wellness goals.
 TODO: User data is encrypted in transit and at rest (https and User data encrypted in SQL)
 
 
 
-TODO: Platform collects initial fitness assessment data
+DONE: Platform collects initial fitness assessment data
 TODO: Health metrics are converted to standard units before storage.
 
 
-TODO: Platform allows user to change their data sharing preferences. ? what does this mean ?
+DONE: Platform allows user to change their data sharing preferences. ? what does this mean ? // Available to switch off AI.
+
 TODO: Historical weight changes are tracked with timestamps
 
-TODO: Verify each weight entry has a unique timestamp by adding multiple entries and checking their history display
-
+DONE: Verify each weight entry has a unique timestamp by adding multiple entries and checking their history display // all entires have time stamps
 DONE: System prevents duplicate activity entries for the same timestamp: Time will be added as now.
 DONE: Wellness score changes when user updates their weekly activity frequency
 DONE: System recalculates wellness score components when any contributing metric changes
+
 TODO: Verify scores update when changing: BMI range, activity level, goal, progress, or health habits
 
+
+AI section
 
 TODO: System generates different health insights when user's goals change
 TODO: Verify insight adjustment after changing user goals from one type to another (e.g., weight loss to muscle gain)
 TODO: AI recommendations include specific references to user's stated fitness goals
-
-
 TODO: Verify recommendations explicitly mention and align with the specific fitness goal set in user profile
-
 TODO: AI health insights exclude any personally identifiable information
-
 TODO: System implements response validation to filter out recommendations that don't match user's health restrictions
     - Ask the students to describe their approach
-
-
 
 TODO: System displays cached recommendations when AI service is unavailable
 TODO: Verify system shows most recent cached recommendations when AI service connection is disabled
 
 
 TODO: System generates weekly and monthly health summaries including progress and key metrics
-
 TODO: Verify health summary includes week's activity levels, wellness score changes, and progress towards goals
-
-TODO: Health Dashboard shows BMI, wellness score, progress towards goals and AI insights based on user data
-
 TODO: Progress chart shows weight tracking over time, wellness score evolution and activity level changes
 
 TODO: Goal progress includes milestone tracking
@@ -98,21 +90,20 @@ TODO: Goal progress includes milestone tracking
         Comparison view shows current vs target metrics, weekly/monthly progress comparison, health trend analysis and AI recommendations
 
 
+TODO: Health Dashboard shows BMI, wellness score, progress towards goals and AI insights based on user data  // this is the User main header element.
+
+
 TODO: AI insights are visually presented with priority-based highlighting
-
-TODO: Verify insights are displayed with high/medium/low priority indicators and include expandable details
-
+TODO: Verify insights are displayed with high/medium/low priority indicators and include expandable details // dunno what this mean.
 TODO: Weight progress chart displays goal weight as a reference line
 
 DONE: Charts resize without data loss on mobile devices (feature in recharts)
 TODO: Error messages appear without page reload when API requests fail
+TODO: Submit health profile form with invalid BMI value (e.g., -1) and verify error message appears without page refresh //input error handling from FE.
 
-
-TODO: Submit health profile form with invalid BMI value (e.g., -1) and verify error message appears without page refresh
+// Rate limit
 TODO: System blocks rapid-fire API requests from the same user
-
 TODO: Verify rate limit kicks in after [x] requests within 1 minute
-
 TODO: Dashboard loads placeholder UI when data is being fetched
 
 

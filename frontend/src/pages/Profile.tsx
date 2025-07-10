@@ -55,6 +55,11 @@ const Profile: React.FC = () => {
     //TODO add more values here -
   };
 
+  const isValidNumber = (stringValue: string) => {
+    const normalized = stringValue.replace(",", ".");
+    return /^-?\d+(\.\d+)?$/.test(normalized.trim());
+  };
+
   return (
     <>
       <h3>Wellness Score: {user.wellnessScore}</h3>

@@ -59,10 +59,8 @@ const Progress: React.FC = () => {
   };
 
   const isValidNumber = (stringValue: string) => {
-    if (stringValue === "") return true;
-    const parsed = parseFloat(stringValue);
-    if (parsed < 0) return false;
-    return !isNaN(parsed) && isFinite(parsed);
+    const normalized = stringValue.replace(",", ".");
+    return /^-?\d+(\.\d+)?$/.test(normalized.trim());
   };
 
   return (

@@ -1,5 +1,8 @@
 import React from "react";
 
+//TODO enable export of data that is being viewed
+//TODO System generates weekly and monthly health summaries including progress and key metrics
+
 import {
   LineChart,
   Line,

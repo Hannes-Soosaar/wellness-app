@@ -41,6 +41,11 @@ const Goals: React.FC = () => {
     }
   };
 
+  const isValidNumber = (stringValue: string) => {
+    const normalized = stringValue.replace(",", ".");
+    return /^-?\d+(\.\d+)?$/.test(normalized.trim());
+  };
+
   console.log(USER_GOALS);
   return (
     <>
