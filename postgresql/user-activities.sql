@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS user_activities (
 id SERIAL PRIMARY KEY,
 activity_id TEXT NOT NULL,
 user_id TEXT NOT NULL,
-type TEXT NOT NULL,
+type_id TEXT NOT NULL,
 duration NUMBER NOT NULL,
 intensity TEXT,
 date DATE,

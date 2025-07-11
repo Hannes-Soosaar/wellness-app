@@ -7,6 +7,5 @@ CREATE TABLE IF NOT EXISTS user_settings{
     account_suspended_at TIMESTAMP,
     notification_preferences JSONB,
     privacy_settings JSONB,
-    theme_preferences JSONB,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 }
