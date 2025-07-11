@@ -28,6 +28,8 @@ PROGRESS: Authentication options include email-password and at least 2 OAuth pro
 TODO: Password reset is handled via email
 TODO: Verify functionality of 2FA
 
+TOOD:TO
+
 TODO: User cannot access protected routes without verifying email // no login without being verified.
 
 TODO: New access token is issued when valid refresh token is provided // add token logic 

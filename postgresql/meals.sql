@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS meals {
+    id TEXT NOT NULL,
+    user_id TEXT NOT NULL
+    type TEXT NOT NULL,
+    calories NUMERIC NOT NULL,
+    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    consumed_at DATE NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+}

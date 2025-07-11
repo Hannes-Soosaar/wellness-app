@@ -1,8 +1,15 @@
-import { Request, Response } from "express";
+import { Request, RequestHandler, response, Response } from "express";
 import dotenv from "dotenv";
 import { DiscordAuthOptions, GoogleAuthOptions } from "../models/authModels";
 import axios from "axios";
 import { handleRegisterWithGoogle } from "./registrationController";
+import {
+  generateJWT,
+  generateRefreshToken,
+  verifyJWT,
+  verifyJWTRefresh,
+} from "../utils/tokens";
+import pg from "../../server";
 
 dotenv.config();
 
@@ -197,4 +204,44 @@ export const getBearerToken = (req: Request): string | null => {
     return authHeader.split(" ")[1];
   }
   return null;
+};
+
+export const handleRefreshToken: RequestHandler = async (req, res) => {
+  const refreshToken = req.cookies.refreshToken;
+
+  if (!refreshToken) {
+    res.status(401).json({ message: "No refresh token provided" });
+    return;
+  }
+
+  try {
+    const payload = verifyJWTRefresh(refreshToken);
+    console.log("Refresh token payload:", payload);
+
+    const userId =
+      typeof payload === "object" && "id" in payload ? payload.id : null;
+
+    if (!userId) {
+      res.status(403).json({ message: "Invalid refresh token payload " });
+      return;
+    }
+
+    const result = await pg.pool.query(
+      "SELECT * FROM users WHERE id = $1 AND refresh_token= $2",
+      [userId, refreshToken]
+    );
+
+    if (result.rows.length === 0) {
+      res.status(403).json({ message: "Invalid refresh token" });
+      return;
+    }
+
+    const newAccessToken = generateJWT(userId);
+
+    res.status(200).json({ accessToken: newAccessToken });
+  } catch (error) {
+    console.error("Invalid refresh token", error);
+    res.status(403).json({ message: "Invalid refresh token" });
+    return;
+  }
 };

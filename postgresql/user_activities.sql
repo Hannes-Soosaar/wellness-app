@@ -1,0 +1,14 @@
+CREATE TABLE IF NOT EXISTS user_activities (
+id SERIAL PRIMARY KEY,
+activity_id TEXT NOT NULL,
+user_id TEXT NOT NULL,
+type TEXT NOT NULL,
+duration NUMBER NOT NULL,
+intensity TEXT,
+date DATE,
+note TEXT,
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+

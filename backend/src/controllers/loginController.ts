@@ -12,7 +12,6 @@ interface loginRequest {
 const handleLogin: RequestHandler = async (req: Request, res: Response) => {
   console.log("We arrived at the login controller!");
   console.log("request body", req.body);
-
   const { email, password }: loginRequest = req.body;
 
   try {
@@ -26,7 +25,6 @@ const handleLogin: RequestHandler = async (req: Request, res: Response) => {
         .json({ message: "Please check your login details, user not found" });
       return;
     }
-
     const user = result.rows[0];
 
     console.log("user found", user);
@@ -36,10 +34,28 @@ const handleLogin: RequestHandler = async (req: Request, res: Response) => {
         user.password
       );
       if (isValidUser) {
-        const token = generateJWT(user.id);
+        //TODO: check for 2F authentication.
+        const accessToken = generateJWT(user.id);
+        const refreshToken = generateRefreshToken(user.id);
+
+        await pg.pool.query(
+          "UPDATE users SET refresh_toke = $1 WHERE  id =$2",
+          [refreshToken, user.id]
+        );
+
         res
+          .cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "strict",
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+          })
           .status(200)
-          .json({ message: "All good, user found", token, user: user.email });
+          .json({
+            message: "All good, user found",
+            token: accessToken,
+            user: user.email,
+          });
         return;
       }
     } catch (error) {

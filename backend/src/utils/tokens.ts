@@ -13,7 +13,7 @@ if (!SECRET_KEY) {
 
 function generateJWT(userId: string): string {
   const accessToken = jwt.sign({ id: userId }, SECRET_KEY, {
-    expiresIn: JWT_EXPIRATION,
+    expiresIn: JWT_EXPIRATION as any, // cheating here a bit as what types sign needs is not very clear.
   });
   return accessToken;
 }
@@ -41,4 +41,4 @@ function generateRefreshToken(userId: string): string {
   return refreshToken;
 }
 
-export { generateJWT, verifyJWT, generateRefreshToken };
+export { generateJWT, verifyJWT, generateRefreshToken, verifyJWTRefresh };

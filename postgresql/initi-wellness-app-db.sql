@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS users (
     google_id TEXT UNIQUE,
     github_id TEXT UNIQUE,
     is_2fa_enabled BOOLEAN DEFAULT FALSE,
-    two_factor_secret TEXT,
+    2fa_secret TEXT,
     failed_attempts INT DEFAULT 0,
     locked_until TIMESTAMP,
     email TEXT UNIQUE NOT NULL,
@@ -99,3 +99,11 @@ VALUES
 
 -- );
 
+
+
+INSERT INTO goals (id, title, description) VALUES
+('weigh', 'Reach a desired weight', 'Would like to increase or decrease body weight'),
+('fat', 'Reach a certain body fat percentage', 'Your target body fat percentage'),
+('calories', 'Observe calorie intake', 'What is your weekly calorie intake goal?'),
+('strength', 'Strength Training', 'How many pushups would you like to do in one set?'),
+('endurance', 'Endurance Training', 'How long would you like to be able to walk for?');

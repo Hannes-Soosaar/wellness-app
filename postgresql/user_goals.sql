@@ -1,12 +1,10 @@
-CREATE TABLE IF NOT EXISTS user_goals (
+CREATE TABLE IF NOT EXISTS user_goal (
     id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    goal_type TEXT NOT NULL,  -- e.g., 'weight_loss', 'muscle_gain', 'maintenance'
-    target_weight INT NOT NULL,
-    fat_percentage_target INT NOT NULL,
-    target_weekly_weight_loss INT NOT NULL,
-    target_weekly_calories INT NOT NULL,
-    target_daily_calories INT NOT NULL,
-    target_BMI INT NOT NULL,
+    user_id TEXT NOT NULL UNIQUE,
+    goal_id TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    end_at DATE NOT NULL,
+    progress NUMERIC NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    FOREIGN KEY (goal_id) REFERENCES goals(id) ON DELETE CASCADE
 ); 
