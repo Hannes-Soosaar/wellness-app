@@ -7,6 +7,6 @@ CREATE TABLE IF NOT EXISTS profile_history (
     weight NUMERIC,
     calories_required NUMERIC,
     BMI NUMERIC,
-    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at  TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-)
+);

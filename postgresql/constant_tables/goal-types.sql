@@ -1,8 +1,8 @@
-CREATE TABLE IF NOT EXISTS goals{
+CREATE TABLE IF NOT EXISTS goals(
     id SERIAL PRIMARY KEY,
     category TEXT NOT NULL,
     title TEXT NOT NULL,
     description TEXT,
-    create_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    status TEXT NOT NULL DEFAULT 'active
-}
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    status TEXT NOT NULL DEFAULT 'active'
+);

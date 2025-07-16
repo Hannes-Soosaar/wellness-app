@@ -1,17 +1,17 @@
-CREATE TABLE IF NOT EXISTS user_profiles{
+CREATE TABLE IF NOT EXISTS user_profiles(
     id SERIAL PRIMARY KEY,
-    user_id TEXT NOT NULL,
+    user_id UUID NOT NULL,
     first_name TEXT,
     last_name TEXT ,
     sex TEXT,
     age INT,
-    height NUMERIC ,
-    neck_circumference NUMERIC ,
-    waist_circumference NUMERIC ,
-    body_fat_percentage NUMERIC ,
-    current_weight NUMERIC ,
+    height NUMERIC,
+    neck_circumference NUMERIC,
+    waist_circumference NUMERIC,
+    body_fat_percentage NUMERIC,
+    current_weight NUMERIC,
     current_calories_target NUMERIC,
-    current_BMI NUMERIC
+    current_BMI NUMERIC,
     location TEXT,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-};
+);

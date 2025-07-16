@@ -3,4 +3,4 @@ CREATE TABLE IF NOT EXISTS advice_categories(
     category TEXT NOT NULL UNIQUE,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     status TEXT NOT NULL DEFAULT 'active'
-)'
+);

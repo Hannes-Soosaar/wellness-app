@@ -1,12 +1,12 @@
-CREATE TABLE IF NOT EXISTS user_goal (
+CREATE TABLE IF NOT EXISTS user_goals (
     id SERIAL PRIMARY KEY,
-    user_id TEXT NOT NULL,
-    goal_id TEXT NOT NULL,
-    status TEXT NOT NULL, DEFAULT 'active',
+    user_id UUID NOT NULL,
+    goal_id INT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'active',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     end_at DATE NOT NULL,
     goal_target_value NUMERIC NOT NULL,
     goal_start_value NUMERIC NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (goal_id) REFERENCES goals(id) ON DELETE CASCADE
 ); 

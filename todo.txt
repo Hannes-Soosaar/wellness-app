@@ -85,17 +85,22 @@ TODO: Goal progress includes milestone tracking
         Comparison view shows current vs target metrics, weekly/monthly progress comparison, health trend analysis and AI recommendations
 
 
-
-
 TODO: Health Dashboard shows BMI, wellness score, progress towards goals and AI insights based on user data  // this is the User main header element.
 
-TODO: AI insights are visually presented with priority-based highlighting
+
+
+TODO: AI insights are visually presented with priority-based highlighting -- Handle with markdown
+
 TODO: Verify insights are displayed with high/medium/low priority indicators and include expandable details // dunno what this mean.
+
 TODO: Weight progress chart displays goal weight as a reference line
 
 DONE: Charts resize without data loss on mobile devices (feature in recharts)
+
 TODO: Error messages appear without page reload when API requests fail
-TODO: Submit health profile form with invalid BMI value (e.g., -1) and verify error message appears without page refresh //input error handling from FE.
+
+TODO: Submit health profile form with invalid BMI value (e.g., -1) and verify error message appears without page refresh //input error handling from FE not possible.
+
 
 // Rate limit
 TODO: System blocks rapid-fire API requests from the same user
