@@ -1,0 +1,4 @@
+CREATE TABLE IF NOT EXISTS meals (
+    id SERIAL PRIMARY KEY,
+    meal_type TEXT NOT NULL,
+)

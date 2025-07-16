@@ -52,7 +52,7 @@ export type CaloriesMacros = (typeof CALORIES_MACROS)[number];
 export type ExerciseTimes = (typeof EXERCISE_TIMES)[number];
 export type ExerciseDuration = (typeof EXERCISE_DURATION)[number];
 
-// USER ASSEMENT //
+// USER ASSESSMENT //
 
 export const USER_ACTIVITY_LIFESTYLE = [
   "sedentary: little or no exercise",

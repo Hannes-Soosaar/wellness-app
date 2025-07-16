@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS goal_history (
+    id SERIAL PRIMARY KEY,
+    goal_id INT NOT NULL,
+    goal_value INT NOT NULL,
+    note TEXT,
+    create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    FOREIGN KEY (goal_id) REFERENCES goals(id) ON DELETE CASCADE
+)

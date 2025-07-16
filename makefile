@@ -29,7 +29,7 @@ stopFe:
 
 #BE commands
 startBe:
-	cd backend && node server.js
+	cd backend && npx nodemon --exec "npx tsx src/index.ts"
 
 
 #Full launch
