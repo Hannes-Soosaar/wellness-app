@@ -1,17 +1,10 @@
-CREATE TABLE IF NOT EXISTS strength(
-    id TEXT  PRIMARY KEY,
-    title TEXT,
-    description TEXT ,
-)
-
-CREATE TABLE IF NOT EXISTS activity(
-    id TEXT  PRIMARY KEY,
-    title TEXT,
-    description TEXT ,
-)
-
-CREATE TABLE IF NOT EXISTS session_duration(
-    id TEXT  PRIMARY KEY,
-    title TEXT,
-    description TEXT ,
+CREATE TABLE IF NOT EXISTS assessment_criteria(
+    id SERIAL PRIMARY KEY,
+    category TEXT NOT NULL,
+    value TEXT NOT NULL,
+    title TEXT NOT NULL
+    description TEXT  NOT NULL,
+    score INT NOT NULL,
+    create_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    status TEXT NOT NULL DEFAULT 'active
 )

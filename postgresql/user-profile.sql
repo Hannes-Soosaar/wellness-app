@@ -1,18 +1,17 @@
 CREATE TABLE IF NOT EXISTS user_profiles{
     id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    user_goal_id INT,
+    user_id TEXT NOT NULL,
     first_name TEXT,
     last_name TEXT ,
+    sex TEXT,
     age INT,
-    height INT ,
-    neck_circumference INT ,
-    waist_circumference INT ,
-    body_fat_percentage INT ,
-    goal TEXT ,
-    current_weight INT ,
-    current_calories INT,
+    height NUMERIC ,
+    neck_circumference NUMERIC ,
+    waist_circumference NUMERIC ,
+    body_fat_percentage NUMERIC ,
+    current_weight NUMERIC ,
+    current_calories_target NUMERIC,
+    current_BMI NUMERIC
     location TEXT,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-    FOREIGN KEY (user_goal_id) REFERENCES user_goal(id) ON DELETE CASCADE
 };

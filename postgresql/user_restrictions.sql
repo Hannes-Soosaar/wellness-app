@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS user_restrictions (
     id TEXT primary key,
-    user_id  TEXT NOT NULL,
-    type_id TEXT NOT NULL,
+    user_id  UUID NOT NULL,
+    type_id INT NOT NULL,
     note TEXT,
     create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE

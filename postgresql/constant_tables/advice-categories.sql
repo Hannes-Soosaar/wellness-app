@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS advice_categories(
+    id SERIAL PRIMARY KEY,
+    category TEXT NOT NULL UNIQUE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    status TEXT NOT NULL DEFAULT 'active'
+)'

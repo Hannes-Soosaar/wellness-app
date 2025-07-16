@@ -3,4 +3,6 @@ CREATE TABLE IF NOT EXISTS goals{
     category TEXT NOT NULL,
     title TEXT NOT NULL,
     description TEXT,
+    create_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    status TEXT NOT NULL DEFAULT 'active
 }
