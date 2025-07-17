@@ -13,10 +13,10 @@ export function useAuth() {
       if (!authToken) {
         console.log("No access token, trying refresh...");
         try {
-          const res = await api.post("/auth/refresh", null, {
+          const emptyResponse: {} = {};
+          const res = await api.post("/auth/refresh", emptyResponse, {
             withCredentials: true, // include cookies
           });
-
           const newToken = res.data.accessToken;
           if (newToken) {
             localStorage.setItem("authToken", newToken);

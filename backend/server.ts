@@ -17,15 +17,25 @@ const pool = new Pool({
   port: Number(process.env.DB_PORT),
 });
 
+const allowedOrigins = [
+  "https://localhost:5173",
+  "https://localhost:5174",
+  "https://127.0.0.1:5173",
+  "https://127.0.0.1:5174",
+];
+
 app.use(express.json());
 app.use(
   cors({
-    origin: [
-      "https://localhost:5173",
-      "https://localhost:5174",
-      "https://127.0.0.1:5174",
-      "https://127.0.0.1:5173",
-    ],
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        console.log("Allowed origin:", origin);
+        callback(null, true);
+      } else {
+        console.log("Blocked by CORS:", origin);
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,

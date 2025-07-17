@@ -6,22 +6,22 @@ interface Props {
 }
 
 const Header: React.FC<Props> = ({ isLoggedIn }) => {
-  const authToken = localStorage.getItem("authToken");
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await api.get("/api/user", {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        });
-        console.log(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchData();
-  }, [authToken]);
+  // const authToken = localStorage.getItem("authToken");
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await api.get("/api/user", {
+  //         headers: {
+  //           Authorization: `Bearer ${authToken}`,
+  //         },
+  //       });
+  //       console.log(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, [authToken]);
 
   return (
     <nav className="header-menu">

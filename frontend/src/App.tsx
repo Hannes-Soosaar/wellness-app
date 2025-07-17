@@ -27,28 +27,7 @@ import UserAssessment from "./pages/UserAssesment";
 import { useAuth } from "./hooks/useAuth";
 
 const App: React.FC = () => {
-  // const [isLoggedIn, setIsLoggingIn] = useState<boolean>(false);
   const { isLoggedIn, loading } = useAuth();
-
-  // useEffect(() => {
-  //   if (!authToken || authToken === "undefined") {
-  //     console.log("No auth token found aka not logged in");
-  //     return;
-  //   }
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await api.get("/api/user", {
-  //         headers: {
-  //           Authorization: `Bearer ${authToken}`,
-  //         },
-  //       });
-  //       console.log(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
-  //   fetchData();
-  // }, [authToken]);
 
   return (
     <div className="layout">

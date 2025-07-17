@@ -35,11 +35,13 @@ api.interceptors.response.use(
     }
     console.error("Interceptor response error");
 
+    const emptyResponse: {} = {};
+
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
-        const res = await api.post("/auth/refresh", null, {
+        const res = await api.post("/auth/refresh", emptyResponse, {
           withCredentials: true,
         });
         const newAccessToken = res.data.token;
