@@ -25,10 +25,11 @@ DONE Access token expires after [x] minutes of inactivity
 DONE: The code is well-organized, properly commented, and follows best practices for the chosen programming language(s)
 PROGRESS: Authentication options include email-password and at least 2 OAuth providers (Google/GIt +  1 more)
 
+
+
 TODO: Password reset is handled via email
 TODO: Verify functionality of 2FA
 
-TOOD:TO
 
 TODO: User cannot access protected routes without verifying email // no login without being verified.
 
@@ -37,18 +38,23 @@ TODO: Verify receiving new access token by sending a request with expired access
 TODO: Platform provides clear data usage consent with explicit user approval before data collection
         -At minimum, it includes what data is collected and how it's used
 --        
-DONE: (FE implement): Users can optinonally enable two-factor authentication
-
-
+DONE: (FE implement): Users can optionally enable two-factor authentication
 DONE: Platform collects basic demographics, physical metrics, lifestyle indicators, dietary preferences and restrictions, wellness goals.
-TODO: User data is encrypted in transit and at rest (https and User data encrypted in SQL)
+
+DONE: User data is encrypted in transit and at rest (https and User data encrypted in SQL)
+
+TODO: At rest (https and User data encrypted in SQL) 
+    
+    -Encrypted at rest with pgcrypto
+    -email
+    -first_name 
+    -last_name 
 
 DONE: Platform collects initial fitness assessment data
 TODO: Health metrics are converted to standard units before storage.
 
 DONE: Platform allows user to change their data sharing preferences. ? what does this mean ? // Available to switch off AI.
-TODO: Historical weight changes are tracked with timestamps
-
+DONE: Historical weight changes are tracked with timestamps
 DONE: Verify each weight entry has a unique timestamp by adding multiple entries and checking their history display // all entires have time stamps
 DONE: System prevents duplicate activity entries for the same timestamp: Time will be added as now.
 DONE: Wellness score changes when user updates their weekly activity frequency

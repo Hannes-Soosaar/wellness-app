@@ -7,7 +7,6 @@ interface Props {
 
 const Header: React.FC<Props> = ({ isLoggedIn }) => {
   const authToken = localStorage.getItem("authToken");
-
   useEffect(() => {
     const fetchData = async () => {
       try {

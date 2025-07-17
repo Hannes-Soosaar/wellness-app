@@ -44,4 +44,5 @@ function decryptText(encrypted: string): string {
   decryptedText += decipher.final("utf-8");
   return decryptedText;
 }
+
 export { hashPassword, verifyPassword, encryptText, decryptText };

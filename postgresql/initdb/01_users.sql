@@ -6,8 +6,8 @@ CREATE TABLE IF NOT EXISTS users (
     mfa_enabled BOOLEAN DEFAULT FALSE,
     failed_attempts INT DEFAULT 0,
     locked_until TIMESTAMPTZ,
-    email TEXT UNIQUE NOT NULL,
-    password TEXT ,
+    email TEXT UNIQUE NOT NULL, -- encrypt
+    password TEXT ,             -- never encrypt already salted hash
     verification_token TEXT,
     verification_token_expires TIMESTAMPTZ,
     is_verified BOOLEAN DEFAULT FALSE,

@@ -8,7 +8,7 @@ const resend = new Resend(process.env.RESEND_API);
 
 const sendVerificationEmail = async (to: string, token: string) => {
   try {
-    const verificationLink = `http://localhost:5000/test/user?token=${token}`;
+    const verificationLink = `https://localhost:5000/test/user?token=${token}`;
 
     const data = await resend.emails.send({
       from: "Wellness app <register@geaglampings.eu>",
@@ -25,7 +25,7 @@ const sendVerificationEmail = async (to: string, token: string) => {
 
 const sendPasswordResetEmail = async (to: string, token: string) => {
   try {
-    const resetLink = `http://localhost:5000/reset-password?token=${token}`;
+    const resetLink = `https://localhost:5000/reset-password?token=${token}`;
     const data = await resend.emails.send({
       from: "Wellness app",
       to,
@@ -39,4 +39,4 @@ const sendPasswordResetEmail = async (to: string, token: string) => {
   }
 };
 
-export { sendVerificationEmail };
+export { sendVerificationEmail, sendPasswordResetEmail };
