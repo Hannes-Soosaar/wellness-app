@@ -5,9 +5,9 @@
   max-width: 1280px;
   min-width: 460px;
   flex-direction: column;
-  width: 100%;
+  width: 80vw;
+  margin: 0px;
   min-height: 100vh;
-  margin: 0 auto;
 }
 
 nav {
@@ -31,7 +31,7 @@ nav a:hover {
   display: flex;
   flex-direction: row;
   min-height: 600px;
-  /* flex: 1;  fills remaining space between header & footer */
+  flex: 1;
 }
 
 .sidebar {
