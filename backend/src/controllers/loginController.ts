@@ -3,6 +3,9 @@ import { pool } from "../../server";
 import { hashPassword, verifyPassword } from "../utils/crypto";
 import handleProfile from "./profileController";
 import { generateJWT, generateRefreshToken, verifyJWT } from "../utils/tokens";
+import dotenv from "dotenv";
+dotenv.config();
+const dbKey = process.env.DB_KEY;
 
 interface loginRequest {
   email: string;
@@ -15,9 +18,12 @@ const handleLogin: RequestHandler = async (req: Request, res: Response) => {
   const { email, password }: loginRequest = req.body;
 
   try {
-    const result = await pool.query("SELECT * FROM users WHERE email = $1", [
-      email,
-    ]);
+    console.log("The secret key is ", dbKey);
+    console.log("the email we are looking for is ", email);
+    const result = await pool.query(
+      "SELECT * FROM users WHERE pgp_sym_decrypt(email, $2) = $1",
+      [email, dbKey]
+    );
     if (result.rows.length === 0) {
       console.log("user not found", result.rows);
       res
@@ -26,7 +32,6 @@ const handleLogin: RequestHandler = async (req: Request, res: Response) => {
       return;
     }
     const user = result.rows[0];
-
     try {
       const isValidUser: boolean = await verifyPassword(
         password,

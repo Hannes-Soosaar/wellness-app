@@ -4,6 +4,9 @@ import { pool } from "../../server";
 import { hashPassword } from "../utils/crypto";
 import { sendVerificationEmail } from "../utils/emailService";
 import { GoogleUser } from "../models/googleUserModel";
+import dotenv from "dotenv";
+dotenv.config();
+const dbKey = process.env.DB_KEY;
 
 const handleRegister: RequestHandler = async (req, res) => {
   console.log("We arrived at the register controller!");
@@ -17,10 +20,10 @@ const handleRegister: RequestHandler = async (req, res) => {
     }
 
     console.log("Email to register", email);
-
+    //TODO add encryption
     const existingUser = await pool.query(
-      "SELECT * FROM users WHERE email= $1",
-      [email]
+      "SELECT * FROM users WHERE pgp_sym_decrypt(email, $2) = $1",
+      [email, dbKey]
     );
 
     if (existingUser.rows.length > 0) {
@@ -33,20 +36,19 @@ const handleRegister: RequestHandler = async (req, res) => {
 
     const verificationToken = uuidv4();
 
-    //TODO: add a new refresh token to the user
+    //TODO: add email encryption
     const result = await pool.query(
       `
       INSERT INTO users(email,password,verification_token)
-      VALUES ($1,$2,$3)
-      RETURNING id,email,created_at
-    
+      VALUES (pgp_sym_encrypt($1,$4),$2,$3)
+      RETURNING id, pgp_sym_decrypt(email,$4),created_at
     `,
-      [email, hashedPassword, verificationToken]
+      [email, hashedPassword, verificationToken, dbKey]
     );
 
     const newUser = result.rows[0];
     res.status(200).json({
-      messager: "Waiting for email confirmation",
+      message: "Waiting for email confirmation",
       user: result.rows[0],
     });
 
@@ -63,6 +65,7 @@ const handleRegisterWithGoogle = async (
   console.log("Register with google");
   console.log("user to register", user);
 
+  //TODO: check if this needs to be Google userID
   let newUser: GoogleUser = {
     id: user.id,
     email: user.email,
@@ -71,23 +74,27 @@ const handleRegisterWithGoogle = async (
   console.log("new user", newUser);
   try {
     const existingUser = await pool.query(
-      "SELECT * FROM users WHERE email= $1",
-      [newUser.email]
+      "SELECT * FROM users WHERE email= pgp_sym_decrypt($1, $2)",
+      [newUser.email, dbKey]
     );
-
     if (existingUser.rows.length > 0) {
       console.log("User already exists");
-      return { state: "error", message: "User already exists" };
+      return { state: "error", message: "please choose another email" };
     }
     const verificationToken = uuidv4();
-
-    await pool.query(
-      `
+    try {
+      const result = await pool.query(
+        `
       INSERT INTO users(google_id, email, verification_token)
-      VALUES ($1, $2, $3)
+      VALUES ($1,pgp_sym_encrypt($2,$4), $3)
       `,
-      [newUser.id, newUser.email, verificationToken]
-    );
+        [newUser.id, newUser.email, verificationToken, dbKey]
+      );
+    } catch (error) {
+      console.error("Error during user registration", error);
+      return { state: "error", message: "Internal server error" };
+    }
+    //TODO how to handle the registration more gracefully
     sendVerificationEmail(newUser.email, verificationToken);
     return { state: "success", message: "new user created" };
   } catch (error) {

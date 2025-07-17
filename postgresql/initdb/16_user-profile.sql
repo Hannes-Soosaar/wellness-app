@@ -1,8 +1,8 @@
 CREATE TABLE IF NOT EXISTS user_profiles(
     id SERIAL PRIMARY KEY,
     user_id UUID NOT NULL,
-    first_name TEXT, -- encrypt
-    last_name TEXT , -- encrypt
+    first_name BYTEA, -- encrypt
+    last_name BYTEA, -- encrypt
     sex TEXT,
     age INT,
     height NUMERIC,
