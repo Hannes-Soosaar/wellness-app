@@ -1,14 +1,15 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: "https://localhost:5000",
   timeout: 5000,
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true,
 });
 
-// Add the bearere token to all api requests
+// Add the bearer token to all api requests
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("authToken");
   if (token) {
@@ -34,7 +35,6 @@ api.interceptors.response.use(
         // window.location.href = "/login"; // this will cause an infinite loop
         return Promise.reject(error);
       }
-
       try {
         const res = await api.post("/auth/refresh", { token: refreshToken });
         {

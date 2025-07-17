@@ -1,5 +1,5 @@
 import { Request, Response, RequestHandler } from "express";
-import pg from "../../server";
+import { pool } from "../../server";
 import { hashPassword, verifyPassword } from "../utils/crypto";
 import handleProfile from "./profileController";
 import { generateJWT, generateRefreshToken, verifyJWT } from "../utils/tokens";
@@ -8,14 +8,14 @@ interface loginRequest {
   email: string;
   password: string;
 }
-
+//TODO: clean up logs
 const handleLogin: RequestHandler = async (req: Request, res: Response) => {
   console.log("We arrived at the login controller!");
   console.log("request body", req.body);
   const { email, password }: loginRequest = req.body;
 
   try {
-    const result = await pg.pool.query("SELECT * FROM users WHERE email = $1", [
+    const result = await pool.query("SELECT * FROM users WHERE email = $1", [
       email,
     ]);
     if (result.rows.length === 0) {
@@ -27,21 +27,21 @@ const handleLogin: RequestHandler = async (req: Request, res: Response) => {
     }
     const user = result.rows[0];
 
-    console.log("user found", user);
     try {
       const isValidUser: boolean = await verifyPassword(
         password,
         user.password
       );
       if (isValidUser) {
-        //TODO: check for 2F authentication.
         const accessToken = generateJWT(user.id);
         const refreshToken = generateRefreshToken(user.id);
+        console.log("This is the generated  TOKEN:", accessToken);
+        console.log("This is the generated Refresh TOKEN:", refreshToken);
 
-        await pg.pool.query(
-          "UPDATE users SET refresh_toke = $1 WHERE  id =$2",
-          [refreshToken, user.id]
-        );
+        await pool.query("UPDATE users SET refresh_token = $1 WHERE  id =$2", [
+          refreshToken,
+          user.id,
+        ]);
 
         res
           .cookie("refreshToken", refreshToken, {

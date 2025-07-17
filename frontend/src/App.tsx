@@ -17,10 +17,8 @@ import Goals from "./pages/Goals";
 import Activity from "./pages/Activity";
 import Progress from "./pages/Progress";
 import Meal from "./pages/Meal";
-
 import Profile from "./pages/Profile";
 import Restrictions from "./pages/Restrictions";
-
 import LoginButton from "./components/LoginButton";
 import { useEffect, useState } from "react";
 import Modal from "./components/Modal";

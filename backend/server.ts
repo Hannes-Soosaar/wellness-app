@@ -2,6 +2,8 @@ import pg from "pg";
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import https from "https";
+import fs from "fs";
 dotenv.config({ path: "" });
 
 const { Pool } = pg;
@@ -14,14 +16,15 @@ const pool = new Pool({
   port: Number(process.env.DB_PORT),
 });
 
+//TODO change the origin, once deployed deploy on v3.0
 app.use(express.json());
 app.use(
   cors({
     origin: [
-      "http://localhost:5173",
-      "http://localhost:5174",
-      "http://127.0.0.1:5174",
-      "http://127.0.0.1:5173",
+      "https://localhost:5173",
+      "https://localhost:5174",
+      "https://127.0.0.1:5174",
+      "https://127.0.0.1:5173",
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -29,4 +32,12 @@ app.use(
   })
 );
 
-export default { app, pool };
+const sslOptions = {
+  key: fs.readFileSync("./certs/key.pem"),
+  cert: fs.readFileSync("./certs/cert.pem"),
+};
+
+// Create the HTTPS server
+const httpsServer = https.createServer(sslOptions, app);
+
+export { app, pool, httpsServer };

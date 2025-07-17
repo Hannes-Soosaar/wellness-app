@@ -1,21 +1,22 @@
-import server from '../server';
-import userRouter from './routes/userRouts';
-import apiRouter from './routes/apiRouts';
-import testRouter from './routes/testRouts'
-import authRouter from './routes/authRouts';
+// import server from "../server";
+import userRouter from "./routes/userRouts";
+import apiRouter from "./routes/apiRouts";
+import testRouter from "./routes/testRouts";
+import authRouter from "./routes/authRouts";
+import { app, httpsServer } from "../server";
 
-// start the server
-server.app.listen(5000, () => {
-    console.log('Server is running on http://localhost:5000');
-  });
+// Start the HTTPS server
+httpsServer.listen(5000, () => {
+  console.log("HTTPS server running on https://localhost:5000");
+});
 
-// handle routes 
-server.app.use('/api', apiRouter);
-server.app.use('/user', userRouter);
-server.app.use('/test', testRouter);
-server.app.use('/auth', authRouter);
+// handle routes
+app.use("/api", apiRouter);
+app.use("/user", userRouter);
+app.use("/test", testRouter);
+app.use("/auth", authRouter);
 
-server.app.post('/test', async (req, res) => {
-console.log('Test request received:', req.body);
-res.status(200).json({ message: 'Test successful' });
+app.post("/test", async (req, res) => {
+  console.log("Test request received:", req.body);
+  res.status(200).json({ message: "Test successful" });
 });

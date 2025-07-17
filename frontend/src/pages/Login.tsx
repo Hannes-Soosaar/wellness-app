@@ -19,7 +19,9 @@ const Login: React.FC = () => {
       password,
     };
     try {
-      const response = await api.post("api/login", loginData);
+      const response = await api.post("api/login", loginData, {
+        withCredentials: true,
+      });
       console.log(response.data);
       if (response.status === 200) {
         const { token } = response.data;

@@ -9,7 +9,7 @@ import {
   verifyJWT,
   verifyJWTRefresh,
 } from "../utils/tokens";
-import pg from "../../server";
+import { pool } from "../../server";
 
 dotenv.config();
 
@@ -226,7 +226,7 @@ export const handleRefreshToken: RequestHandler = async (req, res) => {
       return;
     }
 
-    const result = await pg.pool.query(
+    const result = await pool.query(
       "SELECT * FROM users WHERE id = $1 AND refresh_token= $2",
       [userId, refreshToken]
     );

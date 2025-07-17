@@ -1,6 +1,6 @@
 import { Request, Response, RequestHandler } from "express";
 import { v4 as uuidv4 } from "uuid";
-import pg from "../../server";
+import { pool } from "../../server";
 import { hashPassword } from "../utils/crypto";
 import { sendVerificationEmail } from "../utils/emailService";
 import { GoogleUser } from "../models/googleUserModel";
@@ -18,7 +18,7 @@ const handleRegister: RequestHandler = async (req, res) => {
 
     console.log("Email to register", email);
 
-    const existingUser = await pg.pool.query(
+    const existingUser = await pool.query(
       "SELECT * FROM users WHERE email= $1",
       [email]
     );
@@ -34,7 +34,7 @@ const handleRegister: RequestHandler = async (req, res) => {
     const verificationToken = uuidv4();
 
     //TODO: add a new refresh token to the user
-    const result = await pg.pool.query(
+    const result = await pool.query(
       `
       INSERT INTO users(email,password,verification_token)
       VALUES ($1,$2,$3)
@@ -70,7 +70,7 @@ const handleRegisterWithGoogle = async (
 
   console.log("new user", newUser);
   try {
-    const existingUser = await pg.pool.query(
+    const existingUser = await pool.query(
       "SELECT * FROM users WHERE email= $1",
       [newUser.email]
     );
@@ -81,7 +81,7 @@ const handleRegisterWithGoogle = async (
     }
     const verificationToken = uuidv4();
 
-    await pg.pool.query(
+    await pool.query(
       `
       INSERT INTO users(google_id, email, verification_token)
       VALUES ($1, $2, $3)
