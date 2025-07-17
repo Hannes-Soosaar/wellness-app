@@ -28,24 +28,29 @@ PROGRESS: Authentication options include email-password and at least 2 OAuth pro
 
 
 TODO: Password reset is handled via email
+
 TODO: Verify functionality of 2FA
 
 
 TODO: User cannot access protected routes without verifying email // no login without being verified.
 
 TODO: New access token is issued when valid refresh token is provided // add token logic 
+
 TODO: Verify receiving new access token by sending a request with expired access token and valid refresh token
+
+
 TODO: Platform provides clear data usage consent with explicit user approval before data collection
         -At minimum, it includes what data is collected and how it's used
 --        
+
+
 DONE: (FE implement): Users can optionally enable two-factor authentication
-DONE: Platform collects basic demographics, physical metrics, lifestyle indicators, dietary preferences and restrictions, wellness goals.
-
-DONE: User data is encrypted in transit and at rest (https and User data encrypted in SQL)
-
-TODO: At rest (https and User data encrypted in SQL) 
-    
+DONE: Platform collects basic demographics, physical metrics, lifestyle indicators, dietary preferences and restrictions, wellness goals. (personalized to match my use case)
+DONE: User data is encrypted in transit and at rest (https), both FE and BE run in https
+DONE: At rest (https and User data encrypted in SQL) implemented
+ 
     -Encrypted at rest with pgcrypto
+    -user_name
     -email
     -first_name 
     -last_name 
