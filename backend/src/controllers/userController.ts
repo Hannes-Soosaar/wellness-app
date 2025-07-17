@@ -3,6 +3,7 @@ import pool from "../../server";
 import { hashPassword } from "../utils/crypto";
 import { getBearerToken } from "./authController";
 import { verifyJWT } from "../utils/tokens";
+import cookieParser from "cookie-parser";
 
 const handleUser: RequestHandler = (req, res) => {
   console.log("We arrived at the user controller!");
@@ -12,9 +13,10 @@ const handleUser: RequestHandler = (req, res) => {
 
 const handleIsUser: RequestHandler = async (req, res) => {
   const token = getBearerToken(req);
+  const refreshToken = req.cookies?.refreshToken;
+
   if (!token) {
     res.status(401).json({ message: "No token provided" });
-    //TODO handle refresh token
     return;
   }
 

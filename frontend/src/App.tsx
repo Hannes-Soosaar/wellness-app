@@ -24,40 +24,35 @@ import { useEffect, useState } from "react";
 import Modal from "./components/Modal";
 import api from "./lib/axios";
 import UserAssessment from "./pages/UserAssesment";
+import { useAuth } from "./hooks/useAuth";
 
 const App: React.FC = () => {
-  const authToken = localStorage.getItem("authToken");
-  console.log("Auth token from local storage:", authToken);
-  const [isLoggedIn, setIsLoggingIn] = useState<boolean>(false);
+  // const [isLoggedIn, setIsLoggingIn] = useState<boolean>(false);
+  const { isLoggedIn, loading } = useAuth();
 
-  if (!authToken) {
-    console.log("No auth token found");
-  }
-
-  useEffect(() => {
-    if (!authToken || authToken === "undefined") {
-      console.log("No auth token found aka not logged in");
-      return;
-    }
-    const fetchData = async () => {
-      try {
-        const response = await api.get("/api/user", {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        });
-        console.log(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchData();
-  }, [authToken]);
+  // useEffect(() => {
+  //   if (!authToken || authToken === "undefined") {
+  //     console.log("No auth token found aka not logged in");
+  //     return;
+  //   }
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await api.get("/api/user", {
+  //         headers: {
+  //           Authorization: `Bearer ${authToken}`,
+  //         },
+  //       });
+  //       console.log(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, [authToken]);
 
   return (
     <div className="layout">
       <Header isLoggedIn={isLoggedIn} />
-      <LoginButton isLoggedIn={isLoggedIn} setIsLoggingIn={setIsLoggingIn} />
       <main className="main-content">
         {isLoggedIn ? (
           <aside className="sidebar">

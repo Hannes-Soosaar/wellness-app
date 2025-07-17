@@ -4,6 +4,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import https from "https";
 import fs from "fs";
+import cookieParser from "cookie-parser";
 dotenv.config({ path: "" });
 
 const { Pool } = pg;
@@ -16,7 +17,6 @@ const pool = new Pool({
   port: Number(process.env.DB_PORT),
 });
 
-//TODO change the origin, once deployed deploy on v3.0
 app.use(express.json());
 app.use(
   cors({
@@ -31,6 +31,8 @@ app.use(
     credentials: true,
   })
 );
+
+app.use(cookieParser());
 
 const sslOptions = {
   key: fs.readFileSync("./certs/key.pem"),

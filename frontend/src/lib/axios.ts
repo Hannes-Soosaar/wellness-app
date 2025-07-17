@@ -24,35 +24,37 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
-    console.error("Interceptor response error");
     const originalRequest = error.config;
+
+    console.error("Interceptor response error");
+    if (
+      originalRequest.url.includes("/auth/refresh") ||
+      error.response?.status !== 401
+    ) {
+      return Promise.reject(error);
+    }
+    console.error("Interceptor response error");
+
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      const refreshToken = localStorage.getItem("refreshToken");
-      if (!refreshToken) {
-        console.error("No refresh token found");
-        localStorage.removeItem("authToken");
-        // window.location.href = "/login"; // this will cause an infinite loop
-        return Promise.reject(error);
-      }
+
       try {
-        const res = await api.post("/auth/refresh", { token: refreshToken });
-        {
-          const newToken = res.data.token;
-          localStorage.setItem("authToken", newToken);
-          api.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
-          originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
-          return api(originalRequest);
-        }
-      } catch (error) {
+        const res = await api.post("/auth/refresh", null, {
+          withCredentials: true,
+        });
+        const newAccessToken = res.data.token;
+        localStorage.setItem("authToken", newAccessToken);
+        api.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${newAccessToken}`;
+        originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+        return api(originalRequest);
+      } catch (refreshError) {
+        console.log("Error refreshing access token", refreshError);
         localStorage.removeItem("authToken");
-        localStorage.removeItem("refreshToken");
-        window.location.href = "/login";
-        console.error("Error refreshing authToken:", error);
-        return Promise.reject(error);
+        return Promise.reject(refreshError);
       }
     }
-    console.error("Checking if error ");
     return Promise.reject(error);
   }
 );

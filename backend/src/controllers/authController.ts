@@ -10,6 +10,7 @@ import {
   verifyJWTRefresh,
 } from "../utils/tokens";
 import { pool } from "../../server";
+import { Console } from "console";
 
 dotenv.config();
 
@@ -207,6 +208,7 @@ export const getBearerToken = (req: Request): string | null => {
 };
 
 export const handleRefreshToken: RequestHandler = async (req, res) => {
+  console.log("GETTING REFRESH TOKEN!");
   const refreshToken = req.cookies.refreshToken;
 
   if (!refreshToken) {

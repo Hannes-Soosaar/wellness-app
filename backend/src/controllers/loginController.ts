@@ -18,31 +18,56 @@ const handleLogin: RequestHandler = async (req: Request, res: Response) => {
   const { email, password }: loginRequest = req.body;
 
   try {
-    console.log("The secret key is ", dbKey);
-    console.log("the email we are looking for is ", email);
     const result = await pool.query(
       "SELECT * FROM users WHERE pgp_sym_decrypt(email, $2) = $1",
       [email, dbKey]
     );
     if (result.rows.length === 0) {
       console.log("user not found", result.rows);
-      res
-        .status(404)
-        .json({ message: "Please check your login details, user not found" });
+      res.status(404).json({ message: "Please check your login details" });
       return;
     }
+
     const user = result.rows[0];
     try {
-      const isValidUser: boolean = await verifyPassword(
+      console.log("Trying to verify");
+      const hasValidPassword: boolean = await verifyPassword(
         password,
         user.password
       );
+
+      if (!hasValidPassword) {
+        console.log("Wrong password");
+        res.status(404).json({
+          message: "User Not found",
+        });
+        return;
+      }
+
+      const hasVerifiedEmail = await pool.query(
+        " SELECT is_verified FROM users WHERE pgp_sym_decrypt(email, $2) = $1 ",
+        [email, dbKey]
+      );
+
+      const isVerified = hasVerifiedEmail.rows[0]?.is_verified === true;
+
+      if (!isVerified) {
+        console.log("Verify Email");
+        res.status(401).json({
+          message: "Verify Email please!",
+        });
+        return;
+      }
+
+      let isValidUser: boolean = isVerified && hasValidPassword;
+      //TODO: handle m2f  no tokens will be generated before has verified.
+
       if (isValidUser) {
+        console.log("im a VERIFIED USER");
         const accessToken = generateJWT(user.id);
         const refreshToken = generateRefreshToken(user.id);
         console.log("This is the generated  TOKEN:", accessToken);
         console.log("This is the generated Refresh TOKEN:", refreshToken);
-
         await pool.query("UPDATE users SET refresh_token = $1 WHERE  id =$2", [
           refreshToken,
           user.id,
@@ -64,15 +89,13 @@ const handleLogin: RequestHandler = async (req: Request, res: Response) => {
         return;
       }
     } catch (error) {
-      console.error("Error verifying password:", error);
+      console.error("Login failed", error);
       res.status(401).json({
-        message: "Please check your login details, password not valid",
+        message:
+          "Please check your login details and make sure you have verified your email  not valid",
       });
       return;
     }
-
-    console.log("found user", result.rows[0]);
-    console.log("DB password", user.password);
   } catch (error) {
     console.error("Error during login:", error);
     res.status(500).json({ message: "Internal server error" });

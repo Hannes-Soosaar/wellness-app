@@ -54,7 +54,7 @@ const handleRegister: RequestHandler = async (req, res) => {
 
     sendVerificationEmail(email, verificationToken);
   } catch (err) {
-    console.error("Error during user registration", err);
+    console.error("error during user registration", err);
     res.status(500).json({ message: " Internal server error." });
   }
 };
@@ -94,7 +94,7 @@ const handleRegisterWithGoogle = async (
       console.error("Error during user registration", error);
       return { state: "error", message: "Internal server error" };
     }
-    //TODO how to handle the registration more gracefully
+    //TODO: handle the registration more gracefully
     sendVerificationEmail(newUser.email, verificationToken);
     return { state: "success", message: "new user created" };
   } catch (error) {
@@ -102,12 +102,6 @@ const handleRegisterWithGoogle = async (
     return { state: "error", message: "Internal server error" };
   }
 };
-
-// export const handleRegisterWithGitHub = async (gitUser:any) Promise<{ state: string,message: string} > => {
-//   console.log("We are Registring with github register controller!");
-//   console.log("user to register", gitUser);
-//     return { state: "error", message: "Not implemented yet" };
-// };
 
 const handleRegisterWithDiscord = async (
   user: any
