@@ -3,14 +3,11 @@ import React from "react";
 const Advice: React.FC = () => {
   return (
     <>
-      <h1>Advice</h1>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Placeat,
-        blanditiis. Tempora nisi distinctio omnis architecto sit modi, rem
-        perspiciatis deleniti, numquam perferendis aliquid ab, deserunt ex
-        laboriosam culpa dolorum eveniet?
+      <div className="vertical-container">
+        <h1>Advice</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
         <button className="advice-button">Last</button>
-      </p>
+      </div>
     </>
   );
 };
