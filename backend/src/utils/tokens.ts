@@ -80,6 +80,7 @@ interface TokenData {
   isExpired: boolean;
 }
 
+// Not needed probably
 function decodeAndCheckToken(token: string): TokenData {
   const decoded = jwt.decode(token) as { [key: string]: any } | null;
 
@@ -102,10 +103,6 @@ function decodeAndCheckToken(token: string): TokenData {
   const now = Math.floor(Date.now() / 1000);
 
   const isExpired = now >= expiresAt;
-
-  if (isExpired) {
-    throw new Error("Token is expired");
-  }
 
   return {
     id,

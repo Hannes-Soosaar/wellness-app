@@ -231,32 +231,33 @@ export const handleRefreshToken: RequestHandler = async (req, res) => {
     return;
   }
 
-  const result = await pool.query(
-    "SELECT refresh_token FROM users WHERE  refresh_token= $1",
-    [refreshToken]
-  );
-  //TODO:
+  // const result = await pool.query(
+  //   "SELECT refresh_token FROM users WHERE  refresh_token= $1",
+  //   [refreshToken]
+  // );
+  // //TODO:
 
-  if (result.rowCount === 0) {
-    res.status(403).json({ message: "Invalid refresh token" });
-    return;
-  }
-  const tokenFromDb = result.rows[0].refresh_token;
-  let verifiedDecodedJWTToken: TokenData;
+  // if (result.rowCount === 0) {
+  //   res.status(403).json({ message: "Invalid refresh token" });
+  //   return;
+  // }
+  // const tokenFromDb = result.rows[0].refresh_token;
+  // let verifiedDecodedJWTToken: TokenData;
 
-  if (tokenFromDb) {
-    verifiedDecodedJWTToken = decodeAndCheckToken(tokenFromDb);
-  } else {
-    res.status(403).json({ message: "Invalid refresh token" });
-    return;
-  }
+  // if (tokenFromDb) {
+  //   verifiedDecodedJWTToken = decodeAndCheckToken(tokenFromDb);
+  // } else {
+  //   res.status(403).json({ message: "Invalid refresh token" });
+  //   return;
+  // }
   // console.log("Refresh token from DB:", tokenFromDb);
   // console.log("Refresh token hash DB:", hashToken(tokenFromDb));
 
   try {
-    // const payload = verifyJWTRefresh(tokenFromDb);
-    const userId = verifiedDecodedJWTToken.id;
-    // typeof payload === "object" && "id" in payload ? payload.id : null;
+    const payload = verifyJWTRefresh(refreshToken);
+    // verifiedDecodedJWTToken.id;
+    const userId =
+      typeof payload === "object" && "id" in payload ? payload.id : null;
     if (!userId) {
       res.status(403).json({ message: "Invalid refresh token payload " });
       return;
