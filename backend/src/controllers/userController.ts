@@ -1,9 +1,8 @@
 import { Request, Response, RequestHandler } from "express";
-import pool from "../../server";
+import { pool } from "../../server";
 import { hashPassword } from "../utils/crypto";
 import { getBearerToken } from "./authController";
 import { verifyJWT } from "../utils/tokens";
-import cookieParser from "cookie-parser";
 
 const handleUser: RequestHandler = (req, res) => {
   console.log("We arrived at the user controller!");

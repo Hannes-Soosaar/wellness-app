@@ -5,37 +5,16 @@ export function useAuth() {
   const [authToken, setAuthToken] = useState<string | null>(
     localStorage.getItem("authToken")
   );
+
   const [loading, setLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     const checkAuth = async () => {
       if (!authToken) {
-        console.log("No access token, trying refresh...");
-        try {
-          const emptyResponse: {} = {};
-          const res = await api.post("/auth/refresh", emptyResponse, {
-            withCredentials: true, // include cookies
-          });
-          const newToken = res.data.accessToken;
-          if (newToken) {
-            localStorage.setItem("authToken", newToken);
-            setAuthToken(newToken);
-            setIsLoggedIn(true);
-            console.log("Refreshed token successfully");
-          } else {
-            throw new Error("No access token in refresh response");
-          }
-        } catch (err) {
-          console.error("Refresh failed:", err);
-          localStorage.removeItem("authToken");
-          setIsLoggedIn(false);
-        } finally {
-          setLoading(false);
-        }
+        console.log("Handle a 401 in intercept and try to refresh");
         return;
       }
-
       try {
         const res = await api.get("/api/user", {
           headers: {

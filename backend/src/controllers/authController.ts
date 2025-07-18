@@ -1,16 +1,17 @@
-import { Request, RequestHandler, response, Response } from "express";
+import { raw, Request, RequestHandler, response, Response } from "express";
 import dotenv from "dotenv";
 import { DiscordAuthOptions, GoogleAuthOptions } from "../models/authModels";
 import axios from "axios";
 import { handleRegisterWithGoogle } from "./registrationController";
 import {
+  decodeAndCheckToken,
   generateJWT,
   generateRefreshToken,
+  hashToken,
   verifyJWT,
   verifyJWTRefresh,
 } from "../utils/tokens";
 import { pool } from "../../server";
-import { Console } from "console";
 
 dotenv.config();
 
@@ -208,35 +209,63 @@ export const getBearerToken = (req: Request): string | null => {
 };
 
 export const handleRefreshToken: RequestHandler = async (req, res) => {
-  console.log("GETTING REFRESH TOKEN!");
-  const refreshToken = req.cookies.refreshToken;
+  //!!! non conventional handling of a RefreshToken below!!!
+  // THE jwt.verify() function is not working with cookies or DB text values although the hash and values are identical?
+  // Will check cookie against DB
+  // Extract the value by decoding
 
-  if (!refreshToken) {
+  interface TokenData {
+    id: string;
+    isExpired: boolean;
+  }
+
+  console.log("GETTING REFRESH TOKEN!");
+  // console.log("Request cookie header:", req.headers.cookie);
+  const rawToken = req.cookies.refreshToken;
+  // console.log("Raw token from cookie:", rawToken);
+  // console.log("Raw token hash from  cookie:", hashToken(rawToken));
+
+  const refreshToken = decodeURIComponent(req.cookies.refreshToken);
+  if (!refreshToken || typeof refreshToken !== "string") {
     res.status(401).json({ message: "No refresh token provided" });
     return;
   }
 
+  const result = await pool.query(
+    "SELECT refresh_token FROM users WHERE  refresh_token= $1",
+    [refreshToken]
+  );
+  //TODO:
+
+  if (result.rowCount === 0) {
+    res.status(403).json({ message: "Invalid refresh token" });
+    return;
+  }
+  const tokenFromDb = result.rows[0].refresh_token;
+  let verifiedDecodedJWTToken: TokenData;
+
+  if (tokenFromDb) {
+    verifiedDecodedJWTToken = decodeAndCheckToken(tokenFromDb);
+  } else {
+    res.status(403).json({ message: "Invalid refresh token" });
+    return;
+  }
+  // console.log("Refresh token from DB:", tokenFromDb);
+  // console.log("Refresh token hash DB:", hashToken(tokenFromDb));
+
   try {
-    const payload = verifyJWTRefresh(refreshToken);
-    console.log("Refresh token payload:", payload);
-
-    const userId =
-      typeof payload === "object" && "id" in payload ? payload.id : null;
-
+    // const payload = verifyJWTRefresh(tokenFromDb);
+    const userId = verifiedDecodedJWTToken.id;
+    // typeof payload === "object" && "id" in payload ? payload.id : null;
     if (!userId) {
       res.status(403).json({ message: "Invalid refresh token payload " });
       return;
     }
 
-    const result = await pool.query(
-      "SELECT * FROM users WHERE id = $1 AND refresh_token= $2",
-      [userId, refreshToken]
-    );
-
-    if (result.rows.length === 0) {
-      res.status(403).json({ message: "Invalid refresh token" });
-      return;
-    }
+    // if (result.rows.length === 0) {
+    //   res.status(403).json({ message: "Invalid refresh token" });
+    //   return;
+    // }
 
     const newAccessToken = generateJWT(userId);
 

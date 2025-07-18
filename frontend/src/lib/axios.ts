@@ -14,7 +14,7 @@ api.interceptors.request.use((config) => {
   const token = localStorage.getItem("authToken");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
-    console.error("Intercept request", token);
+    console.log("Intercept request", token);
   }
   return config;
 });
@@ -25,26 +25,28 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-
-    console.error("Interceptor response error");
+    console.log("Interceptor response error");
     if (
       originalRequest.url.includes("/auth/refresh") ||
       error.response?.status !== 401
     ) {
       return Promise.reject(error);
     }
-    console.error("Interceptor response error");
 
-    const emptyResponse: {} = {};
+    console.log("Interceptor response error");
 
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-
       try {
-        const res = await api.post("/auth/refresh", emptyResponse, {
-          withCredentials: true,
-        });
-        const newAccessToken = res.data.token;
+        const response = await api.post(
+          "/auth/refresh",
+          {},
+          {
+            withCredentials: true,
+          }
+        );
+        const newAccessToken = response.data.accessToken;
+        console.log("the payload from the BE", newAccessToken);
         localStorage.setItem("authToken", newAccessToken);
         api.defaults.headers.common[
           "Authorization"

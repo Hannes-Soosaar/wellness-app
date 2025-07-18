@@ -2,7 +2,13 @@ import { Request, Response, RequestHandler } from "express";
 import { pool } from "../../server";
 import { hashPassword, verifyPassword } from "../utils/crypto";
 import handleProfile from "./profileController";
-import { generateJWT, generateRefreshToken, verifyJWT } from "../utils/tokens";
+import {
+  decodeJWT,
+  generateJWT,
+  generateRefreshToken,
+  verifyJWT,
+  verifyJWTRefresh,
+} from "../utils/tokens";
 import dotenv from "dotenv";
 dotenv.config();
 const dbKey = process.env.DB_KEY;
@@ -66,8 +72,7 @@ const handleLogin: RequestHandler = async (req: Request, res: Response) => {
         console.log("im a VERIFIED USER");
         const accessToken = generateJWT(user.id);
         const refreshToken = generateRefreshToken(user.id);
-        console.log("This is the generated  TOKEN:", accessToken);
-        console.log("This is the generated Refresh TOKEN:", refreshToken);
+
         await pool.query("UPDATE users SET refresh_token = $1 WHERE  id =$2", [
           refreshToken,
           user.id,
@@ -77,7 +82,8 @@ const handleLogin: RequestHandler = async (req: Request, res: Response) => {
           .cookie("refreshToken", refreshToken, {
             httpOnly: true,
             secure: true,
-            sameSite: "strict",
+            sameSite: "none",
+            path: "/",
             maxAge: 7 * 24 * 60 * 60 * 1000,
           })
           .status(200)
