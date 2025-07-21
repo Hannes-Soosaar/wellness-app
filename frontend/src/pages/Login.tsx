@@ -1,5 +1,6 @@
 import React from "react";
 import api from "../lib/axios";
+import RequestPasswordReset from "../components/RequestPasswordReset";
 
 interface LoginData {
   email: string;
@@ -36,36 +37,39 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="login-container">
-      <h3>Login</h3>
-      <form onSubmit={handleLogin}>
-        <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+    <>
+      <div className="login-container">
+        <h3>Login</h3>
+        <form onSubmit={handleLogin}>
+          <label htmlFor="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
 
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
 
-        <button type="submit">Login</button>
-      </form>
-      <div className="vertical-container">
-        <a className="reset-link">Reset Password</a>
-        <a className="register-link">Register a new account</a>
+          <button type="submit">Login</button>
+        </form>
+        <div className="vertical-container">
+          <a className="reset-link">Reset Password</a>
+          <a className="register-link">Register a new account</a>
+        </div>
       </div>
-    </div>
+      <RequestPasswordReset />
+    </>
   );
 };
 

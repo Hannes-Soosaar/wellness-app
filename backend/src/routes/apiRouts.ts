@@ -10,6 +10,7 @@ const apiRouter = Router();
 
 apiRouter.post("/login", handleLogin); // Ensure loginController is a valid middleware
 apiRouter.post("/register", handleRegister);
+apiRouter.post("/reset", handleRegister);
 // apiRouter.post("/user", handleIsUser);
 
 apiRouter.get("/user", handleIsUser); // Ensure isUserAuthenticated is a valid middleware

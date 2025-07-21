@@ -1,22 +1,60 @@
 
 The README file contains a clear project overview, setup instructions, and usage guide
 
+DONE// Explain section/
 
+        Student can explain how PII removal affects AI model's ability to generate personalized recommendations
+                // the removal of PII does not affect the AI's ability to generate personalized recommendations, as all users are anonymouse and never get sent to the AI. any personalized touches to the replies are added in the FE.
 
-Student can explain how PII removal affects AI model's ability to generate personalized recommendations
-Student can explain their strategy for detecting and handling AI hallucinations in health recommendations
-Student can explain the security implications of access token duration in JWT authentication
-Student can explain how normalization of health metrics impacts data visualization accuracy
-Student can explain how BMI classifications affect wellness score calculation
-Student can explain their choice of AI model(s) based on response quality and latency requirements
-Student can explain what model capabilities were most important for their implementation
-Student can explain the difference between AI response caching and regeneration
-Student can explain how context length affects AI response quality in health recommendations
-Student can explain their prompt engineering approach to ensure consistent health recommendation format
-Student can explain the tradeoffs between zero-shot and few-shot prompting in their implementation
-Student can explain the impact of missing health data on AI recommendation accuracy
-Student can explain their approach to preventing API abuse through rate limiting
-Student can explain the tradeoffs of their chosen data visualization library
+        Student can explain their strategy for detecting and handling AI hallucinations in health recommendations
+                // my current model does not implement all safe guards but the following are known methods for health related recommendations.
+                //In a clinical setting you would want to 
+                    //1- Ask to include citations
+                    //2- Add a second AI model layer  to verify the answer to the question
+                    //3- User Restricted knowledge grounding (RAG) will not answer if there is no citations in the pre-approved knowledge base
+                    //4- Patter Detections
+                    //5- Human in the loop for low confidence answers.
+        
+                //To handle any hallucinations we can add the following safety measures. I have used a confidence level indicator.    
+                    // 1- Reject unsafe outputs
+                    // 2- Ask to give general advice
+                    // 3- Flag for human intervention 
+                    // 4- Explain uncertainty and risk
+
+        Student can explain the security implications of access token duration in JWT authentication
+                // access tokens grant you access, so if you were to get access to an JWT authentication token you could make a request on behalf of the user that would get processed by the backend.
+                // hence the Access token is short lived and destroyed on logout, so its suggested to log out if you are not using the application.
+        Student can explain how normalization of health metrics impacts data visualization accuracy
+                // I do not understand the question but, but one must compare apples to apples any attempt to mix and match data that is of not the same type will result in a nonsensical response.
+        Student can explain how BMI classifications affect wellness score calculation
+                // The BMI is calculated based on data that is entered by the user. there is no direct correlation between BMI and the health score.
+                // BMI has a wide ranges and based on your goal and body type can have a totally different implication on what your would think of as wellness 
+                // To incorporating BMI into the app in any meaningful way is beyond the scope of the project currently due to the high business knowledge required for it to make sense.
+        Student can explain their choice of AI model(s) based on response quality and latency requirements
+                // I chose an AI model that is provided by an European service provider and is of commercial quality, as the free and locally launched models would not give me the XP and result I am looking for. 
+                // Pay by token AI is rather affordable.
+        Student can explain what model capabilities were most important for their implementation
+                // accuracy in formatting the output
+        Student can explain the difference between AI response caching and regeneration
+                // We only user save and reuse (chasing) for history only we do not answer any new inquires with a cached answer. 
+        Student can explain how context length affects AI response quality in health recommendations
+                // Anything outside the context range can not be considered in the answer. So it can be rather bad if critical context was not presented, eg.  user restriction.
+        Student can explain their prompt engineering approach to ensure consistent health recommendation format
+                // I have taken a step by step approach in getting the best responses 
+                // 1- Establish the roll, this will change based on the query
+                // 2- Give the current target and last known situation
+                // 3- Give historical progress data
+                // 4- Define any restrictions
+                // 5- Ask the questions
+                // 5- Give example of what the answer needs to look like.       
+        Student can explain the tradeoffs between zero-shot and few-shot prompting in their implementation
+                //zero-shot is easier and quicker for the LLM model to answer however the data might not conform to the desired format. The quality of the examples has a impact on the result. Takes up token that could be used to relay context. 
+        Student can explain the impact of missing health data on AI recommendation accuracy
+                // The more data the better. However there is a tradeoff, the data should be condensed before final analysis as 
+        Student can explain their approach to preventing API abuse through rate limiting
+                // The API use is monitored through the 
+        Student can explain the tradeoffs of their chosen data visualization library
+                // I chose the data visualization with the most support, manuals and compatibility with  a React front end, as this was my fist time using visualization, having lots of info was the most important criteria. 
 
 
 
@@ -26,21 +64,20 @@ DONE: The code is well-organized, properly commented, and follows best practices
 PROGRESS: Authentication options include email-password and at least 2 OAuth providers (Google/GIt +  1 more)
 
 
-
 TODO: Password reset is handled via email
 TODO: Verify functionality of 2FA
-TODO: New access token is issued when valid refresh token is provided // add token logic
 
 
+DONE: New access token is issued when valid refresh token is provided // add token logic
 DONE: User cannot access protected routes without verifying email // no login without being verified. 
     TODO: setup error handling on the FE
 
 
-TODO: Verify receiving new access token by sending a request with expired access token and valid refresh token
+DONE: Verify receiving new access token by sending a request with expired access token and valid refresh token
 
-
-TODO: Platform provides clear data usage consent with explicit user approval before data collection
+DONE: Platform provides clear data usage consent with explicit user approval before data collection
         -At minimum, it includes what data is collected and how it's used
+        TODO: formatting and 
 --        
 
 
@@ -48,7 +85,6 @@ DONE: (FE implement): Users can optionally enable two-factor authentication
 DONE: Platform collects basic demographics, physical metrics, lifestyle indicators, dietary preferences and restrictions, wellness goals. (personalized to match my use case)
 DONE: User data is encrypted in transit and at rest (https), both FE and BE run in https
 DONE: At rest (https and User data encrypted in SQL) implemented
- 
     -Encrypted at rest with pgcrypto
     -user_name
     -email
@@ -56,16 +92,14 @@ DONE: At rest (https and User data encrypted in SQL) implemented
     -last_name 
 
 DONE: Platform collects initial fitness assessment data
-TODO: Health metrics are converted to standard units before storage.
-
 DONE: Platform allows user to change their data sharing preferences. ? what does this mean ? // Available to switch off AI.
 DONE: Historical weight changes are tracked with timestamps
 DONE: Verify each weight entry has a unique timestamp by adding multiple entries and checking their history display // all entires have time stamps
 DONE: System prevents duplicate activity entries for the same timestamp: Time will be added as now.
+DONE: Health metrics are converted to standard units before storage.
 DONE: Wellness score changes when user updates their weekly activity frequency
-DONE: System recalculates wellness score components when any contributing metric changes
 
-
+TODO: System recalculates wellness score components when any contributing metric changes
 TODO: Verify scores update when changing: BMI range, activity level, goal, progress, or health habits
 
 
@@ -82,8 +116,6 @@ TODO: System implements response validation to filter out recommendations that d
 
 TODO: System displays cached recommendations when AI service is unavailable
 TODO: Verify system shows most recent cached recommendations when AI service connection is disabled
-
-
 TODO: System generates weekly and monthly health summaries including progress and key metrics
 TODO: Verify health summary includes week's activity levels, wellness score changes, and progress towards goals
 TODO: Progress chart shows weight tracking over time, wellness score evolution and activity level changes
@@ -98,18 +130,13 @@ TODO: Goal progress includes milestone tracking
 
 TODO: Health Dashboard shows BMI, wellness score, progress towards goals and AI insights based on user data  // this is the User main header element.
 
-
-
 TODO: AI insights are visually presented with priority-based highlighting -- Handle with markdown
-
 TODO: Verify insights are displayed with high/medium/low priority indicators and include expandable details // dunno what this mean.
-
 TODO: Weight progress chart displays goal weight as a reference line
 
 DONE: Charts resize without data loss on mobile devices (feature in recharts)
 
 TODO: Error messages appear without page reload when API requests fail
-
 TODO: Submit health profile form with invalid BMI value (e.g., -1) and verify error message appears without page refresh //input error handling from FE not possible.
 
 
