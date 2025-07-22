@@ -2,7 +2,8 @@ import { Request, Response, RequestHandler } from "express";
 import { pool } from "../../server";
 import { hashPassword } from "../utils/crypto";
 import { getBearerToken } from "./authController";
-import { verifyJWT } from "../utils/tokens";
+import { verifyJWT, verifyPasswordResetJWT } from "../utils/tokens";
+import { ResponseData } from "@shared/types/api";
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -38,5 +39,72 @@ const handleIsUser: RequestHandler = async (req, res) => {
 };
 
 //
+interface RequestData {
+  token: string;
+  password: string;
+}
 
-export { handleUser, handleIsUser };
+const handleUpdateUserPassword: RequestHandler = (req, res) => {
+  let response: ResponseData<null> = {
+    success: false,
+    message: "Password Changed, if you were logged in, you will be logged out.",
+  };
+
+  let request: RequestData = {
+    token: "",
+    password: "",
+  };
+
+  if (!req.body) {
+    response.error = "No data was provided";
+    response.message = "";
+    response.success = false;
+    res.status(200).json(response);
+    return;
+  }
+
+  if (!req.body.token) {
+    response.error = "Request incomplete" + request.token;
+    response.message = "";
+    response.success = false;
+    res.status(200).json(response);
+    return;
+  }
+
+  if (!req.body.password) {
+    response.error = "Request incomplete" + request.password;
+    response.message = "";
+    response.success = false;
+    res.status(200).json(response);
+    return;
+  }
+
+
+
+  console.log(req.body);
+
+  const isValidToken = verifyPasswordResetJWT(req.body.token);
+
+  if (!isValidToken) {
+        response.error = "Expired or wrong link";
+        response.message = "";
+        response.success = false;
+        res.status(200).json(response);
+        return;
+  }
+
+  const 
+
+  // verify JWT
+  // get e-mail from JWT
+  // find user by email
+  // update password
+    
+    
+  // remove password JWT from DB
+  // remove refresh token from DB.
+
+  res.status(200).json(response);
+};
+
+export { handleUser, handleIsUser, handleUpdateUserPassword };

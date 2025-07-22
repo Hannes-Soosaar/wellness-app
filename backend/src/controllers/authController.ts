@@ -15,16 +15,11 @@ import {
 import { pool } from "../../server";
 
 import { ResponseData } from "@shared/types/api";
-import {
-  findUserIdByEmail,
-  setUserPasswordResetJWT,
-} from "../services/userService";
-import {
-  sendPasswordResetEmail,
-  sendVerificationEmail,
-} from "../utils/emailService";
+import { findUserIdByEmail } from "../services/userService";
+import { sendPasswordResetEmail } from "../utils/emailService";
 import { request } from "http";
 
+import { setUserPasswordResetJWT } from "@backend/src/services/tokenService";
 dotenv.config();
 
 // encryption key data at rest

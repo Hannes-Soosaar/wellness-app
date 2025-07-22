@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS users (
     locked_until TIMESTAMPTZ,
     user_name BYTEA,
     email BYTEA NOT NULL, -- encrypt
-    password TEXT ,             -- never encrypt already salted hash
+    password TEXT ,             
     verification_token TEXT,
     verification_token_expires TIMESTAMPTZ,
     is_verified BOOLEAN DEFAULT FALSE,
