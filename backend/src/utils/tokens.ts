@@ -42,14 +42,8 @@ function verifyJWT(token: string): string | jwt.JwtPayload {
 
 function verifyJWTRefresh(token: string): string | jwt.JwtPayload {
   token = token.replace(/^"|"$/g, "");
-  // console.log("Cleaned token:", token);
 
   const payload = jwt.decode(token, { complete: true });
-  // console.log("Decoded (no verify):", payload);
-  // console.log(
-  //   "SECRET_KEY_REFRESH (verify):",
-  //   JSON.stringify(SECRET_KEY_REFRESH)
-  // );
 
   try {
     return jwt.verify(token, SECRET_KEY);
@@ -116,6 +110,6 @@ export {
   generateRefreshToken,
   verifyJWTRefresh,
   decodeJWT,
-  hashToken,
-  decodeAndCheckToken,
+  hashToken, //DEBUG
+  decodeAndCheckToken, // DEBUG
 };

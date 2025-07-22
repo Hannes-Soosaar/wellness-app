@@ -15,6 +15,9 @@ import { pool } from "../../server";
 
 dotenv.config();
 
+// encryption key data at rest
+const dbKey = process.env.DB_KEY;
+
 // Google
 const redirectUri: string =
   process.env.REDIRECT_URL_GOOGLE ||
@@ -209,21 +212,7 @@ export const getBearerToken = (req: Request): string | null => {
 };
 
 export const handleRefreshToken: RequestHandler = async (req, res) => {
-  //!!! non conventional handling of a RefreshToken below!!!
-  // THE jwt.verify() function is not working with cookies or DB text values although the hash and values are identical?
-  // Will check cookie against DB
-  // Extract the value by decoding
-
-  interface TokenData {
-    id: string;
-    isExpired: boolean;
-  }
-
-  console.log("GETTING REFRESH TOKEN!");
-  // console.log("Request cookie header:", req.headers.cookie);
   const rawToken = req.cookies.refreshToken;
-  // console.log("Raw token from cookie:", rawToken);
-  // console.log("Raw token hash from  cookie:", hashToken(rawToken));
 
   const refreshToken = decodeURIComponent(req.cookies.refreshToken);
   if (!refreshToken || typeof refreshToken !== "string") {
@@ -231,43 +220,15 @@ export const handleRefreshToken: RequestHandler = async (req, res) => {
     return;
   }
 
-  // const result = await pool.query(
-  //   "SELECT refresh_token FROM users WHERE  refresh_token= $1",
-  //   [refreshToken]
-  // );
-  // //TODO:
-
-  // if (result.rowCount === 0) {
-  //   res.status(403).json({ message: "Invalid refresh token" });
-  //   return;
-  // }
-  // const tokenFromDb = result.rows[0].refresh_token;
-  // let verifiedDecodedJWTToken: TokenData;
-
-  // if (tokenFromDb) {
-  //   verifiedDecodedJWTToken = decodeAndCheckToken(tokenFromDb);
-  // } else {
-  //   res.status(403).json({ message: "Invalid refresh token" });
-  //   return;
-  // }
-  // console.log("Refresh token from DB:", tokenFromDb);
-  // console.log("Refresh token hash DB:", hashToken(tokenFromDb));
-
   try {
     const payload = verifyJWTRefresh(refreshToken);
-    // verifiedDecodedJWTToken.id;
+
     const userId =
       typeof payload === "object" && "id" in payload ? payload.id : null;
     if (!userId) {
       res.status(403).json({ message: "Invalid refresh token payload " });
       return;
     }
-
-    // if (result.rows.length === 0) {
-    //   res.status(403).json({ message: "Invalid refresh token" });
-    //   return;
-    // }
-
     const newAccessToken = generateJWT(userId);
 
     res.status(200).json({ accessToken: newAccessToken });
@@ -276,4 +237,37 @@ export const handleRefreshToken: RequestHandler = async (req, res) => {
     res.status(403).json({ message: "Invalid refresh token" });
     return;
   }
+};
+
+const handleChangePassword: RequestHandler = async (req, res) => {
+  interface RequestData {
+    email: string;
+  }
+
+  interface ResponseData {
+    message: string;
+  }
+
+  let requestResponse: ResponseData = { message: "" };
+
+  if (!req.body.email) {
+    requestResponse.message = "No email provided with the request";
+    res.status(200).json(requestResponse);
+    return;
+  }
+
+  console.log("Handling password update link");
+  console.log("Request body", req.body);
+  try {
+    const getUserId = await pool.query(
+      "SELECT id FROM user WHEREpgp_sym_decrypt(email, $2)= $1",
+      [req.body.email, dbKey]
+    );
+  } catch (error) {
+    console.log("error getting user result", error);
+  }
+
+  // check if user exists.
+  // generate JWT token
+  // send LinkToChange Password.
 };

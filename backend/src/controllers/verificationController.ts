@@ -24,4 +24,5 @@ const verifyEmail: RequestHandler = async (req, res) => {
   res.redirect("https://localhost:5173/login");
 };
 
+
 export { verifyEmail };

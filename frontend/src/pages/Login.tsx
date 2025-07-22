@@ -50,7 +50,6 @@ const Login: React.FC = () => {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-
           <label htmlFor="password">Password</label>
           <input
             type="password"
@@ -60,7 +59,6 @@ const Login: React.FC = () => {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-
           <button type="submit">Login</button>
         </form>
         <div className="vertical-container">

@@ -15,7 +15,7 @@ const handleIsUser: RequestHandler = async (req, res) => {
   const refreshToken = req.cookies?.refreshToken;
 
   if (!token) {
-    res.status(401).json({ message: "No token provided" });
+    res.status(401).json({ message: "No token provided" }); // This might be better handled with a different error code.
     return;
   }
 

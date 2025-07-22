@@ -12,6 +12,7 @@
     "nodemon": "^3.1.9",
     "pg": "^8.14.1",
     "resend": "^4.2.0",
+    "tsconfig-paths": "^4.2.0",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
@@ -31,7 +32,7 @@
   },
   "type": "module",
   "scripts": {
-    "dev": "ts-node src/index.ts",
-    "devRun": "npx nodemon --exec npx tsx src/index.ts"
+    "dev": "ts-node -r tsconfig-paths/register src/index.ts",
+    "devRun": "npx nodemon --watch src --ext ts,tsx --exec \"tsx -r tsconfig-paths/register\" src/index.ts"
   }
 }
