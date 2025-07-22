@@ -19,6 +19,7 @@ import Progress from "./pages/Progress";
 import Meal from "./pages/Meal";
 import Profile from "./pages/Profile";
 import Restrictions from "./pages/Restrictions";
+import PasswordReset from "./components/PasswordReset";
 import LoginButton from "./components/LoginButton";
 import { useEffect, useState } from "react";
 import Modal from "./components/Modal";
@@ -47,7 +48,7 @@ const App: React.FC = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/logout" element={<Logout />} />
             <Route path="/register" element={<Register />} />
-            {/*Example of links routing*/}
+            <Route path="/reset/:token" element={<PasswordReset />} />
             {isLoggedIn ? (
               <Route path="/user" element={<User />}>
                 <Route index element={<User />} />

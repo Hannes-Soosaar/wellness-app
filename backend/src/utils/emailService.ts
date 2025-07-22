@@ -25,9 +25,10 @@ const sendVerificationEmail = async (to: string, token: string) => {
 
 const sendPasswordResetEmail = async (to: string, token: string) => {
   try {
-    const resetLink = `https://localhost:5000/reset-password?token=${token}`;
+    const resetLink = `https://localhost:5173/reset/${token}`;
+
     const data = await resend.emails.send({
-      from: "Wellness app",
+      from: "Wellness app <register@geaglampings.eu>",
       to,
       subject: "Password Reset",
       html: `<p>Click to Reset you password  <a href="${resetLink}"> here </a> to reset your password . </p>`,

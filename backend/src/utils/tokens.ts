@@ -40,30 +40,29 @@ function verifyJWT(token: string): string | jwt.JwtPayload {
     throw new Error("Invalid token");
   }
 }
-function generatePasswordResetJWT(userId: string): string {
-  console.log("generating access token for user", userId);
-  const accessToken = jwt.sign({ id: userId }, SECRET_KEY, {
+function generatePasswordResetJWT(email: string): string {
+  console.log("generating password reset token for email: ", email);
+  const accessToken = jwt.sign({ id: email }, SECRET_KEY, {
     expiresIn: JWT_EXPIRATION_PASSWORD as any, // cheating here a bit as what types sign needs is not very clear.
   });
+  console.log("accessToken", accessToken);
   return accessToken;
 }
 
 function verifyPasswordResetJWT(token: string): string | jwt.JwtPayload {
   token = token.replace(/^"|"$/g, "");
-  console.log("Access Token to be verified", token);
+  console.log("Reset Token to be verified", token);
   try {
     return jwt.verify(token, SECRET_KEY);
   } catch (error) {
-    console.error("Error verifying Access JWT:", error);
+    console.error("Error verifying Reset JWT:", error);
     throw new Error("Invalid token");
   }
 }
 
 function verifyJWTRefresh(token: string): string | jwt.JwtPayload {
   token = token.replace(/^"|"$/g, "");
-
-  const payload = jwt.decode(token, { complete: true });
-
+  // const payload = jwt.decode(token, { complete: true });
   try {
     return jwt.verify(token, SECRET_KEY);
   } catch (error) {
@@ -130,4 +129,6 @@ export {
   decodeJWT,
   hashToken, //DEBUG
   decodeAndCheckToken, // DEBUG
+  generatePasswordResetJWT,
+  verifyPasswordResetJWT,
 };

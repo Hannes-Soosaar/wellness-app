@@ -6,6 +6,7 @@ import { handleRegisterWithGoogle } from "./registrationController";
 import {
   decodeAndCheckToken,
   generateJWT,
+  generatePasswordResetJWT,
   generateRefreshToken,
   hashToken,
   verifyJWT,
@@ -14,6 +15,15 @@ import {
 import { pool } from "../../server";
 
 import { ResponseData } from "@shared/types/api";
+import {
+  findUserIdByEmail,
+  setUserPasswordResetJWT,
+} from "../services/userService";
+import {
+  sendPasswordResetEmail,
+  sendVerificationEmail,
+} from "../utils/emailService";
+import { request } from "http";
 
 dotenv.config();
 
@@ -242,15 +252,12 @@ export const handleRefreshToken: RequestHandler = async (req, res) => {
 };
 
 export const handleChangePassword: RequestHandler = async (req, res) => {
-  interface RequestData {
-    email: string;
-  }
-
   let requestResponse: ResponseData<null> = {
     success: true,
     message: "",
   };
 
+  // Should never be triggered check on FE
   if (!req.body.email) {
     requestResponse.success = false;
     requestResponse.message = "";
@@ -259,20 +266,60 @@ export const handleChangePassword: RequestHandler = async (req, res) => {
     return;
   }
 
-  console.log("Handling password update link");
-  console.log("Request body", req.body);
-
-  try {
-    const getUserId = await pool.query(
-      "SELECT id FROM users WHERE pgp_sym_decrypt(email, $2)= $1",
-      [req.body.email, dbKey]
-    );
-  } catch (error) {
-    console.log("error getting user result", error);
+  // No user, but does not give a hint about if the user exists or not.
+  if (!findUserIdByEmail(req.body.email)) {
+    requestResponse.success = false;
+    requestResponse.message = "";
+    requestResponse.error =
+      "Email with Verification link sent to :" + req.body.email;
+    res.status(200).json(requestResponse);
+    return;
   }
 
+  const resetToken = generatePasswordResetJWT(req.body.email);
+
+  if (!resetToken) {
+    requestResponse.success = false;
+    requestResponse.message = "Please try again later";
+    requestResponse.error = "Error getting a verification token";
+    res.status(500).json(requestResponse);
+    return;
+  }
+
+  try {
+    const tokenSetForUser = await setUserPasswordResetJWT(
+      req.body.email,
+      resetToken
+    );
+    if (!tokenSetForUser) {
+      requestResponse.success = false;
+      requestResponse.message = "Please try again later";
+      requestResponse.error = "Error setting a verification token";
+      res.status(500).json(requestResponse);
+      return;
+    }
+  } catch (error: any) {
+    requestResponse.success = false;
+    requestResponse.message = "Please try again later";
+    requestResponse.data = error; // CHECK THE FLOW HERE!
+    requestResponse.error = "Error setting a verification token";
+    res.status(500).json(requestResponse);
+    return;
+  }
+
+  try {
+    const response = await sendPasswordResetEmail(req.body.email, resetToken);
+  } catch (error: any) {
+    requestResponse.success = false;
+    requestResponse.message = "Please try again later";
+    requestResponse.data = error; // CHECK THE FLOW HERE!
+    requestResponse.error = "Error setting a verification token";
+    res.status(500).json(requestResponse);
+    return;
+  }
+
+  requestResponse.success = true;
+  requestResponse.message = "The reset link has been sent to" + req.body.email;
+
   res.status(200).json(requestResponse);
-  // check if user exists.
-  // generate JWT token
-  // send LinkToChange Password.
 };
