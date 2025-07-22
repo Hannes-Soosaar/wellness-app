@@ -13,6 +13,8 @@ import {
 } from "../utils/tokens";
 import { pool } from "../../server";
 
+import { ResponseData } from "@shared/types/api";
+
 dotenv.config();
 
 // encryption key data at rest
@@ -239,34 +241,37 @@ export const handleRefreshToken: RequestHandler = async (req, res) => {
   }
 };
 
-const handleChangePassword: RequestHandler = async (req, res) => {
+export const handleChangePassword: RequestHandler = async (req, res) => {
   interface RequestData {
     email: string;
   }
 
-  interface ResponseData {
-    message: string;
-  }
-
-  let requestResponse: ResponseData = { message: "" };
+  let requestResponse: ResponseData<null> = {
+    success: true,
+    message: "",
+  };
 
   if (!req.body.email) {
-    requestResponse.message = "No email provided with the request";
+    requestResponse.success = false;
+    requestResponse.message = "";
+    requestResponse.error = "No email provided with the request";
     res.status(200).json(requestResponse);
     return;
   }
 
   console.log("Handling password update link");
   console.log("Request body", req.body);
+
   try {
     const getUserId = await pool.query(
-      "SELECT id FROM user WHEREpgp_sym_decrypt(email, $2)= $1",
+      "SELECT id FROM users WHERE pgp_sym_decrypt(email, $2)= $1",
       [req.body.email, dbKey]
     );
   } catch (error) {
     console.log("error getting user result", error);
   }
 
+  res.status(200).json(requestResponse);
   // check if user exists.
   // generate JWT token
   // send LinkToChange Password.

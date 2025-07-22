@@ -23,6 +23,7 @@ const RequestPasswordReset: React.FC = () => {
       setErrorMessage(
         "Please enter the email again to verify the email matches"
       );
+      return;
     }
 
     if (email === emailAgain) {
@@ -91,7 +92,9 @@ const RequestPasswordReset: React.FC = () => {
           value={emailAgain}
           onChange={(e) => setEmailAgain(e.target.value)}
         />
-        <button onClick={handleRequestPasswordResetLink}>Request link</button>
+        <button type="button" onClick={handleRequestPasswordResetLink}>
+          Request link
+        </button>
         {/* <div>{responseData.successMessage}</div> */}
       </div>
     </>

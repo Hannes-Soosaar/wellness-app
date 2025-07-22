@@ -4,6 +4,7 @@ declare namespace NodeJS {
     SECRET_KEY_REFRESH: string;
     JWT_EXPIRATION: string; // Expiration time for JWTs (e.g., "1h", "7d")
     JWT_EXPIRATION_REFRESH: string;
+    JWT_EXPIRATION_PASSWORD: string;
     GOOGLE_CLIENT_ID: string; // Google OAuth client ID
     GOOGLE_CLIENT_SECRET: string; // Google OAuth client secret
     REDIRECT_URL_GOOGLE: string; // Google OAuth redirect URI
@@ -15,5 +16,6 @@ declare namespace NodeJS {
     DB_HOST: string; // Database host
     DB_PORT: string; // Database port
     DB_NAME: string; // Database name
+    DB_KEY: string; // Database name
   }
 }

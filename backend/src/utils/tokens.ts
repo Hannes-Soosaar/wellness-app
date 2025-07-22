@@ -8,6 +8,7 @@ const SECRET_KEY: jwt.Secret = process.env.SECRET_KEY;
 const SECRET_KEY_REFRESH: jwt.Secret = process.env.SECRET_KEY_REFRESH;
 const JWT_EXPIRATION = process.env.JWT_EXPIRATION;
 const JWT_EXPIRATION_REFRESH = process.env.JWT_EXPIRATION_REFRESH;
+const JWT_EXPIRATION_PASSWORD = process.env.JWT_EXPIRATION_PASSWORD;
 console.log("Keys Secret Key ", SECRET_KEY);
 console.log("Keys Secret Refresh ", SECRET_KEY);
 
@@ -30,6 +31,24 @@ function generateJWT(userId: string): string {
 }
 
 function verifyJWT(token: string): string | jwt.JwtPayload {
+  token = token.replace(/^"|"$/g, "");
+  console.log("Access Token to be verified", token);
+  try {
+    return jwt.verify(token, SECRET_KEY);
+  } catch (error) {
+    console.error("Error verifying Access JWT:", error);
+    throw new Error("Invalid token");
+  }
+}
+function generatePasswordResetJWT(userId: string): string {
+  console.log("generating access token for user", userId);
+  const accessToken = jwt.sign({ id: userId }, SECRET_KEY, {
+    expiresIn: JWT_EXPIRATION_PASSWORD as any, // cheating here a bit as what types sign needs is not very clear.
+  });
+  return accessToken;
+}
+
+function verifyPasswordResetJWT(token: string): string | jwt.JwtPayload {
   token = token.replace(/^"|"$/g, "");
   console.log("Access Token to be verified", token);
   try {
@@ -74,7 +93,6 @@ interface TokenData {
   isExpired: boolean;
 }
 
-// Not needed probably
 function decodeAndCheckToken(token: string): TokenData {
   const decoded = jwt.decode(token) as { [key: string]: any } | null;
 

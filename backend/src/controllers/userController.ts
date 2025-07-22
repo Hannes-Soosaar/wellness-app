@@ -4,6 +4,9 @@ import { hashPassword } from "../utils/crypto";
 import { getBearerToken } from "./authController";
 import { verifyJWT } from "../utils/tokens";
 
+import dotenv from "dotenv";
+dotenv.config();
+
 const handleUser: RequestHandler = (req, res) => {
   console.log("We arrived at the user controller!");
   console.log("request body", req);
@@ -33,5 +36,7 @@ const handleIsUser: RequestHandler = async (req, res) => {
     }
   }
 };
+
+//
 
 export { handleUser, handleIsUser };
