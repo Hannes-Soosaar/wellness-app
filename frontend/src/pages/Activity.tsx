@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-
+import api from "../lib/axios";
+import {} from "@";
 interface ActivityPost {
   id: string;
   activityType: string;
@@ -25,9 +26,12 @@ const Activity: React.FC = () => {
   const [activityIntensity, setActivityIntensity] = useState("");
   const [activityDate, setActivityDate] = useState(getTodayString());
   const [activityNote, setActivityNote] = useState("");
-  const [error, setError] = useState("");
+  const [errorMessage, setError] = useState("");
+  const [message, setMessage] = useState("");
 
-  const handleSave = () => {
+  //TODO get user Activity Types
+
+  const handleSave = async () => {
     const newActivityPost = {
       id: crypto.randomUUID(),
       activityType,
@@ -49,6 +53,12 @@ const Activity: React.FC = () => {
     } catch (error) {
       console.error("Failed to save activity:", error);
       alert("Failed to save activity.");
+    }
+
+    try {
+      const response = await api.post("user/activity");
+    } catch (error) {
+      setError("" + error);
     }
   };
 

@@ -16,7 +16,6 @@ CREATE TABLE IF NOT EXISTS users (
     refresh_token TEXT,
     refresh_token_created TEXT,
     password_reset_token TEXT,
-    password_reset_expires TIMESTAMPTZ,
     role TEXT DEFAULT 'user', 
     status TEXT DEFAULT 'active', 
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP

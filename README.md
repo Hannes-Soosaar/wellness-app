@@ -117,3 +117,6 @@ The meal page will let you update your calories intake In version 1.0 . In versi
 ## Restrictions page
 
 On the restrictions page you can add restrictions that will be taken into account giving advice and suggestions. Any food restrictions are not used in version 1.0
+
+
+mf2 - otplib backend.

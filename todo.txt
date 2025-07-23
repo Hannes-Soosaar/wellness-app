@@ -61,24 +61,23 @@ DONE// Explain section/
 DONE: User receives an email with verification link after registration
 DONE Access token expires after [x] minutes of inactivity
 DONE: The code is well-organized, properly commented, and follows best practices for the chosen programming language(s)
-PROGRESS: Authentication options include email-password and at least 2 OAuth providers (Google/GIt +  1 more)
-
-
 DONE: Password reset is handled via email
-TODO: Verify functionality of 2FA
 
+
+PROGRESS: Authentication options include email-password and at least 2 OAuth providers (Google/GIt +  1 more)
+TODO: Verify functionality of 2FA
 
 DONE: New access token is issued when valid refresh token is provided // add token logic
 DONE: User cannot access protected routes without verifying email // no login without being verified. 
     TODO: setup error handling on the FE
-
-
 DONE: Verify receiving new access token by sending a request with expired access token and valid refresh token
 
 DONE: Platform provides clear data usage consent with explicit user approval before data collection
         -At minimum, it includes what data is collected and how it's used
         TODO: formatting and 
 --        
+
+
 
 
 DONE: (FE implement): Users can optionally enable two-factor authentication
@@ -91,6 +90,7 @@ DONE: At rest (https and User data encrypted in SQL) implemented
     -first_name 
     -last_name 
 
+
 DONE: Platform collects initial fitness assessment data
 DONE: Platform allows user to change their data sharing preferences. ? what does this mean ? // Available to switch off AI.
 DONE: Historical weight changes are tracked with timestamps
@@ -99,8 +99,11 @@ DONE: System prevents duplicate activity entries for the same timestamp: Time wi
 DONE: Health metrics are converted to standard units before storage.
 DONE: Wellness score changes when user updates their weekly activity frequency
 
+
+
 TODO: System recalculates wellness score components when any contributing metric changes
 TODO: Verify scores update when changing: BMI range, activity level, goal, progress, or health habits
+
 
 
 AI section
@@ -145,6 +148,12 @@ TODO: System blocks rapid-fire API requests from the same user
 TODO: Verify rate limit kicks in after [x] requests within 1 minute
 TODO: Dashboard loads placeholder UI when data is being fetched
 
+
+//Bugs
+TODO: logout
+TODO: error messages component
+TODO: password change re-rout + logout
+TODO: 
 
 
 Extra

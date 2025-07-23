@@ -1,11 +1,12 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import tsconfigPaths from "vite-tsconfig-paths";
 import fs from "fs";
 import path from "path";
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), tsconfigPaths()],
   server: {
     https: {
       key: fs.readFileSync("../backend/certs/key.pem"),
@@ -16,7 +17,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@shared": path.resolve(__dirname, "../shared"),
+      "@shared": path.resolve(__dirname, "../shared/"),
       "@frontend": path.resolve(__dirname, "./"),
     },
   },
