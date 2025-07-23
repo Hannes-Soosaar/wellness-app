@@ -6,6 +6,7 @@ import {
   discordCallback,
   test,
   handleRefreshToken,
+  handleChangePassword,
 } from "../controllers/authController";
 
 import { handleUpdateUserPassword } from "@backend/src/controllers/userController";
@@ -23,6 +24,7 @@ authRouter.get("/email/verification", verifyEmail);
 authRouter.get("/discord/callback", discordCallback);
 authRouter.post("/refresh", handleRefreshToken); // attempt to refresh the token
 authRouter.post("/verify/update", handleUpdateUserPassword);
+authRouter.post("/password/update", handleChangePassword);
 authRouter.post("/logout", test); // logout
 
 export default authRouter;

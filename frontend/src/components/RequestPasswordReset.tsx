@@ -40,7 +40,7 @@ const RequestPasswordReset: React.FC = () => {
     };
 
     try {
-      const response = await api.post("auth/refresh/verify", requestData, {
+      const response = await api.post("auth/password/update", requestData, {
         withCredentials: true,
       });
       if (response.status === 200) {

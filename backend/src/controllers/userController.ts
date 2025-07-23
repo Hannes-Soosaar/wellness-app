@@ -79,8 +79,6 @@ const handleUpdateUserPassword: RequestHandler = (req, res) => {
     return;
   }
 
-
-
   console.log(req.body);
 
   const isValidToken = verifyPasswordResetJWT(req.body.token);
@@ -92,8 +90,6 @@ const handleUpdateUserPassword: RequestHandler = (req, res) => {
         res.status(200).json(response);
         return;
   }
-
-  const 
 
   // verify JWT
   // get e-mail from JWT
