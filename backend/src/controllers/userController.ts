@@ -6,6 +6,7 @@ import { verifyJWT, verifyPasswordResetJWT } from "../utils/tokens";
 import { ResponseData } from "@shared/types/api";
 
 import dotenv from "dotenv";
+import { setUserPasswordByResetToken } from "../services/tokenService";
 dotenv.config();
 
 const handleUser: RequestHandler = (req, res) => {
@@ -38,16 +39,15 @@ const handleIsUser: RequestHandler = async (req, res) => {
   }
 };
 
-//
 interface RequestData {
   token: string;
   password: string;
 }
 
-const handleUpdateUserPassword: RequestHandler = (req, res) => {
+const handleUpdateUserPassword: RequestHandler = async (req, res) => {
   let response: ResponseData<null> = {
     success: false,
-    message: "Password Changed, if you were logged in, you will be logged out.",
+    message: "",
   };
 
   let request: RequestData = {
@@ -79,28 +79,56 @@ const handleUpdateUserPassword: RequestHandler = (req, res) => {
     return;
   }
 
-  console.log(req.body);
+  request.password = req.body.password;
+  request.token = req.body.token;
 
-  const isValidToken = verifyPasswordResetJWT(req.body.token);
+  // verify JWT and get email from JWT
+  const requestToken = verifyPasswordResetJWT(request.token);
 
-  if (!isValidToken) {
-        response.error = "Expired or wrong link";
-        response.message = "";
-        response.success = false;
-        res.status(200).json(response);
-        return;
+  if (!requestToken) {
+    response.error = "Expired or invalid link";
+    response.message = "";
+    response.success = false;
+    res.status(200).json(response);
+    return;
+  }
+  try {
+    const newHashedPassword = await hashPassword(request.password);
+    request.password = newHashedPassword;
+  } catch (error) {
+    response.error = "Server error, updating password: " + error;
+    response.message = "";
+    response.success = false;
+    res.status(500).json(response);
+    return;
   }
 
-  // verify JWT
-  // get e-mail from JWT
-  // find user by email
-  // update password
-    
-    
-  // remove password JWT from DB
-  // remove refresh token from DB.
+  console.log("the Request", request);
 
-  res.status(200).json(response);
+  try {
+    const updated = await setUserPasswordByResetToken(
+      request.token,
+      request.password
+    );
+
+    if (updated) {
+      response.message = "The password has been updated";
+      response.success = true;
+      res.status(200).json(response);
+    } else {
+      response.error =
+        "Error, updating password, please request new update link";
+      response.message = "";
+      response.success = false;
+      res.status(200).json(response);
+    }
+  } catch (error) {
+    response.error = "Server error, saving password";
+    response.message = "";
+    response.success = false;
+    res.status(500).json(response);
+    return;
+  }
 };
 
 export { handleUser, handleIsUser, handleUpdateUserPassword };

@@ -19,8 +19,6 @@ const handleRegister: RequestHandler = async (req, res) => {
       return;
     }
 
-    console.log("Email to register", email);
-    //TODO add encryption
     const existingUser = await pool.query(
       "SELECT * FROM users WHERE pgp_sym_decrypt(email, $2) = $1",
       [email, dbKey]

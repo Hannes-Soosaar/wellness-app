@@ -51,3 +51,25 @@ export const getUserPasswordResetJWT = async (
     return null;
   }
 };
+
+export const setUserPasswordByResetToken = async (
+  resetJWT: string,
+  password: string
+): Promise<boolean> => {
+  console.log("updating the token", resetJWT, password);
+  try {
+    const response = await pool.query(
+      "UPDATE users SET password =$1, password_reset_token = NULL WHERE password_reset_token = $2 RETURNING id",
+      [password, resetJWT]
+    );
+    console.log("Handling the User password set and deletion", response.rows);
+    if (response.rows.length > 0) {
+      console.log("The Id is ", response.rows[0].id);
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.log("error getting the reset JWT", error);
+    return false;
+  }
+};

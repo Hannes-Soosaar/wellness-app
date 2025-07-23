@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import jwt, { Jwt } from "jsonwebtoken";
 import dotenv from "dotenv";
 import { pool } from "../../server";
 import crypto from "crypto";
@@ -22,6 +22,12 @@ if (!SECRET_KEY_REFRESH) {
   throw new Error("SECRET_KEY_REFRESH is not defined in environment variables");
 }
 
+interface JwtPayload {
+  id: string; // email
+  iat: number; // issued at
+  exp: number; // expiry
+}
+
 function generateJWT(userId: string): string {
   console.log("generating access token for user", userId);
   const accessToken = jwt.sign({ id: userId }, SECRET_KEY, {
@@ -30,41 +36,57 @@ function generateJWT(userId: string): string {
   return accessToken;
 }
 
-function verifyJWT(token: string): string | jwt.JwtPayload {
+function verifyJWT(token: string): JwtPayload {
   token = token.replace(/^"|"$/g, "");
   console.log("Access Token to be verified", token);
   try {
-    return jwt.verify(token, SECRET_KEY);
+    const decoded = jwt.verify(token, SECRET_KEY) as JwtPayload;
+
+    if (!decoded.id) {
+      throw new Error("Token payload missing 'id'");
+    }
+
+    return decoded;
   } catch (error) {
     console.error("Error verifying Access JWT:", error);
     throw new Error("Invalid token");
   }
 }
-function generatePasswordResetJWT(email: string): string {
-  console.log("generating password reset token for email: ", email);
-  const accessToken = jwt.sign({ id: email }, SECRET_KEY, {
+function generatePasswordResetJWT(): string {
+  console.log("generating password reset token for email:");
+  const resetToken = jwt.sign({ id: ">9000" }, SECRET_KEY, {
     expiresIn: JWT_EXPIRATION_PASSWORD as any, // cheating here a bit as what types sign needs is not very clear.
   });
-  console.log("accessToken", accessToken);
-  return accessToken;
+  return resetToken;
 }
 
-function verifyPasswordResetJWT(token: string): string | jwt.JwtPayload {
+function verifyPasswordResetJWT(token: string): JwtPayload {
   token = token.replace(/^"|"$/g, "");
-  console.log("Reset Token to be verified", token);
+  console.log("Password Reset Token to be verified", token);
   try {
-    return jwt.verify(token, SECRET_KEY);
+    const decoded = jwt.verify(token, SECRET_KEY) as JwtPayload;
+
+    if (!decoded.id) {
+      throw new Error("Token payload missing 'id'");
+    }
+
+    return decoded;
   } catch (error) {
     console.error("Error verifying Reset JWT:", error);
     throw new Error("Invalid token");
   }
 }
 
-function verifyJWTRefresh(token: string): string | jwt.JwtPayload {
+function verifyJWTRefresh(token: string): JwtPayload {
   token = token.replace(/^"|"$/g, "");
-  // const payload = jwt.decode(token, { complete: true });
   try {
-    return jwt.verify(token, SECRET_KEY);
+    const decoded = jwt.verify(token, SECRET_KEY) as JwtPayload;
+
+    if (!decoded.id) {
+      throw new Error("Token payload missing 'id'");
+    }
+
+    return decoded;
   } catch (error) {
     console.error("Error verifying Refresh JWT:", error);
     throw new Error("Invalid token");
@@ -94,7 +116,6 @@ interface TokenData {
 
 function decodeAndCheckToken(token: string): TokenData {
   const decoded = jwt.decode(token) as { [key: string]: any } | null;
-
   if (!decoded) {
     throw new Error("Invalid token: unable to decode");
   }

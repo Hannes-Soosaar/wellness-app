@@ -271,7 +271,7 @@ export const handleChangePassword: RequestHandler = async (req, res) => {
     return;
   }
 
-  const resetToken = generatePasswordResetJWT(req.body.email);
+  const resetToken = generatePasswordResetJWT();
 
   if (!resetToken) {
     requestResponse.success = false;
