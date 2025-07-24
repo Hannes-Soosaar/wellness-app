@@ -11,8 +11,8 @@ export interface RequestData {
 
 export interface UserActivityPost {
   activityType: string;
-  duration: number;
-  intensity: string;
+  activityDuration: number;
+  activityIntensity: string;
   activityDate: string;
   activityNote?: string;
 }

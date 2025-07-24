@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import api from "../lib/axios";
-import {} from "@";
+import { UserActivityPost } from "../../../shared/types/api";
+import { extractErrorMessage } from "../../utils/errorHandler";
+import { ErrorMessage } from "../components/ErrorMessage";
 interface ActivityPost {
   id: string;
   activityType: string;
@@ -21,6 +23,8 @@ const Activity: React.FC = () => {
     return /^-?\d+(\.\d+)?$/.test(normalized.trim());
   };
 
+  // To avoid making copies of the userActivityPost each entry field, will be first stored separately
+  // If time permits redo this with useReducer
   const [activityType, setActivityType] = useState("");
   const [activityDuration, setActivityDuration] = useState<number>(0);
   const [activityIntensity, setActivityIntensity] = useState("");
@@ -32,8 +36,7 @@ const Activity: React.FC = () => {
   //TODO get user Activity Types
 
   const handleSave = async () => {
-    const newActivityPost = {
-      id: crypto.randomUUID(),
+    const userActivityPost: UserActivityPost = {
       activityType,
       activityDuration,
       activityIntensity,
@@ -42,8 +45,8 @@ const Activity: React.FC = () => {
     };
 
     try {
-      console.log("Saving activity:", newActivityPost);
-      localStorage.setItem("latestActivity", JSON.stringify(newActivityPost));
+      console.log("Saving activity:", userActivityPost);
+      localStorage.setItem("latestActivity", JSON.stringify(userActivityPost));
       alert("Activity saved successfully!");
       setActivityType("");
       setActivityDuration(0);
@@ -51,17 +54,18 @@ const Activity: React.FC = () => {
       setActivityDate("");
       setActivityNote("");
     } catch (error) {
+      setError(extractErrorMessage(error));
       console.error("Failed to save activity:", error);
-      alert("Failed to save activity.");
     }
 
     try {
-      const response = await api.post("user/activity");
+      const response = await api.post("user/activity", userActivityPost);
     } catch (error) {
-      setError("" + error);
+      setError(extractErrorMessage(error));
     }
   };
 
+  // TODO next iteration provide delete option and list view of paginated activities
   return (
     <>
       <div className="activity-container">
@@ -87,7 +91,9 @@ const Activity: React.FC = () => {
           <input
             type="text"
             value={activityType}
-            onChange={(e) => setActivityType(e.target.value)}
+            onChange={(e) => {
+              setActivityDuration(Number(e.target.value));
+            }}
             className="activity-input"
           />
         </label>

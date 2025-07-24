@@ -1,23 +1,47 @@
-import React from "react";
+import { useEffect, useState } from "react";
 
-interface ErrorProps {
-  errorMessage: string;
-  onClose: () => void;
-}
-
-const ErrorMessage: React.FC<ErrorProps> = ({ errorMessage, onClose }) => {
-  if (!errorMessage) return null;
-
-  return (
-    <>
-      <div className="error-container">
-        <p className="error-content">{errorMessage}</p>
-        <button className="error-button" onClick={onClose}>
-          Close
-        </button>
-      </div>
-    </>
-  );
+type ErrorMessageProps = {
+  message: string;
+  duration?: number;
+  onDismiss?: () => void;
 };
 
-export default ErrorMessage;
+export function ErrorMessage({
+  message,
+  duration,
+  onDismiss,
+}: ErrorMessageProps) {
+  const [visible, setVisible] = useState(!!message);
+
+  if (!duration) {
+    duration = 3000;
+  }
+
+  useEffect(() => {
+    if (message) {
+      setVisible(true);
+      const timer = setTimeout(() => {
+        setVisible(false);
+        onDismiss?.();
+      }, duration);
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [message, duration, onDismiss]);
+
+  if (!visible || !message) return null;
+
+  return (
+    <div
+      style={{
+        color: "white",
+        backgroundColor: "red",
+        padding: "10px",
+        borderRadius: "4px",
+      }}
+    >
+      {message}
+    </div>
+  );
+}

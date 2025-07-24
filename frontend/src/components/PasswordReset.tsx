@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../lib/axios";
-import { ResponseData } from "../../../shared/types/api";
+import { ResponseData } from "../../../shared/src/types/api";
 
 interface RequestData {
   token: string;
