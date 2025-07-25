@@ -1,6 +1,10 @@
 import { Router } from "express";
 import { handleUser } from "../controllers/userController";
 import { test } from "../controllers/authController";
+import {
+  getActivityOptions,
+  updateUserActivity,
+} from "../controllers/activityController";
 
 /* 
 All routes here require that the user be authenticated. each page on the front end has its ons section
@@ -15,10 +19,10 @@ userRouter.get("/refresh-token", handleUser);
 userRouter.get("/dashboard", test); // Get the information for a simple dashboard
 
 //Activity page
-userRouter.get("/activity/options", test);
+userRouter.get("/activity/options", getActivityOptions);
 userRouter.get("/activity/history", test); // Implement v2
 userRouter.delete("/activity/remove", test); // Implement v2
-userRouter.post("/activity", test);
+userRouter.post("/activity", updateUserActivity);
 
 //Meal page
 userRouter.get("/meal/options", test);

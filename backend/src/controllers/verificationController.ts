@@ -11,14 +11,13 @@ export const verifyEmail: RequestHandler = async (req, res) => {
     res.status(400).json({ message: "Invalid or expired token" });
     return;
   }
-  //TODO: Extract to Serivces
+  //TODO: Extract to Service
   const result = await pool.query(
     "UPDATE users SET is_verified = TRUE, verification_token = NULL WHERE verification_token = $1",
     [token]
   );
 
   if (!result.rowCount) {
-    //TODO: create an error page, with a link to request new verification
     res.status(400).json({ message: "Invalid or expired token" });
     return;
   }
@@ -26,18 +25,19 @@ export const verifyEmail: RequestHandler = async (req, res) => {
   res.redirect("https://localhost:5173/login");
 };
 
-export const verifyUser = (req: Request): boolean => {
+// simple token verification for user routes.
+export const getUserId = (req: Request): string => {
   const token = getBearerToken(req);
   if (!token) {
     console.log("no token ");
-    return false;
+    return "";
   }
   try {
     const verified = verifyJWT(token);
     console.log("Token is valid", verified);
-    return true;
+    return verified.id;
   } catch (error: any) {
     console.log(" error verifying token");
-    return false;
+    return "";
   }
 };

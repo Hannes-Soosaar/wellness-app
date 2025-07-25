@@ -9,8 +9,7 @@ import dotenv from "dotenv";
 import { setUserPasswordByResetToken } from "../services/tokenService";
 dotenv.config();
 
-
-// Not a usefull controller.
+// Not a useful function
 const handleUser: RequestHandler = (req, res) => {
   console.log("We arrived at the user controller!");
   console.log("request body", req);
