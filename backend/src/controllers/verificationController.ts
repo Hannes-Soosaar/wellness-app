@@ -1,7 +1,9 @@
 import { Request, Response, RequestHandler } from "express";
 import { pool } from "../../server";
+import { getBearerToken } from "./authController";
+import { verifyJWT } from "../utils/tokens";
 
-const verifyEmail: RequestHandler = async (req, res) => {
+export const verifyEmail: RequestHandler = async (req, res) => {
   console.log("verifying email", req);
   const { token } = req.query;
 
@@ -9,7 +11,7 @@ const verifyEmail: RequestHandler = async (req, res) => {
     res.status(400).json({ message: "Invalid or expired token" });
     return;
   }
-
+  //TODO: Extract to Serivces
   const result = await pool.query(
     "UPDATE users SET is_verified = TRUE, verification_token = NULL WHERE verification_token = $1",
     [token]
@@ -24,5 +26,18 @@ const verifyEmail: RequestHandler = async (req, res) => {
   res.redirect("https://localhost:5173/login");
 };
 
-
-export { verifyEmail };
+export const verifyUser = (req: Request): boolean => {
+  const token = getBearerToken(req);
+  if (!token) {
+    console.log("no token ");
+    return false;
+  }
+  try {
+    const verified = verifyJWT(token);
+    console.log("Token is valid", verified);
+    return true;
+  } catch (error: any) {
+    console.log(" error verifying token");
+    return false;
+  }
+};

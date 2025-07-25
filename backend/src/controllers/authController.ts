@@ -12,10 +12,9 @@ import {
   verifyJWT,
   verifyJWTRefresh,
 } from "../utils/tokens";
-import { pool } from "../../server";
 
 import { ResponseData } from "@shared/types/api";
-import { findUserIdByEmail } from "../services/userService";
+import { findUserIdByEmail } from "../services/user/userService";
 import { sendPasswordResetEmail } from "../utils/emailService";
 import { request } from "http";
 

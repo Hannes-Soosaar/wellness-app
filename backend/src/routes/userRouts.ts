@@ -12,7 +12,7 @@ const userRouter = Router();
 // User session handling routes
 userRouter.get("/user", handleUser);
 userRouter.get("/refresh-token", handleUser);
-userRouter.get("/dash-board", test); // Get the information for a simple dashboard
+userRouter.get("/dashboard", test); // Get the information for a simple dashboard
 
 //Activity page
 userRouter.get("/activity/options", test);
@@ -28,7 +28,7 @@ userRouter.post("/meal", test);
 
 //Goal page
 userRouter.get("/goals/options", test);
-userRouter.put("/goal"); // The goals is static, so it will overwrite the goals
+userRouter.put("/goal", test); // The goals is static, so it will overwrite the goals
 
 //Assessment page
 userRouter.get("/assessment/options", test);

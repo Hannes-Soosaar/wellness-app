@@ -1,5 +1,5 @@
 import { Request, Response, RequestHandler } from "express";
-import pool from "../../server";
+// import pool from "../../server";
 import { hashPassword } from "../utils/crypto";
 
 const handleProfile: RequestHandler = (req, res) => {

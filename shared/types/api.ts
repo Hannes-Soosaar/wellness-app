@@ -17,6 +17,10 @@ export interface UserActivityPost {
   activityNote?: string;
 }
 
+export interface ActivityOptions {
+  activities: string[];
+}
+
 export interface UserMealPost {
   mealType: string;
   calories: number;

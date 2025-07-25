@@ -1,6 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import api from "../lib/axios";
-import { UserActivityPost } from "../../../shared/types/api";
+import {
+  UserActivityPost,
+  ResponseData,
+  ActivityOptions,
+} from "../../../shared/types/api";
 import { extractErrorMessage } from "../utils/errorUtility";
 import { ErrorMessage } from "../components/ErrorMessage";
 interface ActivityPost {
@@ -18,7 +22,7 @@ const Activity: React.FC = () => {
     return today.toISOString().split("T")[0];
   };
 
-  const isValidNumber = (stringValue: string) => {
+  const isValidNumber = (stringValue: string): boolean => {
     const normalized = stringValue.replace(",", ".");
     return /^-?\d+(\.\d+)?$/.test(normalized.trim());
   };
@@ -32,6 +36,7 @@ const Activity: React.FC = () => {
   const [activityNote, setActivityNote] = useState("");
   const [errorMessage, setError] = useState("");
   const [message, setMessage] = useState("");
+  const [availableOptions, setAvailableOptions] = useState<string[]>([]);
 
   //TODO get user Activity Types
 
@@ -59,16 +64,51 @@ const Activity: React.FC = () => {
     }
 
     try {
-      const response = await api.post("user/activity", userActivityPost);
+      const response = await api.post<ResponseData<null>>(
+        "user/activity",
+        userActivityPost
+      );
+      if (response.data.success) {
+        setMessage(response.data.message);
+      }
+      if (response.data.error) {
+        setError(response.data.error);
+      }
     } catch (error) {
       setError(extractErrorMessage(error).message);
     }
   };
 
+  // Get the initial options.
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await api.get<ResponseData<ActivityOptions>>(
+          "user/activity/options"
+        );
+        if (response.data.success) {
+          const options = response.data.data?.activities;
+          if (options) {
+            setAvailableOptions(options);
+          } else {
+            setError("There options are unknown");
+          }
+        }
+        if (response.data.error) {
+          setError(response.data.error);
+        }
+      } catch (error) {
+        setError(extractErrorMessage(error).message);
+      }
+    };
+    fetchData();
+  }, []);
+
   // TODO next iteration provide delete option and list view of paginated activities
   return (
     <>
       <div className="activity-container">
+        <ErrorMessage message={errorMessage} duration={5000} />
         <h3 className="activity-heading">Log New Activity</h3>
         <label className="activity-label">
           Activity Type:
@@ -77,20 +117,20 @@ const Activity: React.FC = () => {
             onChange={(e) => setActivityType(e.target.value)}
             className="activity-input"
           >
-            <option value="">Select Intensity</option>
-            <option value="cardio">Cardio</option>
-            <option value="strength">Strength</option>
-            <option value="hit">HIT</option>
-            <option value="mixed">Mixed</option>
-            <option value="running">Running</option>
+            {availableOptions.map((activity) => (
+              <option key={activity} value={activity}>
+                {activity}
+              </option>
+            ))}
           </select>
         </label>
 
         <label className="activity-label">
           Duration (minutes):
           <input
-            type="text"
-            value={activityType}
+            type="number"
+            min="0"
+            value={activityDuration}
             onChange={(e) => {
               setActivityDuration(Number(e.target.value));
             }}

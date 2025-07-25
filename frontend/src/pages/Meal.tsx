@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { ErrorBar } from "recharts";
-import ErrorMessage from "../components/ErrorMessage";
 
 interface MealPost {
   id: string;

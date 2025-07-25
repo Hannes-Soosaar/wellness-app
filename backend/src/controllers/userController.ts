@@ -9,6 +9,8 @@ import dotenv from "dotenv";
 import { setUserPasswordByResetToken } from "../services/tokenService";
 dotenv.config();
 
+
+// Not a usefull controller.
 const handleUser: RequestHandler = (req, res) => {
   console.log("We arrived at the user controller!");
   console.log("request body", req);
@@ -17,7 +19,6 @@ const handleUser: RequestHandler = (req, res) => {
 
 const handleIsUser: RequestHandler = async (req, res) => {
   const token = getBearerToken(req);
-  const refreshToken = req.cookies?.refreshToken;
 
   if (!token) {
     res.status(401).json({ message: "No token provided" }); // This might be better handled with a different error code.

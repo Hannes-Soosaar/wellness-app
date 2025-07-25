@@ -41,7 +41,6 @@ function verifyJWT(token: string): JwtPayload {
   console.log("Access Token to be verified", token);
   try {
     const decoded = jwt.verify(token, SECRET_KEY) as JwtPayload;
-
     if (!decoded.id) {
       throw new Error("Token payload missing 'id'");
     }
