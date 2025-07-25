@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import api from "../lib/axios";
 import { UserActivityPost } from "../../../shared/types/api";
-import { extractErrorMessage } from "../../utils/errorHandler";
+import { extractErrorMessage } from "../utils/errorUtility";
 import { ErrorMessage } from "../components/ErrorMessage";
 interface ActivityPost {
   id: string;
@@ -54,14 +54,14 @@ const Activity: React.FC = () => {
       setActivityDate("");
       setActivityNote("");
     } catch (error) {
-      setError(extractErrorMessage(error));
+      setError(extractErrorMessage(error).message);
       console.error("Failed to save activity:", error);
     }
 
     try {
       const response = await api.post("user/activity", userActivityPost);
     } catch (error) {
-      setError(extractErrorMessage(error));
+      setError(extractErrorMessage(error).message);
     }
   };
 

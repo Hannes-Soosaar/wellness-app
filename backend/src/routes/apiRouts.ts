@@ -1,5 +1,4 @@
-// Routs that do not require authentication
-// Includes login, and register
+
 
 import { Router } from "express";
 import { handleLogin } from "../controllers/loginController";
@@ -10,7 +9,7 @@ const apiRouter = Router();
 
 apiRouter.post("/login", handleLogin); // Ensure loginController is a valid middleware
 apiRouter.post("/register", handleRegister);
-apiRouter.post("/reset", handleChangePassword);
+apiRouter.post("/reset", handleChangePassword);// not in use?
 // apiRouter.post("/user", handleIsUser);
 
 apiRouter.get("/user", handleIsUser); // Ensure isUserAuthenticated is a valid middleware
