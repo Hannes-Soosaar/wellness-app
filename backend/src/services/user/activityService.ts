@@ -24,6 +24,26 @@ export const getActiveActivityOptions = async (): Promise<ActivityOptions> => {
   }
 };
 
+//TODO create objects to hold data from the front end
 export const updateUserActivity = async (userId: string): Promise<boolean> => {
-  return false;
+  if (!activity) {
+    throw new Error("Activity data is required");
+    return false;
+  }
+
+  try {
+    const { activity } = req.body;
+
+    // Insert the activity into the database
+    await pool.query(
+      "INSERT INTO user_activities (user_id, activity) VALUES ($1, $2)",
+      [userId, activity]
+    );
+
+    return true;
+  } catch (error) {
+    console.error("Error updating user activity:", error);
+    throw error;
+    return false;
+  }
 };

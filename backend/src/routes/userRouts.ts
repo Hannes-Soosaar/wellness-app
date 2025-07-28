@@ -61,11 +61,7 @@ userRouter.get("/advice/goal", test);
 //Overview page
 
 /* 
-
 Decide what graphs are needed and add routes based on it
-
-
-
 */
 
 export default userRouter;
