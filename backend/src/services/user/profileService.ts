@@ -1,5 +1,5 @@
 import { pool } from "@backend/server";
-import { ProfilePost, UserProfile } from "@shared/types/api";
+import { ProfilePost, UserDashboard, UserProfile } from "@shared/types/api";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -109,5 +109,36 @@ export const updateUserProfile = async (
 };
 
 export const updateUserProgress = async (): Promise<void> => {
+  // Update the user History and  the User Profile with new values
+
   console.log("User progress updated");
+};
+
+export const getUserDashboard = async (
+  userId: string
+): Promise<UserDashboard> => {
+  let userDashboard: UserDashboard = {};
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+
+    const userProfile = await client.query(
+      `SELECT * FROM user_profiles WHERE user_id = $1`,
+      [userId]
+    );
+
+    const userGoal = await client.query(
+      `SELECT * FROM user_goals WHERE user_id = $1`,
+      [userId]
+    );
+
+    await client.query("COMMIT");
+  } catch (error) {
+    client.query("ROLLBACK");
+    console.error("Failed to get user dashboard:", error);
+    throw new Error(`Failed to get user dashboard: ${error}`);
+  }
+
+  return userDashboard;
 };
