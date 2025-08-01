@@ -1,5 +1,14 @@
-import React, { useState } from "react";
-import { UserAssessmentData, UserData } from "../types/user";
+import React, { useEffect, useState } from "react";
+import api from "../lib/axios";
+// import { UserAssessmentData, UserData } from "../types/user";
+import {
+  ProfilePost,
+  UserDashboard,
+  UserProfile,
+  ResponseData,
+} from "../../../shared/types/api";
+import { ErrorMessage } from "../components/ErrorMessage";
+import { extractErrorMessage } from "../utils/errorUtility";
 // interface UserData {
 //   id: string;
 //   userName: string;
@@ -17,26 +26,45 @@ import { UserAssessmentData, UserData } from "../types/user";
 
 const Profile: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
-  const [user, setUser] = useState<UserData>({
-    id: "aa21231",
-    userName: "hannes@gmail.com",
-    firstName: "Hannes",
-    lastName: "Soosaar",
-    sex: "male",
-    age: 41,
-    weight: 131,
-    height: 185,
-    BMI: 28,
-    fatPercentage: 21,
-    wellnessScore: 100,
-    neckCircumference: "50",
-    waistCircumference: "118",
-  });
 
-  const [formData, setFormData] = useState<UserData>(user);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [sex, setSex] = useState("");
+  const [age, setAge] = useState<number>(0);
+  const [height, setHeight] = useState<number>(0);
+  const [weight, setWeight] = useState<number>(0);
+  const [neckCircumference, setNeckCircumference] = useState<number>(0);
+  const [waistCircumference, setWaistCircumference] = useState<number>(0);
+  const [fatPercentage, setFatPercentage] = useState<number>(0);
+  const [message, setMessage] = useState("");
+  const [errorMessage, setError] = useState("");
+
+  // const [userProfile, setUserProfile] = useState<UserDashboard>(
+  //   {
+
+  // firstName:"",
+  // lastName:"",
+  // sex:"",
+  // age: 0,
+  // height:0,
+  // weight:0,
+  // neckCircumference: 0,
+  // waistCircumference:0,
+  // wellnessScore: 0,
+  // BMI: 0,
+  // fatPercentage: 0,
+  // currentWeight:0,
+  // goal: "",
+  // goalProgress: 0,
+  // goalTargetValue: 0,
+  // goalStartDate: "",
+  // goalEndDate: "",
+  // progressIndicator:""
+
+  //   }
+  // );
 
   const handleEditClick = () => {
-    setFormData(user);
     setIsEditing(true);
   };
 
@@ -44,15 +72,35 @@ const Profile: React.FC = () => {
     setIsEditing(false);
   };
 
-  const handleSave = () => {
-    setUser(formData);
+  const handleSave = async () => {
     setIsEditing(false);
-    //   send via API to be update at the BE
-  };
+    const updatedProfile: ProfilePost = {
+      firstName: firstName,
+      lastName: lastName,
+      sex: sex,
+      age: age,
+      height: height,
+      weight: weight,
+      neckCircumference: neckCircumference,
+      waistCircumference: waistCircumference,
+    };
+    setIsEditing(false);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [event.target.name]: event.target.value });
-    //TODO add more values here -
+    try {
+      const response = await api.post<ResponseData<null>>(
+        "user/profile",
+        updatedProfile
+      );
+      //   send via API to be update at the BE
+      if (response.data.success) {
+        setMessage("Profile updated successfully");
+      } else {
+        setError(response.data.error || "Failed to update profile");
+      }
+    } catch (error) {
+      setError(extractErrorMessage(error).message);
+      console.error("Error updating profile:", error);
+    }
   };
 
   const isValidNumber = (stringValue: string) => {
@@ -60,38 +108,69 @@ const Profile: React.FC = () => {
     return /^-?\d+(\.\d+)?$/.test(normalized.trim());
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await api.get<ResponseData<UserDashboard>>(
+          "user/profile/dashboard"
+        );
+        if (!response.data) {
+          console.log(response.data);
+          setError("Failed to fetch user profile");
+          return;
+        }
+        setFirstName(response.data.data?.firstName || "");
+        setLastName(response.data.data?.lastName || "");
+        setSex(response.data.data?.sex || "");
+        setAge(response.data.data?.age || 0);
+        setHeight(response.data.data?.height || 0);
+        setWeight(response.data.data?.weight || 0);
+        setNeckCircumference(response.data.data?.neckCircumference || 0);
+        setWaistCircumference(response.data.data?.waistCircumference || 0);
+        setFatPercentage(response.data.data?.fatPercentage || 0);
+        setMessage(response.data.message || "");
+        // setUserProfile(response.data.data);
+      } catch (error) {
+        setError(extractErrorMessage(error).message);
+        console.error("Error fetching user profile:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <>
-      <h3>Wellness Score: {user.wellnessScore}</h3>
+      <h3>User Profile</h3>
+      <ErrorMessage message={errorMessage} duration={5000} />
       {!isEditing ? (
         <>
           <p>
             <strong>Name: </strong>
-            {user.firstName} {user.lastName}
+            {firstName} {lastName}
           </p>
           <p>
             <strong>Email: </strong>
-            {user.userName}
+            {email}
           </p>
           <p>
             <strong>Sex: </strong>
-            {user.sex}
+            {sex}
           </p>
           <p>
             <strong>Weight: </strong>
-            {user.weight}
+            {weight}
           </p>
           <p>
             <strong>Body fat: </strong>
-            {user.fatPercentage}
+            {fatPercentage}
           </p>
           <p>
             <strong>Age: </strong>
-            {user.age}
+            {age}
           </p>
           <p>
             <strong>Height: </strong>
-            {user.height}
+            {height}
           </p>
           <button onClick={handleEditClick}>Edit Profile</button>
         </>
@@ -101,24 +180,26 @@ const Profile: React.FC = () => {
             First Name:
             <input
               name="firstName"
-              value={formData.firstName}
-              onChange={handleChange}
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
             ></input>
           </label>
           <label className="stacked">
             Last Name :
             <input
               name="lastName"
-              value={formData.lastName}
-              onChange={handleChange}
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
             ></input>
           </label>
           <label className="stacked">
             Neck Circumference: (cm):
             <input
               name="neckCircumference"
-              value={formData.neckCircumference}
-              onChange={handleChange}
+              type="number"
+              min="0"
+              value={neckCircumference}
+              onChange={(e) => setNeckCircumference(Number(e.target.value))}
             ></input>
           </label>
           <br />
@@ -126,33 +207,42 @@ const Profile: React.FC = () => {
             Waist Circumference: (cm) :
             <input
               name="waistCircumference"
-              value={formData.waistCircumference}
-              onChange={handleChange}
+              type="number"
+              min="0"
+              value={waistCircumference}
+              onChange={(e) => setWaistCircumference(Number(e.target.value))}
             ></input>
           </label>
           <label className="stacked">
             Weight (kg):
             <input
               name="weight"
-              value={formData.weight}
-              onChange={handleChange}
+              value={weight}
+              onChange={(e) => setWeight(Number(e.target.value))}
+              type="number"
+              min="0"
             ></input>
           </label>
           <label className="stacked">
             Height (cm):
             <input
               name="height"
-              value={formData.height}
-              onChange={handleChange}
+              type="number"
+              min="0"
+              value={height}
+              onChange={(e) => setHeight(Number(e.target.value))}
             ></input>
           </label>
           <label className="stacked">
             Sex:
-            <input
+            <select
               name="sex"
-              value={formData.sex}
-              onChange={handleChange}
-            ></input>
+              value={sex}
+              onChange={(e) => setSex(e.target.value)}
+            >
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
           </label>
 
           <br />

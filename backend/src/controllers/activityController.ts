@@ -63,7 +63,16 @@ export const updateUserActivity = async (
   }
 
   const userActivity: UserActivity = { ...req.body, userId };
-  const activityCalories = calculateCalories(userActivity);
+
+  try {
+    const activityCalories = await calculateCalories(userActivity);
+    userActivity.caloriesBurned = activityCalories;
+  } catch (error) {
+    console.log("error calculating calories", error);
+    responseData.error = "Error adding calories";
+    userActivity.caloriesBurned = 0;
+  }
+
   try {
     const response = await updateUserActivityService(userActivity);
     responseData.message = "Activity added";

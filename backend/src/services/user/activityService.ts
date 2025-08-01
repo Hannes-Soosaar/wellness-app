@@ -30,9 +30,8 @@ export const updateUserActivity = async (
     throw new Error("No user Id provided");
   }
 
-  // Insert the activity into the database
   await pool.query(
-    "INSERT INTO user_activities (user_id, activity_type, duration, intensity, date, note) VALUES ($1, $2, $3, $4, $5, $6)",
+    "INSERT INTO user_activities (user_id, activity_type, duration, intensity, date, note, calories_burned) VALUES ($1, $2, $3, $4, $5, $6, $7)",
     [
       userActivity.userId,
       userActivity.activityType,
@@ -40,6 +39,9 @@ export const updateUserActivity = async (
       userActivity.activityIntensity,
       userActivity.activityDate,
       userActivity.activityNote,
+      userActivity.caloriesBurned || 0,
     ]
   );
 };
+
+

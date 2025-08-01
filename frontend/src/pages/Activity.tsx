@@ -7,14 +7,6 @@ import {
 } from "../../../shared/types/api";
 import { extractErrorMessage } from "../utils/errorUtility";
 import { ErrorMessage } from "../components/ErrorMessage";
-interface ActivityPost {
-  id: string;
-  activityType: string;
-  activityDuration: number;
-  activityIntensity: string;
-  activityDate: string;
-  activityNote?: string;
-}
 
 const Activity: React.FC = () => {
   const getTodayString = () => {

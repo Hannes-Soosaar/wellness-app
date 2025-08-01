@@ -5,6 +5,10 @@ import {
   getActivityOptions,
   updateUserActivity,
 } from "../controllers/activityController";
+import {
+  getUserDashboard,
+  updateProfile,
+} from "../controllers/profileController";
 
 /* 
 All routes here require that the user be authenticated. each page on the front end has its ons section
@@ -39,8 +43,8 @@ userRouter.get("/assessment/options", test);
 userRouter.put("/assessment", test); // will update the assessment, not post as there is but one record for each profile
 
 //Profile page
-userRouter.get("/profile/options", test);
-userRouter.put("/profile", test); // will update the profile, not post as there is but one record for each profile
+userRouter.get("/profile/dashboard", getUserDashboard);
+userRouter.put("/profile", updateProfile); // will update the profile, not post as there is but one record for each profile
 
 //Progress page
 userRouter.get("/progress/options", test);

@@ -1,2 +1,2 @@
 
-DROP TABLE user_activities
+DROP TABLE user_profiles 
