@@ -7,7 +7,8 @@ import {
 import { Request, Response, RequestHandler } from "express";
 import { getUserId } from "./verificationController";
 import { ResolveFnOutput } from "module";
-import { updateUserProfile } from "../services/user/userService";
+import { updateUserProfile } from "../services/user/profileService";
+import { calculateBodyComposition } from "../utils/bodyComposition";
 
 // Would be better to add middle ware to handle no ID and no verification
 
@@ -28,26 +29,28 @@ export const updateProfile: RequestHandler = async (
   };
 
   const userId = getUserId(req);
+
   if (!userId) {
     responseData.error = "Unable to to update profile";
     res.status(401).json(responseData);
     return;
   }
 
-  // calculate BMI and fat percentage
+  const bodyComposition = calculateBodyComposition(req.body);
 
-  const userProfile: UserProfile = { ...req.body, userId };
+  const userProfile: UserProfile = { ...req.body, userId, ...bodyComposition };
 
   try {
     const response = await updateUserProfile(userProfile);
     responseData.success = true;
     responseData.message = "Profile updated successfully";
     res.status(200).json(responseData);
+    return;
   } catch (error) {
     responseData.error = "Failed to update profile";
     res.status(500).json(responseData);
+    return;
   }
-  res.status(200).json({ message: "Task completed" });
 };
 
 export const updateUserProgress: RequestHandler = async (

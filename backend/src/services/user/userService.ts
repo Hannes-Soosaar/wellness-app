@@ -51,12 +51,6 @@ export const createUser = async (userData: userData): Promise<boolean> => {
   return false;
 };
 
-export const updateUserProfile = async <T>(
-  userProfile: T
-): Promise<boolean> => {
-  return false;
-};
-
 export const getUserWeightById = async (userId: string): Promise<number> => {
   if (!userId) {
     throw new Error("User ID is required");

@@ -44,7 +44,7 @@ userRouter.put("/assessment", test); // will update the assessment, not post as 
 
 //Profile page
 userRouter.get("/profile/dashboard", getUserDashboard);
-userRouter.put("/profile", updateProfile); // will update the profile, not post as there is but one record for each profile
+userRouter.post("/profile", updateProfile); // will update the profile, not post as there is but one record for each profile
 
 //Progress page
 userRouter.get("/progress/options", test);

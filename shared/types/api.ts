@@ -69,6 +69,7 @@ export interface ProfilePost {
   weight?: number;
   neckCircumference?: number;
   waistCircumference?: number;
+  hipCircumference?: number;
   date?: string;
   note?: string;
 }

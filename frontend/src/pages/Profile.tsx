@@ -21,6 +21,7 @@ const Profile: React.FC = () => {
   const [weight, setWeight] = useState<number>(0);
   const [neckCircumference, setNeckCircumference] = useState<number>(0);
   const [waistCircumference, setWaistCircumference] = useState<number>(0);
+  const [hipCircumference, setHipCircumference] = useState<number>(0);
   const [fatPercentage, setFatPercentage] = useState<number>(0);
   const [message, setMessage] = useState("");
   const [errorMessage, setError] = useState("");
@@ -44,12 +45,13 @@ const Profile: React.FC = () => {
       weight: weight,
       neckCircumference: neckCircumference,
       waistCircumference: waistCircumference,
+      hipCircumference: hipCircumference,
     };
     setIsEditing(false);
 
     try {
       const response = await api.post<ResponseData<null>>(
-        "user/profile",
+        "/user/profile",
         updatedProfile
       );
       if (response.data.success) {
@@ -87,6 +89,7 @@ const Profile: React.FC = () => {
         setWeight(response.data.data?.weight || 0);
         setNeckCircumference(response.data.data?.neckCircumference || 0);
         setWaistCircumference(response.data.data?.waistCircumference || 0);
+        setHipCircumference(response.data.data?.hipCircumference || 0);
         setFatPercentage(response.data.data?.fatPercentage || 0);
         setMessage(response.data.message || "");
         // setUserProfile(response.data.data);
@@ -107,10 +110,6 @@ const Profile: React.FC = () => {
           <p>
             <strong>Name: </strong>
             {firstName} {lastName}
-          </p>
-          <p>
-            <strong>Email: </strong>
-            {email}
           </p>
           <p>
             <strong>Sex: </strong>
@@ -137,7 +136,7 @@ const Profile: React.FC = () => {
       ) : (
         <>
           <label className="stacked">
-            First Name:
+            First Name (optional)
             <input
               name="firstName"
               value={firstName}
@@ -145,7 +144,7 @@ const Profile: React.FC = () => {
             ></input>
           </label>
           <label className="stacked">
-            Last Name :
+            Last Name (optional)
             <input
               name="lastName"
               value={lastName}
@@ -153,24 +152,13 @@ const Profile: React.FC = () => {
             ></input>
           </label>
           <label className="stacked">
-            Neck Circumference: (cm):
+            Age (years):
             <input
-              name="neckCircumference"
+              name="weight"
+              value={age}
+              onChange={(e) => setAge(Number(e.target.value))}
               type="number"
               min="0"
-              value={neckCircumference}
-              onChange={(e) => setNeckCircumference(Number(e.target.value))}
-            ></input>
-          </label>
-          <br />
-          <label className="stacked">
-            Waist Circumference: (cm) :
-            <input
-              name="waistCircumference"
-              type="number"
-              min="0"
-              value={waistCircumference}
-              onChange={(e) => setWaistCircumference(Number(e.target.value))}
             ></input>
           </label>
           <label className="stacked">
@@ -194,6 +182,28 @@ const Profile: React.FC = () => {
             ></input>
           </label>
           <label className="stacked">
+            Neck Circumference: (cm):
+            <input
+              name="neckCircumference"
+              type="number"
+              min="0"
+              value={neckCircumference}
+              onChange={(e) => setNeckCircumference(Number(e.target.value))}
+            ></input>
+          </label>
+          <br />
+          <label className="stacked">
+            Waist Circumference: (cm) :
+            <input
+              name="waistCircumference"
+              type="number"
+              min="0"
+              value={waistCircumference}
+              onChange={(e) => setWaistCircumference(Number(e.target.value))}
+            ></input>
+          </label>
+
+          <label className="stacked">
             Sex:
             <select
               name="sex"
@@ -204,6 +214,18 @@ const Profile: React.FC = () => {
               <option value="female">Female</option>
             </select>
           </label>
+          {sex === "female" ? (
+            <label className="stacked">
+              Hip Circumference: (cm) :
+              <input
+                name="waistCircumference"
+                type="number"
+                min="0"
+                value={hipCircumference}
+                onChange={(e) => setHipCircumference(Number(e.target.value))}
+              ></input>
+            </label>
+          ) : null}
 
           <br />
           <button onClick={handleSave}>Save</button>

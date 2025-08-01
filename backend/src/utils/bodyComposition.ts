@@ -6,7 +6,15 @@ interface BodyComposition {
   fatPercentage: number;
 }
 
-//! Add hip circumference to properly assess body composition for females
+/* 
+Body fat is calculated using the U.S Navy Body Fat Formula (SI units Metric):
+
+Males:
+BFP =	495/ 1.0324 - 0.19077×log10(waist-neck) + 0.15456×log10(height)- 450
+
+Females:
+BFP =	495/1.29579 - 0.35004×log10(waist+hip-neck) + 0.22100×log10(height)-450
+*/
 
 export const calculateBodyComposition = (
   profile: ProfilePost
@@ -27,12 +35,30 @@ export const calculateBodyComposition = (
       "Waist and neck circumference are required to calculate fat percentage"
     );
   }
+
   bodyComposition.BMI = calculateBMI(profile.height, profile.weight);
-  bodyComposition.fatPercentage = calculateFatPercentage(
-    profile.waistCircumference,
-    profile.neckCircumference,
-    profile.height
-  );
+
+  if (profile.sex === "male") {
+    bodyComposition.fatPercentage = calculateMaleFatPercentage(
+      profile.waistCircumference,
+      profile.neckCircumference,
+      profile.height
+    );
+  }
+
+  if (profile.sex === "female") {
+    if (!profile.hipCircumference) {
+      throw new Error(
+        "Hip circumference is required to calculate fat percentage for females"
+      );
+    }
+    bodyComposition.fatPercentage = calculateFemaleFatPercentage(
+      profile.waistCircumference,
+      profile.neckCircumference,
+      profile.hipCircumference,
+      profile.height
+    );
+  }
 
   if (
     bodyComposition.fatPercentage < 0 ||
@@ -48,7 +74,7 @@ export const calculateBodyComposition = (
   return bodyComposition;
 };
 
-const calculateFatPercentage = (
+const calculateMaleFatPercentage = (
   waistCircumference: number,
   neckCircumference: number,
   height: number
@@ -58,6 +84,24 @@ const calculateFatPercentage = (
       (1.0324 -
         0.19077 * Math.log10(waistCircumference - neckCircumference) +
         0.15456 * Math.log10(height)) -
+    450;
+  return parseFloat(bodyFatPercentage.toFixed(2));
+};
+
+const calculateFemaleFatPercentage = (
+  waistCircumference: number,
+  neckCircumference: number,
+  hipCircumference: number,
+  height: number
+): number => {
+  const bodyFatPercentage =
+    495 /
+      (1.29579 -
+        0.35004 *
+          Math.log10(
+            waistCircumference + hipCircumference - neckCircumference
+          ) +
+        0.221 * Math.log10(height)) -
     450;
   return parseFloat(bodyFatPercentage.toFixed(2));
 };

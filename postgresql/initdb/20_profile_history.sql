@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS profile_history (
     body_fat_percentage NUMERIC,
     neck_circumference NUMERIC,
     waist_circumference NUMERIC,
+    hip_circumference NUMERIC,
     weight NUMERIC,
     calories_required NUMERIC,
     BMI NUMERIC,
