@@ -9,20 +9,6 @@ import {
 } from "../../../shared/types/api";
 import { ErrorMessage } from "../components/ErrorMessage";
 import { extractErrorMessage } from "../utils/errorUtility";
-// interface UserData {
-//   id: string;
-//   userName: string;
-//   firstName: string;
-//   lastName: string;
-//   // gender needs to be a number
-//   gender: string;
-//   age: number;
-//   weight: number;
-//   height: number;
-//   BMI: number;
-//   fatPercentage: number;
-//   wellnessScore: number;
-// }
 
 const Profile: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -38,31 +24,6 @@ const Profile: React.FC = () => {
   const [fatPercentage, setFatPercentage] = useState<number>(0);
   const [message, setMessage] = useState("");
   const [errorMessage, setError] = useState("");
-
-  // const [userProfile, setUserProfile] = useState<UserDashboard>(
-  //   {
-
-  // firstName:"",
-  // lastName:"",
-  // sex:"",
-  // age: 0,
-  // height:0,
-  // weight:0,
-  // neckCircumference: 0,
-  // waistCircumference:0,
-  // wellnessScore: 0,
-  // BMI: 0,
-  // fatPercentage: 0,
-  // currentWeight:0,
-  // goal: "",
-  // goalProgress: 0,
-  // goalTargetValue: 0,
-  // goalStartDate: "",
-  // goalEndDate: "",
-  // progressIndicator:""
-
-  //   }
-  // );
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -91,7 +52,6 @@ const Profile: React.FC = () => {
         "user/profile",
         updatedProfile
       );
-      //   send via API to be update at the BE
       if (response.data.success) {
         setMessage("Profile updated successfully");
       } else {
