@@ -1,2 +1,2 @@
 
-DROP TABLE user_profiles 
+DROP TABLE profile_history

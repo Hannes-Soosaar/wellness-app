@@ -64,13 +64,14 @@ export const calculateBodyComposition = (
     bodyComposition.fatPercentage < 0 ||
     bodyComposition.fatPercentage > 100
   ) {
+    bodyComposition.fatPercentage = 0;
     throw new Error("Calculated fat percentage is out of valid range (0-100)");
   }
 
   if (bodyComposition.BMI < 10 || bodyComposition.BMI > 50) {
+    bodyComposition.BMI = 0;
     throw new Error("Calculated BMI is out of valid range (10-50)");
   }
-
   return bodyComposition;
 };
 
@@ -85,6 +86,8 @@ const calculateMaleFatPercentage = (
         0.19077 * Math.log10(waistCircumference - neckCircumference) +
         0.15456 * Math.log10(height)) -
     450;
+
+  console.log("Calculated body fat percentage:", bodyFatPercentage);
   return parseFloat(bodyFatPercentage.toFixed(2));
 };
 
@@ -103,6 +106,7 @@ const calculateFemaleFatPercentage = (
           ) +
         0.221 * Math.log10(height)) -
     450;
+  console.log("Calculated body fat percentage:", bodyFatPercentage);
   return parseFloat(bodyFatPercentage.toFixed(2));
 };
 

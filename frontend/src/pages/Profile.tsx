@@ -23,6 +23,7 @@ const Profile: React.FC = () => {
   const [waistCircumference, setWaistCircumference] = useState<number>(0);
   const [hipCircumference, setHipCircumference] = useState<number>(0);
   const [fatPercentage, setFatPercentage] = useState<number>(0);
+  const [BMI, setBMI] = useState<number>(0);
   const [message, setMessage] = useState("");
   const [errorMessage, setError] = useState("");
 
@@ -65,6 +66,7 @@ const Profile: React.FC = () => {
     }
   };
 
+  // NOT used at the moment, but could be used to validate input
   const isValidNumber = (stringValue: string) => {
     const normalized = stringValue.replace(",", ".");
     return /^-?\d+(\.\d+)?$/.test(normalized.trim());
@@ -92,7 +94,7 @@ const Profile: React.FC = () => {
         setHipCircumference(response.data.data?.hipCircumference || 0);
         setFatPercentage(response.data.data?.fatPercentage || 0);
         setMessage(response.data.message || "");
-        // setUserProfile(response.data.data);
+        setBMI(response.data.data?.BMI || 0);
       } catch (error) {
         setError(extractErrorMessage(error).message);
         console.error("Error fetching user profile:", error);

@@ -22,8 +22,12 @@ export const updateUserProfile = async (
     throw new Error("No user Id provided");
   }
 
-  const response = await pool.query(
-    `INSERT INTO user_profiles (
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
+
+    await client.query(
+      `INSERT INTO user_profiles (
     user_id,
     first_name,
     last_name,
@@ -33,10 +37,12 @@ export const updateUserProfile = async (
     current_weight,
     neck_circumference,
     waist_circumference,
-    hip_circumference)
+    hip_circumference,
+    current_BMI,
+    body_fat_percentage)
     VALUES
     ($1, pgp_sym_encrypt($2, $11),pgp_sym_encrypt($3, $11),
-    $4,$5,$6,$7,$8,$9,$10) ON CONFLICT (user_id)
+    $4,$5,$6,$7,$8,$9,$10,$12,$13) ON CONFLICT (user_id)
     DO UPDATE SET
     first_name = pgp_sym_encrypt($2, $11),
     last_name=pgp_sym_encrypt($3, $11) ,
@@ -46,24 +52,62 @@ export const updateUserProfile = async (
     current_weight = $7,
     neck_circumference=$8,
     waist_circumference= $9,
-    hip_circumference = $10`,
-    [
-      userProfile.userId,
-      userProfile.firstName,
-      userProfile.lastName,
-      userProfile.sex,
-      userProfile.age,
-      userProfile.height,
-      userProfile.weight,
-      userProfile.neckCircumference,
-      userProfile.waistCircumference,
-      userProfile.hipCircumference,
-      dbKey,
-    ]
-  );
+    hip_circumference = $10,
+    current_BMI = $12,
+    body_fat_percentage = $13`,
+      [
+        userProfile.userId,
+        userProfile.firstName,
+        userProfile.lastName,
+        userProfile.sex,
+        userProfile.age,
+        userProfile.height,
+        userProfile.weight,
+        userProfile.neckCircumference,
+        userProfile.waistCircumference,
+        userProfile.hipCircumference,
+        dbKey,
+        userProfile.BMI,
+        userProfile.fatPercentage,
+      ]
+    );
+    // From the profile update window the history gets the posting time stamp, when adding from the progress window a custom time for the entry can be added
+    await client.query(
+      `
+        INSERT INTO profile_history (
+        user_id,
+        body_fat_percentage,
+        neck_circumference,
+        waist_circumference,
+        hip_circumference,
+        weight,
+        bmi
+        ) VALUES
+        ($1, $2, $3, $4, $5, $6, $7)
+        `,
+      [
+        userProfile.userId,
+        userProfile.fatPercentage,
+        userProfile.neckCircumference,
+        userProfile.waistCircumference,
+        userProfile.hipCircumference,
+        userProfile.weight,
+        userProfile.BMI,
+      ]
+    );
 
-  console.log("Profile updated successfully", response);
-  if (response.rowCount === 0) {
-    throw new Error("Failed to update profile");
+    await client.query("COMMIT");
+    console.log("User profile updated successfully");
+  } catch (error) {
+    await client.query("ROLLBACK");
+    console.error("Failed to update user profile:", error);
+    throw new Error(`Failed to update user profile: ${error}`);
+  } finally {
+    client.release();
   }
+  console.log("User profile updated successfully");
+};
+
+export const updateUserProgress = async (): Promise<void> => {
+  console.log("User progress updated");
 };
