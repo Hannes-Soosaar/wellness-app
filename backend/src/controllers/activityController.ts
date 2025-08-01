@@ -1,13 +1,23 @@
 import axios from "axios";
-import { Request, RequestHandler, Response } from "express";
+import { Request, RequestHandler, response, Response } from "express";
 import {
   getActiveActivityOptions as getActivityOptionsService,
   updateUserActivity as updateUserActivityService,
 } from "../services/user/activityService";
 
-import { ResponseData, ActivityOptions } from "@shared/types/api";
+import {
+  ResponseData,
+  ActivityOptions,
+  ActivityPost,
+  UserActivity,
+} from "@shared/types/api";
 import { handleIsUser } from "./userController";
 import { getUserId } from "./verificationController";
+import { calculateCalories } from "../utils/calories";
+
+interface ActivityRequest extends Request {
+  body: ActivityPost;
+}
 
 export const getActivityOptions = async (req: Request, res: Response) => {
   // Verify user
@@ -36,21 +46,26 @@ export const getActivityOptions = async (req: Request, res: Response) => {
   }
 };
 
-export const updateUserActivity = async (req: Request, res: Response) => {
+export const updateUserActivity = async (
+  req: ActivityRequest,
+  res: Response
+) => {
   const userId = getUserId(req);
-
   let responseData: ResponseData<null> = {
     success: false,
     message: "",
   };
 
   if (!userId) {
-    responseData.error = "Not logged in";
-    res.status(404).json(responseData);
+    responseData.message = "Activity not added";
+    res.status(401).json({ response });
+    return;
   }
 
+  const userActivity: UserActivity = { ...req.body, userId };
+  const activityCalories = calculateCalories(userActivity);
   try {
-    const response = await updateUserActivityService(userId);
+    const response = await updateUserActivityService(userActivity);
     responseData.message = "Activity added";
     responseData.success = true;
     res.status(200).json(responseData);

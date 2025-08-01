@@ -1,1 +1,2 @@
-user_goals
+
+DROP TABLE user_activities

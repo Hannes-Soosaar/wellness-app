@@ -2,6 +2,7 @@ import { pool } from "@backend/server";
 import dotenv from "dotenv";
 import { userData } from "@backend/src/models/userModel";
 import { response } from "express";
+import { throwDeprecation } from "process";
 
 dotenv.config();
 
@@ -54,4 +55,23 @@ export const updateUserProfile = async <T>(
   userProfile: T
 ): Promise<boolean> => {
   return false;
+};
+
+export const getUserWeightById = async (userId: string): Promise<number> => {
+  if (!userId) {
+    throw new Error("User ID is required");
+  }
+  let currentUserWeigh = 0;
+  await pool
+    .query("SELECT current_weight FROM user_profile WHERE user_id = $1", [
+      userId,
+    ])
+    .then((result) => {
+      if (result.rows.length > 0) {
+        currentUserWeigh = result.rows[0].current_weight;
+      } else {
+        throw new Error("User weight not found");
+      }
+    });
+  return currentUserWeigh;
 };

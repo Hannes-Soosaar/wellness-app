@@ -11,7 +11,7 @@ export const verifyEmail: RequestHandler = async (req, res) => {
     res.status(400).json({ message: "Invalid or expired token" });
     return;
   }
-  //TODO: Extract to Service
+
   const result = await pool.query(
     "UPDATE users SET is_verified = TRUE, verification_token = NULL WHERE verification_token = $1",
     [token]

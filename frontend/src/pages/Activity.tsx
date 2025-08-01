@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import api from "../lib/axios";
 import {
-  UserActivityPost,
+  ActivityPost,
   ResponseData,
   ActivityOptions,
 } from "../../../shared/types/api";
@@ -41,7 +41,7 @@ const Activity: React.FC = () => {
   //TODO get user Activity Types
 
   const handleSave = async () => {
-    const userActivityPost: UserActivityPost = {
+    const userActivityPost: ActivityPost = {
       activityType,
       activityDuration,
       activityIntensity,

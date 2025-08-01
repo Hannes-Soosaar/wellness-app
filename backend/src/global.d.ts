@@ -17,5 +17,8 @@ declare namespace NodeJS {
     DB_PORT: string; // Database port
     DB_NAME: string; // Database name
     DB_KEY: string; // Database name
+    LOW_MET: number;
+    MED_MET: number;
+    HIGH_MET: number;
   }
 }
