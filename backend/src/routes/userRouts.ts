@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { handleUser } from "../controllers/userController";
+import { getUserSettings, handleUser, updateUserSettings } from "../controllers/userController";
 import { test } from "../controllers/authController";
 import {
   getActivityOptions,
@@ -29,8 +29,8 @@ userRouter.delete("/activity/remove", test); // Implement v2
 userRouter.post("/activity", updateUserActivity);
 
 //Settings page
-userRouter.get("/settings", test); // Get user settings
-userRouter.post("/settings", test); // update user settings
+userRouter.get("/settings", getUserSettings); // Get user settings
+userRouter.post("/settings", updateUserSettings); // update user settings
 
 //Meal page
 userRouter.get("/meal/options", test);

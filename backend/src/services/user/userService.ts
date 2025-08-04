@@ -95,7 +95,7 @@ export const getUserSettings = async (
       email_notifications: result.rows[0].email_notifications,
       notification_active: result.rows[0].notification_active,
       privacy_accepted: result.rows[0].privacy_accepted,
-      cookie_allowed: result.rows[0].cookie_allowed,
+      cookies_allowed: result.rows[0].cookie_allowed,
       ai_enabled: result.rows[0].ai_enabled,
     };
   } catch (error) {
@@ -123,7 +123,7 @@ export const updateUserSettings = async (
           email_notifications = $2,
           notification_active = $3,
           privacy_accepted = $4,
-          cookie_allowed = $5,
+          cookies_allowed = $5,
           ai_enabled = $6
       WHERE user_id = $7
     `,
@@ -132,7 +132,7 @@ export const updateUserSettings = async (
         settings.email_notifications,
         settings.notification_active,
         settings.privacy_accepted,
-        settings.cookie_allowed,
+        settings.cookies_allowed,
         settings.ai_enabled,
         userId,
       ]

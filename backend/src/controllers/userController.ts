@@ -3,10 +3,14 @@ import { pool } from "../../server";
 import { hashPassword } from "../utils/crypto";
 import { getBearerToken } from "./authController";
 import { verifyJWT, verifyPasswordResetJWT } from "../utils/tokens";
-import { ResponseData } from "@shared/types/api";
+import { ResponseData, UserSettings } from "@shared/types/api";
 
 import dotenv from "dotenv";
 import { setUserPasswordByResetToken } from "../services/tokenService";
+import { getUserId } from "./verificationController";
+import { getUserSettings as getUserSettingsFromDB } from "../services/user/userService";
+import { updateUserSettings as updatedUserSettingsInDB } from "../services/user/userService";
+import { userData } from "../models/userModel";
 dotenv.config();
 
 // Not a useful function
@@ -129,6 +133,98 @@ const handleUpdateUserPassword: RequestHandler = async (req, res) => {
     res.status(500).json(response);
     return;
   }
+};
+
+export const getUserSettings: RequestHandler = async (
+  req: Request,
+  res: Response
+) => {
+  let response: ResponseData<UserSettings> = {
+    success: false,
+    message: "",
+  };
+  const userId = getUserId(req);
+
+  if (!userId) {
+    response.error = "Unable to get user settings";
+    response.error = "Please log in again and try again";
+    res.status(401).json(response);
+    return;
+  }
+
+  try {
+    response.data = await getUserSettingsFromDB(userId);
+    response.success = true;
+    response.message = "Loaded user settings successfully";
+    res.status(200).json(response);
+    return;
+  } catch (error) {
+    response.error = "Failed to load user settings";
+    res.status(500).json(response);
+    return;
+  }
+};
+
+export const updateUserSettings: RequestHandler = async (
+  req: Request,
+  res: Response
+) => {
+  let response: ResponseData<userData> = {
+    success: false,
+    message: "",
+  };
+  const userId = getUserId(req);
+
+  if (!userId) {
+    response.message = "Unable to update user settings";
+    response.error = "Please log in again and try again";
+    res.status(401).json(response);
+    return;
+  }
+
+  if (!req.body) {
+    response.error = "No data was provided";
+    res.status(400).json(response);
+    return;
+  }
+
+  try {
+    await updatedUserSettingsInDB(userId, req.body);
+    response.success = true;
+    response.message = "User settings updated successfully";
+    response.data = req.body;
+    res.status(200).json(response);
+  } catch (error) {
+    response.error = "Failed to update user settings";
+    res.status(500).json(response);
+  }
+};
+
+export const updateUserProfile: RequestHandler = async (
+  req: Request,
+  res: Response
+) => {
+  let response: ResponseData<null> = {
+    success: false,
+    message: "",
+  };
+  console.log("Updating User Profile Request", req.body);
+
+  const userId = getUserId(req);
+  if (!userId) {
+    response.error = "Unable to get user settings";
+    response.error = "Please log in again and try again";
+    res.status(401).json(response);
+    return;
+  }
+
+  if (!req.body) {
+    response.error = "No data was provided";
+    res.status(400).json(response);
+    return;
+  }
+
+  console.log("request body", req.body);
 };
 
 export { handleUser, handleIsUser, handleUpdateUserPassword };
