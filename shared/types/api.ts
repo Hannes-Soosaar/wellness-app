@@ -95,3 +95,13 @@ export interface UserDashboard extends ProfilePost {
   goalEndDate: string;
   progressIndicator: string; // e.g. "On Track", "Behind", "Ahead"
 }
+
+// This is used to display the user Settings page and modify the user settings
+export interface UserSettings {
+  mfa_enabled?: boolean; // Supported: Multi-factor authentication enabled
+  email_notifications?: boolean; // Supported: Email notifications enabled
+  notification_active?: boolean; // Planned: Notification system not implemented yet
+  privacy_accepted?: boolean; // : Allow data sharing with third parties
+  cookie_allowed?: boolean; // Supported: Only necessary cookies are used, no need to ask this atm.
+  ai_enabled?: boolean; // Supported: Allow AI features
+}

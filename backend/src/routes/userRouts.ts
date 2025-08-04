@@ -28,6 +28,10 @@ userRouter.get("/activity/history", test); // Implement v2
 userRouter.delete("/activity/remove", test); // Implement v2
 userRouter.post("/activity", updateUserActivity);
 
+//Settings page
+userRouter.get("/settings", test); // Get user settings
+userRouter.post("/settings", test); // update user settings
+
 //Meal page
 userRouter.get("/meal/options", test);
 userRouter.get("/meal/history", test); // implement v2

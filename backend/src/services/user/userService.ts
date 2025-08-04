@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import { userData } from "@backend/src/models/userModel";
 import { response } from "express";
 import { throwDeprecation } from "process";
+import { UserSettings } from "@shared/types/api";
 
 dotenv.config();
 
@@ -55,17 +56,89 @@ export const getUserWeightById = async (userId: string): Promise<number> => {
   if (!userId) {
     throw new Error("User ID is required");
   }
+
   let currentUserWeigh = 0;
-  await pool
-    .query("SELECT current_weight FROM user_profile WHERE user_id = $1", [
-      userId,
-    ])
-    .then((result) => {
-      if (result.rows.length > 0) {
-        currentUserWeigh = result.rows[0].current_weight;
-      } else {
-        throw new Error("User weight not found");
-      }
-    });
-  return currentUserWeigh;
+  try {
+    const result = await pool.query(
+      "SELECT current_weight FROM user_profile WHERE user_id = $1",
+      [userId]
+    );
+    if (result.rows.length > 0) {
+      currentUserWeigh = result.rows[0].current_weight;
+    } else {
+      throw new Error("User weight not found");
+    }
+    return currentUserWeigh;
+  } catch (error) {
+    console.error("Error fetching user weight:", error);
+    throw new Error("Failed to fetch user weight");
+  }
+};
+
+export const getUserSettings = async (
+  userId: string
+): Promise<UserSettings> => {
+  if (!userId) {
+    throw new Error("User ID is required");
+  }
+  try {
+    const result = await pool.query(
+      "SELECT * FROM user_settings WHERE user_id = $1",
+      [userId]
+    );
+    if (result.rows.length === 0) {
+      throw new Error("User settings not found");
+    }
+
+    return {
+      mfa_enabled: result.rows[0].mfa_enabled,
+      email_notifications: result.rows[0].email_notifications,
+      notification_active: result.rows[0].notification_active,
+      privacy_accepted: result.rows[0].privacy_accepted,
+      cookie_allowed: result.rows[0].cookie_allowed,
+      ai_enabled: result.rows[0].ai_enabled,
+    };
+  } catch (error) {
+    console.error("Error fetching user settings:", error);
+    throw error;
+  }
+};
+
+export const updateUserSettings = async (
+  userId: string,
+  settings: UserSettings
+): Promise<void> => {
+  if (!userId) {
+    throw new Error("User ID is required");
+  }
+  if (!settings) {
+    throw new Error("Settings data is required");
+  }
+
+  try {
+    await pool.query(
+      `
+      UPDATE user_settings
+      SET mfa_enabled = $1,
+          email_notifications = $2,
+          notification_active = $3,
+          privacy_accepted = $4,
+          cookie_allowed = $5,
+          ai_enabled = $6
+      WHERE user_id = $7
+    `,
+      [
+        settings.mfa_enabled,
+        settings.email_notifications,
+        settings.notification_active,
+        settings.privacy_accepted,
+        settings.cookie_allowed,
+        settings.ai_enabled,
+        userId,
+      ]
+    );
+  } catch (error) {
+    console.error("Failed to update user settings:", error);
+    throw error;
+  }
 };

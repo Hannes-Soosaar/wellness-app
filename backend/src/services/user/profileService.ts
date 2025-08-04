@@ -117,7 +117,8 @@ export const updateUserProgress = async (): Promise<void> => {
 export const getUserDashboard = async (
   userId: string
 ): Promise<UserDashboard> => {
-  let userDashboard: UserDashboard = {};
+    let userDashboard: UserDashboard;
+    
   const client = await pool.connect();
 
   try {
