@@ -1,63 +1,87 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ErrorMessage } from "../components/ErrorMessage";
 import { SuccessMessage } from "../components/SuccessMessage";
-
-interface MealPost {
-  id: string;
-  meal: string;
-  mealCalories: string;
-  mealNote: string;
-  mealDate: string;
-}
+import { MealPost, ResponseData, MealOptions } from "../../../shared/types/api"; // Assuming you have a type definition for MealPost
+import api from "../lib/axios";
 
 const Meal: React.FC = () => {
   const getTodayString = () => {
     const today = new Date();
     return today.toISOString().split("T")[0];
   };
-
-  const [meal, setMeal] = useState("");
-  const [mealCalories, setMealCalories] = useState("");
-  const [mealDate, setMealDate] = useState(getTodayString());
-  const [mealNote, setMealNote] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-
-  const handleSave = () => {
-    const newMeal = {
-      id: crypto.randomUUID(),
-      meal: meal,
-      mealCalories: mealCalories.replace(",", "."),
-      mealDate: mealDate,
-    };
-
-    console.log(isValidNumber(mealCalories) + "Evaluation");
-
-    if (!isValidNumber(mealCalories)) {
-      setErrorMessage("Please enter a valid number for calories.");
-      return;
-    } else {
-      setErrorMessage("");
-      try {
-        console.log("saving meal", newMeal);
-        localStorage.setItem("latesMeal", JSON.stringify(newMeal));
-        setSuccessMessage("Meal saved successfully!");
-      } catch (error) {
-        setErrorMessage("Failed to save meal. Please try again.");
-        console.log("failed to save meal:", error);
-      }
-    }
-  };
+  // This sets the initial value of Meal to "meal" to avoid loading conflicts.
+  const [meal, setMeal] = useState<string>("meal");
+  const [calories, setCalories] = useState<string>("");
+  const [consumedAt, setConsumedAt] = useState<string>(getTodayString());
+  const [mealNote, setMealNote] = useState<string>("");
+  const [successMessage, setSuccessMessage] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [mealOptions, setMealOptions] = useState<string[]>([]);
 
   const isValidNumber = (stringValue: string) => {
     const normalized = stringValue.replace(",", ".");
     return /^-?\d+(\.\d+)?$/.test(normalized.trim());
   };
 
-  const handleErrorClose = () => {
-    setErrorMessage("");
-    setMealCalories("");
+  const handleSave = async () => {
+    const newMeal: MealPost = {
+      mealType: meal,
+      calories: calories.replace(",", "."),
+      consumedAt: consumedAt,
+    };
+
+    console.log(isValidNumber(calories) + "Evaluation");
+
+    if (!isValidNumber(calories)) {
+      setErrorMessage("Please enter a valid number for calories.");
+      return;
+    }
+
+    try {
+      const response = await api.post("/user/meal", newMeal);
+
+      if (!response.data.success) {
+        setErrorMessage("Failed to add meal. Please try again.");
+        return;
+      }
+
+      setSuccessMessage(
+        "Successfully added " +
+          response.data.data.mealType +
+          " " +
+          response.data.data.calories +
+          " kcal on " +
+          response.data.data.consumedAt
+      );
+      console.log("success Message", successMessage);
+      setMeal("");
+      setCalories("");
+      setConsumedAt(getTodayString());
+      setMealNote("");
+    } catch (error) {
+      console.log("Error saving meal:", error);
+      setErrorMessage("Failed to save meal. Please try again.");
+    }
   };
+
+  useEffect(() => {
+    const fetchMealOptions = async () => {
+      try {
+        const response = await api.get<ResponseData<MealOptions>>(
+          "/user/meal/options"
+        );
+        if (response.data.success) {
+          setMealOptions(response.data.data?.mealTypes || []);
+        } else {
+          setErrorMessage("Failed to load meal options.");
+        }
+      } catch (error) {
+        setErrorMessage("Error fetching meal options: " + error);
+      }
+    };
+
+    fetchMealOptions();
+  }, []);
 
   return (
     <>
@@ -70,22 +94,22 @@ const Meal: React.FC = () => {
             onChange={(e) => setMeal(e.target.value)}
             className="activity-input"
           >
-            <option value="Meal">Meal</option>
-            <option value="Breakfast">Breakfast</option>
-            <option value="Lunch">Lunch</option>
-            <option value="Dinner">Dinner</option>
-            <option value="Snack">Snack</option>
-            <option value="Dessert">Dessert</option>
+            {mealOptions.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
           </select>
         </label>
+
         <label className="meal-label">
           Meal Calories (kcal)
           <input
             className="meal-input"
             type="number"
             min="0"
-            value={mealCalories}
-            onChange={(e) => setMealCalories(e.target.value)}
+            value={calories}
+            onChange={(e) => setCalories(e.target.value)}
           />
         </label>
 
@@ -93,8 +117,8 @@ const Meal: React.FC = () => {
           Target Date:
           <input
             type="date"
-            value={mealDate}
-            onChange={(e) => setMealDate(e.target.value)}
+            value={consumedAt}
+            onChange={(e) => setConsumedAt(e.target.value)}
             className="date-input"
           />
         </label>
@@ -113,7 +137,7 @@ const Meal: React.FC = () => {
         />
         <SuccessMessage
           message={successMessage}
-          duration={3000}
+          duration={5000}
           onDismiss={() => setSuccessMessage("")}
         />
         <button onClick={handleSave}>Add Meal</button>

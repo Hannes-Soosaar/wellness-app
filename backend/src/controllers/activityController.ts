@@ -1,4 +1,3 @@
-import axios from "axios";
 import { Request, RequestHandler, response, Response } from "express";
 import {
   getActiveActivityOptions as getActivityOptionsService,

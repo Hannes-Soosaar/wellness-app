@@ -31,14 +31,14 @@ export interface ActivityOptions {
 
 export interface MealPost {
   mealType: string;
-  calories: number;
+  calories: string;
   consumedAt: string;
 }
 
 export interface UserMeal {
   userId: string;
   mealType: string;
-  calories: number;
+  calories: string;
   consumedAt: string;
 }
 

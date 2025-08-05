@@ -14,6 +14,8 @@ import {
   updateProfile,
 } from "../controllers/profileController";
 
+import { getMealOptions, updateUserMeals } from "../controllers/mealController";
+
 /* 
 All routes here require that the user be authenticated. each page on the front end has its ons section
 user services will be broken up into sections for each page.

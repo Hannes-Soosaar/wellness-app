@@ -1,5 +1,5 @@
 import { pool } from "@backend/server";
-import { MealOptions, UserMeal } from "@shared/types/api";
+import { MealOptions, MealPost, UserMeal } from "@shared/types/api";
 
 export const getActiveMealOptions = async (): Promise<MealOptions> => {
   const mealOptions: MealOptions = {
@@ -22,14 +22,11 @@ export const getActiveMealOptions = async (): Promise<MealOptions> => {
   }
 };
 
-export const updateUserMeals = async (
-  userId: string,
-  mealPost: UserMeal
-): Promise<void> => {
-  if (!userId) {
+export const updateUserMeals = async (userMeal: UserMeal): Promise<void> => {
+  if (!userMeal.userId) {
     throw new Error("User ID is required");
   }
-  if (!mealPost) {
+  if (!userMeal) {
     throw new Error("Meal data is required");
   }
 
@@ -39,11 +36,16 @@ export const updateUserMeals = async (
       INSERT INTO user_meals (user_id, meal_id, calories, consumed_at) SELECT
         $1, id, $3, $4 FROM meals WHERE meal_type = $2 RETURNING *
      `,
-      [userId, mealPost.mealType, mealPost.calories, mealPost.consumedAt]
+      [
+        userMeal.userId,
+        userMeal.mealType,
+        userMeal.calories,
+        userMeal.consumedAt,
+      ]
     );
 
     if (updateResult.rowCount === 0) {
-      throw new Error(`Meal type "${mealPost.mealType}" not found`);
+      throw new Error(`Meal type "${userMeal.mealType}" not found`);
     }
   } catch (error) {
     throw new Error(`Failed to update user meals: ${error}`);
