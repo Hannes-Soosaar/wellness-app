@@ -1,5 +1,7 @@
 //In the next project use a shared global.d.ts file for shared declartions of types, interfaces and constants
 
+import { getUserId } from "@backend/src/controllers/verificationController";
+
 export interface ResponseData<T> {
   success: boolean;
   message: string;
@@ -31,6 +33,17 @@ export interface MealPost {
   mealType: string;
   calories: number;
   consumedAt: string;
+}
+
+export interface UserMeal {
+  userId: string;
+  mealType: string;
+  calories: number;
+  consumedAt: string;
+}
+
+export interface MealOptions {
+  mealTypes: string[];
 }
 
 export interface GoalPost {

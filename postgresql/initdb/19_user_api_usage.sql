@@ -1,6 +1,6 @@
 CREATE TABLE api_usage (
     id SERIAL PRIMARY KEY,
-    user_id UUID NOT NULL,
+    user_id UUID NOT NULL UNIQUE,
     request_count INT DEFAULT 0,
     period_start TIMESTAMP NOT NULL,
     period_end TIMESTAMP NOT NULL,

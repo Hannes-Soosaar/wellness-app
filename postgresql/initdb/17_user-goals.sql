@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS user_goals (
     id SERIAL PRIMARY KEY,
-    user_id UUID NOT NULL,
+    user_id UUID NOT NULL unique,
     goal_id INT NOT NULL,
     status TEXT NOT NULL DEFAULT 'active',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,

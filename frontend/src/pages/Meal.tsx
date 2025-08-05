@@ -82,7 +82,8 @@ const Meal: React.FC = () => {
           Meal Calories (kcal)
           <input
             className="meal-input"
-            type="text"
+            type="number"
+            min="0"
             value={mealCalories}
             onChange={(e) => setMealCalories(e.target.value)}
           />

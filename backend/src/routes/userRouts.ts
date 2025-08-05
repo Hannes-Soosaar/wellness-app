@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { getUserSettings, handleUser, updateUserSettings } from "../controllers/userController";
+import {
+  getUserSettings,
+  handleUser,
+  updateUserSettings,
+} from "../controllers/userController";
 import { test } from "../controllers/authController";
 import {
   getActivityOptions,
@@ -33,10 +37,10 @@ userRouter.get("/settings", getUserSettings); // Get user settings
 userRouter.post("/settings", updateUserSettings); // update user settings
 
 //Meal page
-userRouter.get("/meal/options", test);
+userRouter.get("/meal/options", getMealOptions); // Get meal options
 userRouter.get("/meal/history", test); // implement v2
 userRouter.delete("/meal/remove", test); // implement v2
-userRouter.post("/meal", test);
+userRouter.post("/meal", updateUserMeals);
 
 //Goal page
 userRouter.get("/goals/options", test);
@@ -44,7 +48,7 @@ userRouter.put("/goal", test); // The goals is static, so it will overwrite the 
 
 //Assessment page
 userRouter.get("/assessment/options", test);
-userRouter.put("/assessment", test); // will update the assessment, not post as there is but one record for each profile
+userRouter.post("/assessment", test); // will update the assessment, not post as there is but one record for each profile
 
 //Profile page
 userRouter.get("/profile/dashboard", getUserDashboard);
@@ -58,7 +62,7 @@ userRouter.post("/progress", test);
 
 //Restrictions page
 userRouter.get("/restrictions/options", test);
-userRouter.put("/restrictions", test);
+userRouter.post("/restrictions", test);
 
 // AI routes to get advice
 userRouter.get("/advice/daily", test);
