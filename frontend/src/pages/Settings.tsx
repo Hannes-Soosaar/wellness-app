@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { ResponseData, UserSettings } from "../../../shared/types/api"; // Adjust the import path as necessary
 import api from "../lib/axios";
 import { extractErrorMessage } from "../utils/errorUtility";
+import RequestPasswordReset from "../components/RequestPasswordReset";
+import Modal from "../components/Modal";
 
 const Settings: React.FC = () => {
   // User data states
@@ -16,6 +18,7 @@ const Settings: React.FC = () => {
   const [errorMessage, setError] = useState<string>();
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState<boolean>(true);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   // const [formData, setFormData] = useState<UserSettings>(userSetting);
 
@@ -92,8 +95,14 @@ const Settings: React.FC = () => {
     getUserSettings();
   }, []);
 
+  // Check if you can use the (prev) => (!prev) syntax
+
   const handleUpdatePassword = () => {
-    alert("Update password functionality is not implemented yet.");
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -155,11 +164,15 @@ const Settings: React.FC = () => {
           <br />
           <div>
             <button onClick={handleSave}>Save</button>
-            <button onClick={handleUpdatePassword}>Update Password </button>
           </div>
-          <p>data has been got</p>
         </>
       )}
+      <button onClick={handleUpdatePassword}>Update Password </button>
+      <Modal
+        modalIsOpen={isModalOpen}
+        closeModal={closeModal}
+        children={<RequestPasswordReset />}
+      ></Modal>
     </>
   );
 };
