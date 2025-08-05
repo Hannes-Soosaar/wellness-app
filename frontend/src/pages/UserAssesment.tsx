@@ -2,6 +2,8 @@ import React from "react";
 import { useState } from "react";
 import { USER_ASSESSMENT_OPTIONS } from "../types/tempMockConstants";
 import AssessmentField from "../components/AssessmentFiled";
+import { ErrorMessage } from "../components/ErrorMessage";
+import { SuccessMessage } from "../components/SuccessMessage";
 
 const LABELS: Record<string, string> = {
   fitnessLevel: "Fitness Level",
@@ -10,6 +12,8 @@ const LABELS: Record<string, string> = {
 };
 
 const UserAssessment: React.FC = () => {
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const [selectedOptionsByGroup, setSelectedOptionsByGroup] = useState(
     Object.keys(USER_ASSESSMENT_OPTIONS).reduce((acc, key) => {
       acc[key] = "";
@@ -37,6 +41,16 @@ const UserAssessment: React.FC = () => {
 
   return (
     <>
+      <ErrorMessage
+        message={errorMessage}
+        duration={5000}
+        onDismiss={() => setErrorMessage("")}
+      />
+      <SuccessMessage
+        message={successMessage}
+        duration={3000}
+        onDismiss={() => setSuccessMessage("")}
+      />
       {Object.entries(USER_ASSESSMENT_OPTIONS).map(([key, options]) => (
         <AssessmentField
           key={key}

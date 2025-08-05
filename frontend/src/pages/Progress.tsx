@@ -70,7 +70,16 @@ const Progress: React.FC = () => {
     <>
       <div className="progress-container">
         <h3 className="progress-heading">Log Progress</h3>
-
+        <ErrorMessage
+          message={errorMessage}
+          duration={5000}
+          onDismiss={() => setErrorMessage("")}
+        />
+        <SuccessMessage
+          message={successMessage}
+          duration={3000}
+          onDismiss={() => setSuccessMessage("")}
+        />
         <label className="progress-label">
           Weight in (kg):
           <input

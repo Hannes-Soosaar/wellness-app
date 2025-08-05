@@ -8,6 +8,7 @@ import {
   ResponseData,
 } from "../../../shared/types/api";
 import { ErrorMessage } from "../components/ErrorMessage";
+import { SuccessMessage } from "../components/SuccessMessage";
 import { extractErrorMessage } from "../utils/errorUtility";
 
 const Profile: React.FC = () => {
@@ -25,7 +26,8 @@ const Profile: React.FC = () => {
   const [fatPercentage, setFatPercentage] = useState<number>(0);
   const [BMI, setBMI] = useState<number>(0);
   const [message, setMessage] = useState("");
-  const [errorMessage, setError] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -58,10 +60,10 @@ const Profile: React.FC = () => {
       if (response.data.success) {
         setMessage("Profile updated successfully");
       } else {
-        setError(response.data.error || "Failed to update profile");
+        setErrorMessage(response.data.error || "Failed to update profile");
       }
     } catch (error) {
-      setError(extractErrorMessage(error).message);
+      setErrorMessage(extractErrorMessage(error).message);
       console.error("Error updating profile:", error);
     }
   };
@@ -80,7 +82,7 @@ const Profile: React.FC = () => {
         );
         if (!response.data) {
           console.log(response.data);
-          setError("Failed to fetch user profile");
+          setErrorMessage("Failed to fetch user profile");
           return;
         }
         setFirstName(response.data.data?.firstName || "");
@@ -96,7 +98,7 @@ const Profile: React.FC = () => {
         setMessage(response.data.message || "");
         setBMI(response.data.data?.BMI || 0);
       } catch (error) {
-        setError(extractErrorMessage(error).message);
+        setErrorMessage(extractErrorMessage(error).message);
         console.error("Error fetching user profile:", error);
       }
     };
@@ -106,7 +108,17 @@ const Profile: React.FC = () => {
   return (
     <>
       <h3>User Profile</h3>
-      <ErrorMessage message={errorMessage} duration={5000} />
+
+      <ErrorMessage
+        message={errorMessage}
+        duration={5000}
+        onDismiss={() => setErrorMessage("")}
+      />
+      <SuccessMessage
+        message={successMessage}
+        duration={3000}
+        onDismiss={() => setSuccessMessage("")}
+      />
       {!isEditing ? (
         <>
           <p>

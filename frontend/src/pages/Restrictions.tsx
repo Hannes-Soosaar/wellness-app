@@ -1,8 +1,11 @@
 import React from "react";
 import { useState } from "react";
 import { USER_RESTRICTION_OPTIONS } from "../types/tempMockConstants";
+import { ErrorMessage } from "../components/ErrorMessage";
+import { SuccessMessage } from "../components/SuccessMessage";
 
 import CheckboxMenu from "../components/CheckboxMenu";
+import { CgVercel } from "react-icons/cg";
 const Restrictions: React.FC = () => {
   const LABELS: Record<string, string> = {
     foodsIngredients: "Foods & Ingredients",
@@ -11,7 +14,8 @@ const Restrictions: React.FC = () => {
     exercisesTimes: "Exercise Times",
     exerciseDuration: "Exercise Duration",
   };
-
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const [selectedOptionsByGroup, setSelectedOptionsByGroup] = useState(
     Object.keys(USER_RESTRICTION_OPTIONS).reduce((acc, key) => {
       acc[key] = [] as string[];
@@ -39,6 +43,16 @@ const Restrictions: React.FC = () => {
 
   return (
     <>
+      <ErrorMessage
+        message={errorMessage}
+        duration={5000}
+        onDismiss={() => setErrorMessage("")}
+      />
+      <SuccessMessage
+        message={successMessage}
+        duration={3000}
+        onDismiss={() => setSuccessMessage("")}
+      />
       <p>Any checked item will be excluded from your suggestions</p>
       {Object.entries(USER_RESTRICTION_OPTIONS).map(([key, options]) => (
         <CheckboxMenu

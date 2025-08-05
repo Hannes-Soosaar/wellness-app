@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import GoalCard from "../components/GoalCard";
 import { USER_GOALS } from "../types/tempMockConstants";
+import { ErrorMessage } from "../components/ErrorMessage";
+import { SuccessMessage } from "../components/SuccessMessage";
 
 interface GoalPost {
   option: string;
@@ -9,6 +11,10 @@ interface GoalPost {
 }
 
 const Goals: React.FC = () => {
+  
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  
   const [selectedGoal, setSelectedGoal] = useState<{
     option: string;
     targetDate: string;
@@ -50,6 +56,16 @@ const Goals: React.FC = () => {
   return (
     <>
       <h3>Select your Goal and timeframe</h3>
+              <ErrorMessage
+                message={errorMessage}
+                duration={5000}
+                onDismiss={() => setErrorMessage("")}
+              />
+              <SuccessMessage
+                message={successMessage}
+                duration={3000}
+                onDismiss={() => setSuccessMessage("")}
+              />
       <div className="goals-grid">
         {USER_GOALS.map((goal) => (
           <GoalCard

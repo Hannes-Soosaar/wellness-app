@@ -7,6 +7,7 @@ import {
 } from "../../../shared/types/api";
 import { extractErrorMessage } from "../utils/errorUtility";
 import { ErrorMessage } from "../components/ErrorMessage";
+import { SuccessMessage } from "../components/SuccessMessage";
 
 const Activity: React.FC = () => {
   const getTodayString = () => {
@@ -26,10 +27,10 @@ const Activity: React.FC = () => {
   const [activityIntensity, setActivityIntensity] = useState("");
   const [activityDate, setActivityDate] = useState(getTodayString());
   const [activityNote, setActivityNote] = useState("");
-  const [errorMessage, setError] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [message, setMessage] = useState("");
   const [availableOptions, setAvailableOptions] = useState<string[]>([]);
-
+  const [successMessage, setSuccessMessage] = useState("");
   //TODO get user Activity Types
 
   const handleSave = async () => {
@@ -51,7 +52,7 @@ const Activity: React.FC = () => {
       setActivityDate("");
       setActivityNote("");
     } catch (error) {
-      setError(extractErrorMessage(error).message);
+      setErrorMessage(extractErrorMessage(error).message);
       console.error("Failed to save activity:", error);
     }
 
@@ -61,13 +62,13 @@ const Activity: React.FC = () => {
         userActivityPost
       );
       if (response.data.success) {
-        setMessage(response.data.message);
+        setSuccessMessage(response.data.message);
       }
       if (response.data.error) {
-        setError(response.data.error);
+        setErrorMessage(response.data.error);
       }
     } catch (error) {
-      setError(extractErrorMessage(error).message);
+      setErrorMessage(extractErrorMessage(error).message);
     }
   };
 
@@ -83,14 +84,14 @@ const Activity: React.FC = () => {
           if (options) {
             setAvailableOptions(options);
           } else {
-            setError("There options are unknown");
+            setErrorMessage("There options are unknown");
           }
         }
         if (response.data.error) {
-          setError(response.data.error);
+          setErrorMessage(response.data.error);
         }
       } catch (error) {
-        setError(extractErrorMessage(error).message);
+        setErrorMessage(extractErrorMessage(error).message);
       }
     };
     fetchData();
@@ -100,7 +101,17 @@ const Activity: React.FC = () => {
   return (
     <>
       <div className="activity-container">
-        <ErrorMessage message={errorMessage} duration={5000} />
+        <ErrorMessage
+          message={errorMessage}
+          duration={5000}
+          onDismiss={() => setErrorMessage("")}
+        />
+        <SuccessMessage
+          message={successMessage}
+          duration={3000}
+          onDismiss={() => setSuccessMessage("")}
+        />
+
         <h3 className="activity-heading">Log New Activity</h3>
         <label className="activity-label">
           Activity Type:

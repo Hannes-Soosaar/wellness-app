@@ -4,6 +4,8 @@ import api from "../lib/axios";
 import { extractErrorMessage } from "../utils/errorUtility";
 import RequestPasswordReset from "../components/RequestPasswordReset";
 import Modal from "../components/Modal";
+import { ErrorMessage } from "../components/ErrorMessage";
+import { SuccessMessage } from "../components/SuccessMessage";
 
 const Settings: React.FC = () => {
   // User data states
@@ -15,20 +17,10 @@ const Settings: React.FC = () => {
   const [cookieAllowed, setCookieAllowed] = useState<boolean>(false);
   const [aiEnabled, setAiEnabled] = useState<boolean>(false);
   // Loading and status states
-  const [errorMessage, setError] = useState<string>();
-  const [message, setMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
-  // const [formData, setFormData] = useState<UserSettings>(userSetting);
-
-  // const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const { name, checked } = event.target;
-  //   setFormData({
-  //     ...formData,
-  //     [name]: checked,
-  //   });
-  // };
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleSave = async () => {
     setLoading(true);
@@ -55,7 +47,7 @@ const Settings: React.FC = () => {
         setCookieAllowed(response.data.data?.cookies_allowed ?? false);
         setAiEnabled(response.data.data?.ai_enabled ?? false);
       } else {
-        setMessage("No data returned from server");
+        setErrorMessage("No data returned from server");
       }
     } catch (error) {
       console.log("failed to save userSettings", error);
@@ -89,7 +81,7 @@ const Settings: React.FC = () => {
         }
       } catch (error) {
         console.error("Failed to fetch user settings", error);
-        setError(extractErrorMessage(error).message);
+        setErrorMessage(extractErrorMessage(error).message);
       }
     };
     getUserSettings();
@@ -107,6 +99,16 @@ const Settings: React.FC = () => {
 
   return (
     <>
+      <ErrorMessage
+        message={errorMessage}
+        duration={5000}
+        onDismiss={() => setErrorMessage("")}
+      />
+      <SuccessMessage
+        message={successMessage}
+        duration={3000}
+        onDismiss={() => setSuccessMessage("")}
+      />
       {loading ? (
         <p>Loading user settings...</p>
       ) : (
