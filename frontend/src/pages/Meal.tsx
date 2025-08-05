@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { ErrorMessage } from "../components/ErrorMessage";
+import { SuccessMessage } from "../components/SuccessMessage";
 
 interface MealPost {
   id: string;
@@ -18,7 +20,8 @@ const Meal: React.FC = () => {
   const [mealCalories, setMealCalories] = useState("");
   const [mealDate, setMealDate] = useState(getTodayString());
   const [mealNote, setMealNote] = useState("");
-  const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSave = () => {
     const newMeal = {
@@ -31,18 +34,17 @@ const Meal: React.FC = () => {
     console.log(isValidNumber(mealCalories) + "Evaluation");
 
     if (!isValidNumber(mealCalories)) {
-      const errorMessage = "Calories consumed must be a real number";
-      setError(errorMessage);
-      alert(errorMessage);
+      setErrorMessage("Please enter a valid number for calories.");
       return;
     } else {
-      setError("");
+      setErrorMessage("");
       try {
         console.log("saving meal", newMeal);
         localStorage.setItem("latesMeal", JSON.stringify(newMeal));
+        setSuccessMessage("Meal saved successfully!");
       } catch (error) {
+        setErrorMessage("Failed to save meal. Please try again.");
         console.log("failed to save meal:", error);
-        alert("failed to save meal");
       }
     }
   };
@@ -53,7 +55,8 @@ const Meal: React.FC = () => {
   };
 
   const handleErrorClose = () => {
-    setError("");
+    setErrorMessage("");
+    setMealCalories("");
   };
 
   return (
@@ -75,7 +78,6 @@ const Meal: React.FC = () => {
             <option value="Dessert">Dessert</option>
           </select>
         </label>
-        <ErrorMessage errorMessage={error} onClose={handleErrorClose} />
         <label className="meal-label">
           Meal Calories (kcal)
           <input
@@ -103,7 +105,16 @@ const Meal: React.FC = () => {
             onChange={(e) => setMealNote(e.target.value)}
           />
         </label>
-
+        <ErrorMessage
+          message={errorMessage}
+          duration={5000}
+          onDismiss={() => setErrorMessage("")}
+        />
+        <SuccessMessage
+          message={successMessage}
+          duration={3000}
+          onDismiss={() => setSuccessMessage("")}
+        />
         <button onClick={handleSave}>Add Meal</button>
       </div>
     </>

@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { ErrorMessage } from "../components/ErrorMessage";
+import { SuccessMessage } from "../components/SuccessMessage";
 interface ActivityPost {
   id: string;
   weight: string;
@@ -20,7 +22,8 @@ const Progress: React.FC = () => {
   const [waistCircumference, setWaistCircumference] = useState("");
   const [progressDate, setProgressDate] = useState(getTodayString());
   const [activityNote, setActivityNote] = useState("");
-  const [error, setError] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleSave = () => {
     const newProgress = {
@@ -33,15 +36,15 @@ const Progress: React.FC = () => {
     };
 
     if (!isValidNumber(weight)) {
-      setError("Weight must be a valid number!");
-      alert(error);
-      return error;
+      setErrorMessage("Weight must be a valid number!");
+      alert(errorMessage);
+      return errorMessage;
     }
 
     if (!isValidNumber(neckCircumference)) {
-      setError("Neck Circumference must be a valid number!");
-      alert(error);
-      return error;
+      setErrorMessage("Neck Circumference must be a valid number!");
+      alert(errorMessage);
+      return errorMessage;
     }
 
     try {

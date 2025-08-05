@@ -6,7 +6,7 @@ type SuccessMessageProps = {
   onDismiss?: () => void;
 };
 
-export function ErrorMessage({
+export function SuccessMessage({
   message,
   duration,
   onDismiss,

@@ -1,4 +1,6 @@
 import React from "react";
+import { ErrorMessage } from "../components/ErrorMessage";
+import { SuccessMessage } from "../components/SuccessMessage";
 
 //TODO enable export of data that is being viewed
 //TODO System generates weekly and monthly health summaries including progress and key metrics
@@ -29,8 +31,20 @@ const data: WeightDataPoint[] = [
 ];
 
 const Overview: React.FC = () => {
+  const [errorMessage, setErrorMessage] = React.useState("");
+  const [successMessage, setSuccessMessage] = React.useState("");
   return (
     <>
+      <ErrorMessage
+        message={errorMessage}
+        duration={5000}
+        onDismiss={() => setErrorMessage("")}
+      />
+      <SuccessMessage
+        message={successMessage}
+        duration={3000}
+        onDismiss={() => setSuccessMessage("")}
+      />
       <ResponsiveContainer width="80%" height={300}>
         <LineChart
           data={data}

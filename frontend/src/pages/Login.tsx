@@ -1,7 +1,10 @@
 import React from "react";
 import api from "../lib/axios";
 import RequestPasswordReset from "../components/RequestPasswordReset";
-
+import Modal from "../components/Modal";
+import { Link } from "react-router-dom";
+import { ErrorMessage } from "../components/ErrorMessage";
+import { SuccessMessage } from "../components/SuccessMessage";
 interface LoginData {
   email: string;
   password: string;
@@ -10,6 +13,9 @@ interface LoginData {
 const Login: React.FC = () => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState("");
+  const [successMessage, setSuccessMessage] = React.useState("");
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     console.log("Login button clicked", email, password);
@@ -19,6 +25,7 @@ const Login: React.FC = () => {
       email,
       password,
     };
+
     try {
       const response = await api.post("api/login", loginData, {
         withCredentials: true,
@@ -36,10 +43,28 @@ const Login: React.FC = () => {
     }
   };
 
+  const handleUpdatePassword = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <>
       <div className="login-container">
         <h3>Login</h3>
+        <ErrorMessage
+          message={errorMessage}
+          duration={5000}
+          onDismiss={() => setErrorMessage("")}
+        />
+        <SuccessMessage
+          message={successMessage}
+          duration={3000}
+          onDismiss={() => setSuccessMessage("")}
+        />
         <form onSubmit={handleLogin}>
           <label htmlFor="email">Email</label>
           <input
@@ -62,11 +87,15 @@ const Login: React.FC = () => {
           <button type="submit">Login</button>
         </form>
         <div className="vertical-container">
-          <a className="reset-link">Reset Password</a>
-          <a className="register-link">Register a new account</a>
+          <button onClick={handleUpdatePassword}>Forgot Password </button>
+          <Link to="/register">Not a user Register an Account</Link>
         </div>
       </div>
-      <RequestPasswordReset />
+      <Modal
+        modalIsOpen={isModalOpen}
+        closeModal={closeModal}
+        children={<RequestPasswordReset />}
+      ></Modal>
     </>
   );
 };
