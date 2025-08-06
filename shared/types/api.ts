@@ -1,7 +1,18 @@
 //In the next project use a shared global.d.ts file for shared declartions of types, interfaces and constants
 
+/* 
+In stead of using  Post it would be better to use Data as the same interface is used to both get the data and send the data for a page.
+? when doing the user...Post  that extends ...Post perhaps is it would be better if we just added the userId to the Post interface  as optional and then used that in the service and controller.
+*/
+
 import { getUserId } from "@backend/src/controllers/verificationController";
 
+/* 
+Lessons learned
+  - using the field data in the response Data  interface results in a situation with axios where you have response.data.data.xxx  which is not ideal.
+      next time perhaps using object instead of data would be more suitable better.
+
+*/
 export interface ResponseData<T> {
   success: boolean;
   message: string;
@@ -117,4 +128,19 @@ export interface UserSettings {
   privacy_accepted?: boolean; // : Allow data sharing with third parties
   cookies_allowed?: boolean; // Supported: Only necessary cookies are used, no need to ask this atm.
   ai_enabled?: boolean; // Supported: Allow AI features
+}
+
+//TODO need to handle hips if the person is female
+export interface ProgressPost {
+  weight: number;
+  neckCircumference: number;
+  waistCircumference: number;
+  hipCircumference: number;
+  date: string;
+  note?: string;
+  sex?: string; // Optional, can be used
+}
+
+export interface UserProgressPost extends ProgressPost {
+  userId: string;
 }

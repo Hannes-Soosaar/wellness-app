@@ -15,6 +15,10 @@ import {
 } from "../controllers/profileController";
 
 import { getMealOptions, updateUserMeals } from "../controllers/mealController";
+import {
+  getUserProgress,
+  updateUserProgress,
+} from "../controllers/progressController";
 
 /* 
 All routes here require that the user be authenticated. each page on the front end has its ons section
@@ -57,10 +61,10 @@ userRouter.get("/profile/dashboard", getUserDashboard);
 userRouter.post("/profile", updateProfile); // will update the profile, not post as there is but one record for each profile
 
 //Progress page
-userRouter.get("/progress/options", test);
+userRouter.get("/progress", getUserProgress);
 userRouter.get("/progress/history", test);
 userRouter.delete("/progress/remove", test);
-userRouter.post("/progress", test);
+userRouter.post("/progress", updateUserProgress);
 
 //Restrictions page
 userRouter.get("/restrictions/options", test);
