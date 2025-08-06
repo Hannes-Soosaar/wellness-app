@@ -29,19 +29,21 @@ export const updateUserActivity = async (
   if (!userActivity.userId) {
     throw new Error("No user Id provided");
   }
-
-  await pool.query(
-    "INSERT INTO user_activities (user_id, activity_type, duration, intensity, date, note, calories_burned) VALUES ($1, $2, $3, $4, $5, $6, $7)",
-    [
-      userActivity.userId,
-      userActivity.activityType,
-      userActivity.activityDuration,
-      userActivity.activityIntensity,
-      userActivity.activityDate,
-      userActivity.activityNote,
-      userActivity.caloriesBurned || 0,
-    ]
-  );
+  try {
+    await pool.query(
+      "INSERT INTO user_activities (user_id, activity_type, duration, intensity, date, note, calories_burned) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+      [
+        userActivity.userId,
+        userActivity.activityType,
+        userActivity.activityDuration,
+        userActivity.activityIntensity,
+        userActivity.activityDate,
+        userActivity.activityNote,
+        userActivity.caloriesBurned || 0,
+      ]
+    );
+  } catch (error) {
+    console.error("Error updating user activity:", error);
+    throw new Error(`Failed to update user activity: ${error}`);
+  }
 };
-
-
