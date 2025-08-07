@@ -11,6 +11,7 @@ import { getUserId } from "@backend/src/controllers/verificationController";
 Lessons learned
   - using the field data in the response Data  interface results in a situation with axios where you have response.data.data.xxx  which is not ideal.
       next time perhaps using object instead of data would be more suitable better.
+  - don't make a User...Post interface that extends ...Post, instead just pass in the userId from the JWT on the backend directly to the service.
 
 */
 export interface ResponseData<T> {
@@ -65,7 +66,11 @@ export interface GoalPost {
   endAt: string;
 }
 
-interface UserRestriction {
+export interface UserRestriction {
+  category: string;
+  restriction: string;
+}
+export interface Restriction {
   category: string;
   restriction: string;
 }
@@ -73,6 +78,10 @@ export interface RestrictionPost {
   restrictions: UserRestriction[];
 }
 
+export interface RestrictionResponse {
+  options: Restriction[];
+  userRestrictions: UserRestriction[];
+}
 // will be send as
 interface UserAssessment {
   category: string;

@@ -20,6 +20,11 @@ import {
   updateUserProgress,
 } from "../controllers/progressController";
 
+import {
+  getRestrictions,
+  updateRestrictions,
+} from "@backend/src/controllers/restrictionsController";
+
 /* 
 All routes here require that the user be authenticated. each page on the front end has its ons section
 user services will be broken up into sections for each page.
@@ -67,8 +72,8 @@ userRouter.delete("/progress/remove", test);
 userRouter.post("/progress", updateUserProgress);
 
 //Restrictions page
-userRouter.get("/restrictions/options", test);
-userRouter.post("/restrictions", test);
+userRouter.get("/restrictions", getRestrictions);
+userRouter.post("/restrictions", updateRestrictions);
 
 // AI routes to get advice
 userRouter.get("/advice/daily", test);
