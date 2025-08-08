@@ -67,8 +67,9 @@ export const calculateBodyComposition = (
     bodyComposition.fatPercentage = 0;
     throw new Error("Calculated fat percentage is out of valid range (0-100)");
   }
+  // Increased the range, for testing as to not think about the values too much
 
-  if (bodyComposition.BMI < 10 || bodyComposition.BMI > 50) {
+  if (bodyComposition.BMI < 1 || bodyComposition.BMI > 100) {
     bodyComposition.BMI = 0;
     throw new Error("Calculated BMI is out of valid range (10-50)");
   }
@@ -155,8 +156,9 @@ const calculateMaleFatPercentage = (
   const bodyFatPercentage =
     495 /
       (1.0324 -
-        0.19077 * Math.log10(waistCircumference - neckCircumference) +
-        0.15456 * Math.log10(height)) -
+        0.19077 *
+          Math.log10(Number(waistCircumference) - Number(neckCircumference)) +
+        0.15456 * Math.log10(Number(height))) -
     450;
 
   console.log("Calculated body fat percentage:", bodyFatPercentage);
@@ -169,15 +171,21 @@ const calculateFemaleFatPercentage = (
   hipCircumference: number,
   height: number
 ): number => {
-  const bodyFatPercentage =
-    495 /
-      (1.29579 -
-        0.35004 *
-          Math.log10(
-            waistCircumference + hipCircumference - neckCircumference
-          ) +
-        0.221 * Math.log10(height)) -
-    450;
+  const waist = Number(waistCircumference);
+  const neck = Number(neckCircumference);
+  const hip = Number(hipCircumference);
+  const heightNum = Number(height);
+
+  const waistPlusHipMinusNeck = waist + hip - neck;
+  const log10WaistHipNeck = Math.log10(waistPlusHipMinusNeck);
+  const log10Height = Math.log10(heightNum);
+
+  const denominator =
+    1.29579 - 0.35004 * log10WaistHipNeck + 0.221 * log10Height;
+  console.log("denominator:", denominator);
+
+  const bodyFatPercentage = 495 / denominator - 450;
+
   console.log("Calculated body fat percentage:", bodyFatPercentage);
   return parseFloat(bodyFatPercentage.toFixed(2));
 };

@@ -27,7 +27,7 @@ export const updateUserProfile = async (
     await client.query("BEGIN");
 
     await client.query(
-      `INSERT INTO user_profile (
+      `INSERT INTO user_profiles (
     user_id,
     first_name,
     last_name,

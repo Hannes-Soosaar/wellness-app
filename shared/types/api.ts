@@ -109,8 +109,21 @@ export interface ProfilePost {
   date?: string;
   note?: string;
 }
+export interface ProfileData {
+  firstName?: string;
+  lastName?: string;
+  sex?: string;
+  age?: number;
+  height?: number;
+  weight?: number;
+  neckCircumference?: number;
+  waistCircumference?: number;
+  hipCircumference?: number;
+  date?: string;
+  note?: string;
+}
 export interface UserProfile extends ProfilePost {
-  userId: string;
+  userId?: string;
   wellnessScore?: number;
   BMI?: number;
   fatPercentage?: number;

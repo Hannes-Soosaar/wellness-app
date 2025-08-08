@@ -3,6 +3,7 @@ import {
   getUserSettings,
   handleUser,
   updateUserSettings,
+  getUserProfile,
 } from "../controllers/userController";
 import { test } from "../controllers/authController";
 import {
@@ -63,6 +64,7 @@ userRouter.post("/assessment", test); // will update the assessment, not post as
 
 //Profile page
 userRouter.get("/profile/dashboard", getUserDashboard);
+userRouter.get("/profile", getUserProfile);
 userRouter.post("/profile", updateProfile); // will update the profile, not post as there is but one record for each profile
 
 //Progress page

@@ -3,13 +3,16 @@ import { pool } from "../../server";
 import { hashPassword } from "../utils/crypto";
 import { getBearerToken } from "./authController";
 import { verifyJWT, verifyPasswordResetJWT } from "../utils/tokens";
-import { ResponseData, UserSettings } from "@shared/types/api";
+import { ResponseData, UserProfile, UserSettings } from "@shared/types/api";
 
 import dotenv from "dotenv";
 import { setUserPasswordByResetToken } from "../services/tokenService";
 import { getUserId } from "./verificationController";
 import { getUserSettings as getUserSettingsFromDB } from "../services/user/userService";
-import { updateUserSettings as updatedUserSettingsInDB } from "../services/user/userService";
+import {
+  updateUserSettings as updatedUserSettingsInDB,
+  getUserProfileById,
+} from "../services/user/userService";
 import { userData } from "../models/userModel";
 dotenv.config();
 
@@ -227,4 +230,42 @@ export const updateUserProfile: RequestHandler = async (
   console.log("request body", req.body);
 };
 
+export const getUserProfile: RequestHandler = async (
+  req: Request,
+  res: Response
+) => {
+  let response: ResponseData<UserProfile> = {
+    success: false,
+    message: "",
+  };
+  console.log("Updating User Profile Request");
+
+  const userId = getUserId(req);
+  if (!userId) {
+    response.error = "Unable to get user Profile";
+    response.error += "Please log in again and try again";
+    res.status(401).json(response);
+    return;
+  }
+
+  try {
+    const userProfile = await getUserProfileById(userId);
+    if (!userProfile) {
+      response.error = "User profile not found";
+      res.status(404).json(response);
+      return;
+    }
+    response.data = userProfile;
+    response.success = true;
+    response.message = "User profile loaded successfully";
+
+    res.status(200).json(response);
+    return;
+  } catch (error) {
+    r;
+    response.error = "Failed to get user profile";
+    res.status(500).json(response);
+    return;
+  }
+};
 export { handleUser, handleIsUser, handleUpdateUserPassword };

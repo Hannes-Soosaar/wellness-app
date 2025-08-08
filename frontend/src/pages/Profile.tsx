@@ -75,10 +75,13 @@ const Profile: React.FC = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
+    const getUserProfile = async () => {
       try {
         const response = await api.get<ResponseData<UserDashboard>>(
-          "user/profile/dashboard"
+          "/user/profile/",
+          {
+            timeout: 15000,
+          }
         );
         if (!response.data) {
           console.log(response.data);
@@ -102,7 +105,7 @@ const Profile: React.FC = () => {
         console.error("Error fetching user profile:", error);
       }
     };
-    fetchData();
+    getUserProfile();
   }, []);
 
   return (

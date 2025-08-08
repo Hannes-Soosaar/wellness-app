@@ -1,11 +1,10 @@
 import { pool } from "@backend/server";
 import dotenv from "dotenv";
 import { userData } from "@backend/src/models/userModel";
-import { UserSettings } from "@shared/types/api";
+import { UserSettings, UserProfile } from "@shared/types/api";
 import { UserSexAndHeight } from "@shared/types/api";
 
 dotenv.config();
-
 const dbKey = process.env.DB_KEY;
 
 export const findUserIdByEmail = async (
@@ -169,5 +168,58 @@ export const getSexAndHeightByUserId = async (
     return userSexAndHeight;
   } catch (error) {
     throw new Error(`Failed to fetch user, ${error}`);
+  }
+};
+
+export const getUserProfileById = async (
+  userId: string
+): Promise<UserProfile> => {
+  if (!userId) {
+    throw new Error("No user ID provided");
+  }
+
+  try {
+    const result = await pool.query(
+      `
+      SELECT
+      pgp_sym_decrypt(first_name,$2) AS first_name,
+      pgp_sym_decrypt(last_name,$2) AS last_name,
+      sex,
+      age,
+      height,
+      neck_circumference,
+      waist_circumference,
+      hip_circumference,
+      body_fat_percentage,
+      current_weight,
+      current_BMI
+      FROM user_profiles WHERE user_id = $1`,
+      [
+        userId, //1
+        dbKey, //2
+      ]
+    );
+    if (result.rows.length === 0) {
+      console.log(" No profile found!");
+      throw new Error("User profile not found");
+    }
+    const row = result.rows[0]; // Placeholder, calculate wellness score if needed
+
+    return {
+      firstName: row.first_name,
+      lastName: row.last_name,
+      sex: row.sex,
+      age: row.age,
+      height: row.height,
+      weight: row.current_weight,
+      neckCircumference: row.neck_circumference,
+      waistCircumference: row.waist_circumference,
+      hipCircumference: row.hip_circumference,
+      BMI: row.current_BMI,
+      fatPercentage: row.body_fat_percentage,
+    };
+  } catch (error) {
+    console.error("Error fetching user profile:", error);
+    throw new Error(`Failed to fetch user profile, ${error}`);
   }
 };
