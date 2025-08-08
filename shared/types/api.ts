@@ -1,18 +1,17 @@
-//In the next project use a shared global.d.ts file for shared declartions of types, interfaces and constants
+//In the next project use a shared global.d.ts file for shared declaration of types, interfaces and constants
 
 /* 
 In stead of using  Post it would be better to use Data as the same interface is used to both get the data and send the data for a page.
 ? when doing the user...Post  that extends ...Post perhaps is it would be better if we just added the userId to the Post interface  as optional and then used that in the service and controller.
 */
 
-import { getUserId } from "@backend/src/controllers/verificationController";
-
 /* 
 Lessons learned
   - using the field data in the response Data  interface results in a situation with axios where you have response.data.data.xxx  which is not ideal.
       next time perhaps using object instead of data would be more suitable better.
   - don't make a User...Post interface that extends ...Post, instead just pass in the userId from the JWT on the backend directly to the service.
-
+  - The shared interfaces will grow to a point where it should be split.
+  - There is no need to have a RequestData interface as we have middle ware that handles the header and JWT send identification data. 
 */
 export interface ResponseData<T> {
   success: boolean;
@@ -25,6 +24,7 @@ export interface RequestData {
   //TODO: create a standard data structure
 }
 
+// ACTIVITY
 export interface ActivityPost {
   activityType: string;
   activityDuration: number;
@@ -41,6 +41,7 @@ export interface ActivityOptions {
   activities: string[];
 }
 
+// MEALS
 export interface MealPost {
   mealType: string;
   calories: string;
@@ -58,6 +59,7 @@ export interface MealOptions {
   mealTypes: string[];
 }
 
+// GOALS
 export interface GoalPost {
   category: string;
   goal: string;
@@ -66,6 +68,7 @@ export interface GoalPost {
   endAt: string;
 }
 
+// RESTRICTIONS
 export interface UserRestriction {
   category: string;
   restriction: string;
@@ -82,7 +85,7 @@ export interface RestrictionResponse {
   options: Restriction[];
   userRestrictions: UserRestriction[];
 }
-// will be send as
+// ASSESSMENTS
 interface UserAssessment {
   category: string;
   value: string;
@@ -92,7 +95,7 @@ export interface AssessmentPost {
   assessmentCriteria: UserAssessment[];
 }
 
-// Inputs for the user to update their profile
+// PROFILE
 export interface ProfilePost {
   firstName?: string;
   lastName?: string;
@@ -106,8 +109,6 @@ export interface ProfilePost {
   date?: string;
   note?: string;
 }
-
-// The user profile data that is stored in the database
 export interface UserProfile extends ProfilePost {
   userId: string;
   wellnessScore?: number;
@@ -115,7 +116,7 @@ export interface UserProfile extends ProfilePost {
   fatPercentage?: number;
 }
 
-// This is the main review component.
+// DASHBOARD
 export interface UserDashboard extends ProfilePost {
   wellnessScore: number;
   BMI: number;
@@ -129,7 +130,7 @@ export interface UserDashboard extends ProfilePost {
   progressIndicator: string; // e.g. "On Track", "Behind", "Ahead"
 }
 
-// This is used to display the user Settings page and modify the user settings all of the settings are optional as it is yet not clear where and when they will be toggled
+// SETTINGS
 export interface UserSettings {
   mfa_enabled?: boolean; // Supported: Multi-factor authentication enabled
   email_notifications?: boolean; // Supported: Email notifications enabled
@@ -139,7 +140,7 @@ export interface UserSettings {
   ai_enabled?: boolean; // Supported: Allow AI features
 }
 
-//TODO need to handle hips if the person is female
+// PROGRESS
 export interface ProgressPost {
   weight: number;
   neckCircumference: number;
@@ -152,4 +153,9 @@ export interface ProgressPost {
 
 export interface UserProgressPost extends ProgressPost {
   userId: string;
+}
+
+export interface UserSexAndHeight {
+  sex: string;
+  height: number;
 }

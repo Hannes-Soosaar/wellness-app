@@ -1,6 +1,6 @@
 import { UserProgressPost, ProgressPost } from "@shared/types/api";
 import { pool } from "@backend/server";
-import { getRandomValues } from "crypto";
+import { BodyComposition } from "@shared/types/data";
 
 export const getLastUserProgress = async (
   userId: string
@@ -10,11 +10,11 @@ export const getLastUserProgress = async (
   }
 
   try {
-    //The user_profile only has the latest progress so no need to sort.
+    //  will use the history table to get the latest progress
     const result = await pool.query(
       `
-      SELECT weight, neck_circumference, waist_circumference,  FROM user_profile WHERE user_id = $1
-      `,
+      SELECT weight, neck_circumference, waist_circumference, hip_circumference  FROM profile_history WHERE user_id = $1
+      ORDER BY date DESC LIMIT 1`,
       [userId]
     );
 
@@ -26,19 +26,20 @@ export const getLastUserProgress = async (
       weight: row.weight,
       neckCircumference: row.neck_circumference,
       waistCircumference: row.waist_circumference,
+      hipCircumference: row.hip_circumference,
       date: row.date,
       note: row.note,
-      hipCircumference: row.hip_circ,
     };
-
     return userProgress;
   } catch (error) {
     throw new Error(`Failed to fetch last user progress: ${error}`);
   }
 };
 
+// TODO: Need to also calculate and add the BMI and body-fat percentage
 export const updateUserProgress = async (
-  userProgress: UserProgressPost
+  userProgress: UserProgressPost,
+  userBodyComposition: BodyComposition
 ): Promise<void> => {
   if (!userProgress || !userProgress.userId) {
     throw new Error("User progress data is required");
@@ -50,30 +51,41 @@ export const updateUserProgress = async (
 
     await client.query(
       `
-      INSERT INTO profile_history (user_id, weight, neck_circumference, waist_circumference, hip_circumference, date, note)
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      INSERT INTO profile_history (user_id, weight, neck_circumference, waist_circumference, hip_circumference, date, note, body_fat_percentage, BMI)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) ON CONFLICT (u date)
       `,
       [
-        userProgress.userId,
-        userProgress.weight,
-        userProgress.neckCircumference,
-        userProgress.waistCircumference,
-        userProgress.hipCircumference,
-        userProgress.date,
-        userProgress.note,
+        userProgress.userId, //1
+        userProgress.weight, //2
+        userProgress.neckCircumference, //3
+        userProgress.waistCircumference, //4
+        userProgress.hipCircumference, //5
+        userProgress.date, //6
+        userProgress.note, //7
+        userBodyComposition.fatPercentage, //8
+        userBodyComposition.BMI, //9
       ]
     );
 
     await client.query(
-      ` UPDATE user_profile SET weight = $1, neck_circumference = $2, waist_circumference = $3, hip_circumference = $4, date = $5, note = $6 WHERE user_id = $7 AND (modified_at IS NULL OR $7 > modified_at)`,
+      ` UPDATE user_profile SET weight = $1,
+        neck_circumference = $2,
+        waist_circumference = $3,
+        hip_circumference = $4,
+        date = $5,
+        body_fat_percentage = $6,
+        current_BMI = $7,
+        modified_at = CURRENT_TIMESTAMP
+        WHERE user_id = $8 AND (modified_at IS NULL OR $5 > modified_at)`,
       [
-        userProgress.userId,
-        userProgress.weight,
-        userProgress.neckCircumference,
-        userProgress.waistCircumference,
-        userProgress.hipCircumference,
-        userProgress.date,
-        userProgress.note,
+        userProgress.weight, //1
+        userProgress.neckCircumference, //2
+        userProgress.waistCircumference, //3
+        userProgress.hipCircumference, //4
+        userProgress.date, //5
+        userBodyComposition.fatPercentage, //6
+        userBodyComposition.BMI, //7
+        userProgress.userId, //8
       ]
     );
 

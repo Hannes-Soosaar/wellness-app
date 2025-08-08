@@ -1,9 +1,8 @@
 import { pool } from "@backend/server";
 import dotenv from "dotenv";
 import { userData } from "@backend/src/models/userModel";
-import { response } from "express";
-import { throwDeprecation } from "process";
 import { UserSettings } from "@shared/types/api";
+import { UserSexAndHeight } from "@shared/types/api";
 
 dotenv.config();
 
@@ -140,5 +139,34 @@ export const updateUserSettings = async (
   } catch (error) {
     console.error("Failed to update user settings:", error);
     throw error;
+  }
+};
+
+export const getSexAndHeightByUserId = async (
+  userId: string
+): Promise<UserSexAndHeight> => {
+  if (!userId) {
+    throw new Error("No user ID provided");
+  }
+
+  try {
+    const result = await pool.query(
+      `
+      SELECT
+      sex, height FROM user_profile WHERE user_id = $1`,
+      [userId]
+    );
+    if (result.rows.length === 0) {
+      throw new Error("User not found");
+    }
+
+    const row = result.rows[0];
+    const userSexAndHeight: UserSexAndHeight = {
+      sex: row.sex,
+      height: row.height,
+    };
+    return userSexAndHeight;
+  } catch (error) {
+    throw new Error(`Failed to fetch user, ${error}`);
   }
 };

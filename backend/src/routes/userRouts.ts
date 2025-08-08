@@ -16,14 +16,14 @@ import {
 
 import { getMealOptions, updateUserMeals } from "../controllers/mealController";
 import {
-  getUserProgress,
+  getLastUserProgress,
   updateUserProgress,
 } from "../controllers/progressController";
 
 import {
   getRestrictions,
   updateRestrictions,
-} from "@backend/src/controllers/restrictionsController";
+} from "../controllers/restrictionsController";
 
 /* 
 All routes here require that the user be authenticated. each page on the front end has its ons section
@@ -66,7 +66,7 @@ userRouter.get("/profile/dashboard", getUserDashboard);
 userRouter.post("/profile", updateProfile); // will update the profile, not post as there is but one record for each profile
 
 //Progress page
-userRouter.get("/progress", getUserProgress);
+userRouter.get("/progress", getLastUserProgress);
 userRouter.get("/progress/history", test);
 userRouter.delete("/progress/remove", test);
 userRouter.post("/progress", updateUserProgress);
@@ -82,6 +82,9 @@ userRouter.get("/advice/monthly", test);
 userRouter.get("/advice/goal", test);
 
 //Overview page
+
+//Dashboard
+userRouter.get("/Dashboard", test); // Implement v2
 
 /* 
 Decide what graphs are needed and add routes based on it

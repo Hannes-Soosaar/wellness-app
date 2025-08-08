@@ -74,6 +74,69 @@ export const calculateBodyComposition = (
   }
   return bodyComposition;
 };
+export const calculateBodyCompositionGeneric = (
+  weight: number,
+  height: number,
+  waistCircumference: number,
+  neckCircumference: number,
+  sex: string,
+  hipCircumference?: number
+): BodyComposition => {
+  let bodyComposition: BodyComposition = {
+    BMI: 0,
+    fatPercentage: 0,
+  };
+
+  if (weight || height) {
+    throw new Error(
+      "Weight and height are required to calculate BMI composition"
+    );
+  }
+
+  if (!waistCircumference || !neckCircumference) {
+    throw new Error(
+      "Waist and neck circumference are required to calculate fat percentage"
+    );
+  }
+
+  bodyComposition.BMI = calculateBMI(height, weight);
+
+  if (sex === "male") {
+    bodyComposition.fatPercentage = calculateMaleFatPercentage(
+      waistCircumference,
+      neckCircumference,
+      height
+    );
+  }
+
+  if (sex === "female") {
+    if (!hipCircumference) {
+      throw new Error(
+        "Hip circumference is required to calculate fat percentage for females"
+      );
+    }
+    bodyComposition.fatPercentage = calculateFemaleFatPercentage(
+      waistCircumference,
+      neckCircumference,
+      hipCircumference,
+      height
+    );
+  }
+
+  if (
+    bodyComposition.fatPercentage < 0 ||
+    bodyComposition.fatPercentage > 100
+  ) {
+    bodyComposition.fatPercentage = 0;
+    throw new Error("Calculated fat percentage is out of valid range (0-100)");
+  }
+
+  if (bodyComposition.BMI < 10 || bodyComposition.BMI > 50) {
+    bodyComposition.BMI = 0;
+    throw new Error("Calculated BMI is out of valid range (10-50)");
+  }
+  return bodyComposition;
+};
 
 const calculateMaleFatPercentage = (
   waistCircumference: number,

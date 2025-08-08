@@ -34,7 +34,7 @@ const handleRegister: RequestHandler = async (req, res) => {
 
     const verificationToken = uuidv4();
 
-    //TODO: add email encryption
+    // TODO: refactor under service.
     const result = await pool.query(
       `
       INSERT INTO users(email,password,verification_token)
@@ -63,7 +63,6 @@ const handleRegisterWithGoogle = async (
   console.log("Register with google");
   console.log("user to register", user);
 
-  //TODO: check if this needs to be Google userID
   let newUser: GoogleUser = {
     id: user.id,
     email: user.email,

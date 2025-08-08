@@ -5,16 +5,12 @@ import { SuccessMessage } from "../components/SuccessMessage";
 import {
   RestrictionPost,
   RestrictionResponse,
-  Restriction,
-  UserRestriction,
   ResponseData,
 } from "../../../shared/types/api";
 import { extractErrorMessage } from "../utils/errorUtility";
 import api from "../lib/axios";
 
 import CheckboxMenu from "../components/CheckboxMenu";
-
-import App from "../App";
 
 const Restrictions: React.FC = () => {
   const LABELS: Record<string, string> = {
@@ -57,9 +53,6 @@ const Restrictions: React.FC = () => {
       );
       console.log("Response:", response.data);
       if (response.data.data) {
-        // const { options, userRestrictions } = response.data.data;
-        // setAvailableOptionsByGroup(groupByCategory(options));
-        // setSelectedOptionsByGroup(groupByCategory(userRestrictions));
         setSuccessMessage(response.data.message);
       }
       setSuccessMessage(response.data.message);

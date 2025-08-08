@@ -6,11 +6,19 @@ import {
   ResponseData,
 } from "@shared/types/api";
 
-export const getUserProgress: RequestHandler = async (
+import {
+  getLastUserProgress as getUserProgressService,
+  updateUserProgress as updateUserProgressService,
+} from "@backend/src/services/user/progressService";
+import { getSexAndHeightByUserId } from "@backend/src/services/user/userService";
+import { calculateBodyCompositionGeneric } from "../utils/bodyComposition";
+import { BodyComposition } from "@shared/types/data";
+
+export const getLastUserProgress: RequestHandler = async (
   req: Request,
   res: Response
 ) => {
-  let response: ResponseData<null> = {
+  let response: ResponseData<ProgressPost> = {
     success: false,
     message: "",
   };
@@ -24,8 +32,9 @@ export const getUserProgress: RequestHandler = async (
 
   try {
     // Fetch user progress from the database (not implemented here)
-    // response.data = await fetchUserProgress(userId);
+    const userProgress = await getUserProgressService(userId);
     response.success = true;
+    response.data = userProgress;
     response.message = "User progress loaded successfully";
     res.status(200).json(response);
   } catch (error) {
@@ -38,9 +47,14 @@ export const updateUserProgress: RequestHandler = async (
   req: Request,
   res: Response
 ) => {
-  let response: ResponseData<null> = {
+  let response: ResponseData<ProgressPost> = {
     success: false,
     message: "",
+  };
+
+  let userBodyComposition: BodyComposition = {
+    BMI: 0,
+    fatPercentage: 0,
   };
 
   const userId = getUserId(req);
@@ -51,11 +65,38 @@ export const updateUserProgress: RequestHandler = async (
     return;
   }
 
-  // try {
-  //   const userProgress: UserProgressPost;
-  // } catch (error) {
-  //   response.error = "Failed to update user progress";
-  //   res.status(500).json(response);
-  //   return;
-  // }
+  try {
+    const sexAndHeight = await getSexAndHeightByUserId(userId);
+    const userSex = sexAndHeight.sex;
+    const userHeight = sexAndHeight.height;
+    userBodyComposition = calculateBodyCompositionGeneric(
+      req.body.weight,
+      req.body.neckCircumference,
+      req.body.waistCircumference,
+      req.body.hipCircumference,
+      userSex,
+      userHeight
+    );
+  } catch (error) {
+    response.error = "Failed to get user sex and height";
+    res.status(500).json(response);
+    return;
+  }
+
+  try {
+    const updateResponse = await updateUserProgressService(
+      req.body as UserProgressPost,
+      userBodyComposition
+    );
+    response.success = true;
+    response.message = "User progress updated successfully";
+    // This is a  rotten dirty trick, it just mirrors the input back
+    response.data = req.body;
+    res.status(200).json(response);
+    return;
+  } catch (error) {
+    response.error = "Failed to update user progress";
+    res.status(500).json(response);
+    return;
+  }
 };

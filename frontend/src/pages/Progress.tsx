@@ -48,18 +48,18 @@ const Progress: React.FC = () => {
       return errorMessage;
     }
 
-    try {
-      console.log("Saving activity:", newProgress);
-      localStorage.setItem("newUserProgress", JSON.stringify(newProgress));
-      alert("Progress saved successfully!");
-      setWeight("");
-      setNeckCircumference("");
-      setWaistCircumference("");
-      setActivityNote("");
-    } catch (error) {
-      console.error("Failed to save activity:", error);
-      alert("Failed to save Progress.");
-    }
+    // try {
+    //   console.log("Saving activity:", newProgress);
+    //   localStorage.setItem("newUserProgress", JSON.stringify(newProgress));
+    //   alert("Progress saved successfully!");
+    //   setWeight("");
+    //   setNeckCircumference("");
+    //   setWaistCircumference("");
+    //   setActivityNote("");
+    // } catch (error) {
+    //   console.error("Failed to save activity:", error);
+    //   alert("Failed to save Progress.");
+    // }
   };
 
   const isValidNumber = (stringValue: string) => {
