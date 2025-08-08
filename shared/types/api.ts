@@ -86,13 +86,30 @@ export interface RestrictionResponse {
   userRestrictions: UserRestriction[];
 }
 // ASSESSMENTS
-interface UserAssessment {
+
+export interface AssessmentOption {
+  category: string;
+  value: string;
+  title: string;
+  description: string;
+}
+
+export interface AssessmentOptions {
+  options: AssessmentOption[];
+}
+
+export interface userAssessment {
   category: string;
   value: string;
 }
 
-export interface AssessmentPost {
-  assessmentCriteria: UserAssessment[];
+export interface UserAssessments {
+  assessments: userAssessment[];
+}
+
+export interface AssessmentState {
+  options: AssessmentOptions;
+  userAssessments: UserAssessments;
 }
 
 // PROFILE

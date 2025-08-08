@@ -262,7 +262,6 @@ export const getUserProfile: RequestHandler = async (
     res.status(200).json(response);
     return;
   } catch (error) {
-    r;
     response.error = "Failed to get user profile";
     res.status(500).json(response);
     return;

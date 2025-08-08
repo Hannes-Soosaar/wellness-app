@@ -1,4 +1,4 @@
-import { raw, Request, RequestHandler, response, Response } from "express";
+import { Request, RequestHandler, response, Response } from "express";
 import dotenv from "dotenv";
 import { DiscordAuthOptions, GoogleAuthOptions } from "../models/authModels";
 import axios from "axios";

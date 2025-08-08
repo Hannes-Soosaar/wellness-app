@@ -4,6 +4,8 @@ import { useState } from "react";
 // Update based on needs
 interface AssessmentFieldProps {
   options: readonly string[];
+  title?: string;
+  description?: string;
   selectedValue: string;
   onChange?: (selected: string) => void;
   label: string;
@@ -11,6 +13,8 @@ interface AssessmentFieldProps {
 
 const AssessmentField: React.FC<AssessmentFieldProps> = ({
   options,
+  title,
+  description,
   selectedValue: selectedValue,
   onChange,
   label,
@@ -26,10 +30,10 @@ const AssessmentField: React.FC<AssessmentFieldProps> = ({
     <>
       <fieldset
         className="box-field"
-        title="Please provide feedback to get the initial assessment of your physical ability"
+        title={title || " please provide feedback on your current capability"}
       >
         {" "}
-        {<legend className="legend-title">{label}</legend>}
+        {<legend className="legend-title">{description}</legend>}
         {options.map((option) => (
           <label key={option} className="radiobox-menu-labels">
             <input

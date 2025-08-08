@@ -26,6 +26,8 @@ import {
   updateRestrictions,
 } from "../controllers/restrictionsController";
 
+import { getAssessmentOptions } from "../controllers/assessmentController";
+
 /* 
 All routes here require that the user be authenticated. each page on the front end has its ons section
 user services will be broken up into sections for each page.
@@ -59,7 +61,7 @@ userRouter.get("/goals/options", test);
 userRouter.put("/goal", test); // The goals is static, so it will overwrite the goals
 
 //Assessment page
-userRouter.get("/assessment/options", test);
+userRouter.get("/assessment/options", getAssessmentOptions); // Get assessment options
 userRouter.post("/assessment", test); // will update the assessment, not post as there is but one record for each profile
 
 //Profile page
