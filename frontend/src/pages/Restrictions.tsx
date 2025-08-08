@@ -1,11 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
-import { USER_RESTRICTION_OPTIONS } from "../types/tempMockConstants";
 import { ErrorMessage } from "../components/ErrorMessage";
 import { SuccessMessage } from "../components/SuccessMessage";
+import {
+  RestrictionPost,
+  RestrictionResponse,
+  Restriction,
+  UserRestriction,
+  ResponseData,
+} from "../../../shared/types/api";
+import { extractErrorMessage } from "../utils/errorUtility";
+import api from "../lib/axios";
 
 import CheckboxMenu from "../components/CheckboxMenu";
-import { CgVercel } from "react-icons/cg";
+
+import App from "../App";
+
 const Restrictions: React.FC = () => {
   const LABELS: Record<string, string> = {
     foodsIngredients: "Foods & Ingredients",
@@ -16,21 +26,46 @@ const Restrictions: React.FC = () => {
   };
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [selectedOptionsByGroup, setSelectedOptionsByGroup] = useState(
-    Object.keys(USER_RESTRICTION_OPTIONS).reduce((acc, key) => {
-      acc[key] = [] as string[];
-      return acc;
-    }, {} as Record<string, string[]>)
-  );
+  const [availableOptionsByGroup, setAvailableOptionsByGroup] = useState<
+    Record<string, string[]>
+  >({});
+  const [selectedOptionsByGroup, setSelectedOptionsByGroup] = useState<
+    Record<string, string[]>
+  >({});
 
-  const saveUserRestrictions = () => {
+  function groupByCategory(data: { category: string; restriction: string }[]) {
+    console.log("Grouping data by category:", data);
+    return data.reduce((acc, { category, restriction }) => {
+      if (!acc[category]) acc[category] = [];
+      acc[category].push(restriction);
+      return acc;
+    }, {} as Record<string, string[]>);
+  }
+
+  const saveUserRestrictions = async () => {
+    const body: RestrictionPost = {
+      restrictions: Object.entries(selectedOptionsByGroup).flatMap(
+        ([category, restrictions]) =>
+          restrictions.map((restriction) => ({ category, restriction }))
+      ),
+    };
+
     try {
-      const serializedState = JSON.stringify(selectedOptionsByGroup);
-      localStorage.setItem("userRestrictions", serializedState);
-      alert("Saved successfully!");
+      const response = await api.post<ResponseData<RestrictionResponse>>(
+        "/user/restrictions",
+        body
+      );
+      console.log("Response:", response.data);
+      if (response.data.data) {
+        // const { options, userRestrictions } = response.data.data;
+        // setAvailableOptionsByGroup(groupByCategory(options));
+        // setSelectedOptionsByGroup(groupByCategory(userRestrictions));
+        setSuccessMessage(response.data.message);
+      }
+      setSuccessMessage(response.data.message);
     } catch (error) {
-      console.error("Failed to save", error);
-      alert("Failed to save your restrictions.");
+      setErrorMessage(extractErrorMessage(error).message);
+      console.error("Failed to save user restrictions:", error);
     }
   };
 
@@ -41,6 +76,27 @@ const Restrictions: React.FC = () => {
     }));
   };
 
+  useEffect(() => {
+    // This get a restrictions Response.
+    const getUserRestrictions = async () => {
+      try {
+        const response = await api.get<ResponseData<RestrictionResponse>>(
+          "/user/restrictions"
+        );
+        if (response.data.data) {
+          const { options, userRestrictions } = response.data.data;
+          console.log("Fetched restrictions:", response.data);
+          setAvailableOptionsByGroup(groupByCategory(options));
+          setSelectedOptionsByGroup(groupByCategory(userRestrictions));
+        }
+        console.log("Available options by group:", availableOptionsByGroup);
+        console.log("Selected options by group:", selectedOptionsByGroup);
+      } catch (error) {
+        setErrorMessage(extractErrorMessage(error).message);
+      }
+    };
+    getUserRestrictions();
+  }, []);
   return (
     <>
       <ErrorMessage
@@ -54,13 +110,13 @@ const Restrictions: React.FC = () => {
         onDismiss={() => setSuccessMessage("")}
       />
       <p>Any checked item will be excluded from your suggestions</p>
-      {Object.entries(USER_RESTRICTION_OPTIONS).map(([key, options]) => (
+      {Object.entries(availableOptionsByGroup).map(([category, options]) => (
         <CheckboxMenu
-          key={key}
+          key={category}
           options={options}
-          selectedValues={selectedOptionsByGroup[key]}
-          onChange={(selected) => handleGroupChange(key, selected)}
-          label={LABELS[key] || key}
+          selectedValues={selectedOptionsByGroup[category] || []}
+          onChange={(selected) => handleGroupChange(category, selected)}
+          label={LABELS[category] || category}
         />
       ))}
       <button onClick={saveUserRestrictions}>Save</button>

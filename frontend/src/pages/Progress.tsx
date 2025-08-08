@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ErrorMessage } from "../components/ErrorMessage";
 import { SuccessMessage } from "../components/SuccessMessage";
+import { UserProgressPost, UserProgress } from "../../../shared/types/api";
 interface ActivityPost {
   id: string;
   weight: string;
@@ -65,6 +66,11 @@ const Progress: React.FC = () => {
     const normalized = stringValue.replace(",", ".");
     return /^-?\d+(\.\d+)?$/.test(normalized.trim());
   };
+
+  useEffect(() => {
+    const getUserProgress = async () => {};
+    getUserProgress();
+  }, []);
 
   return (
     <>

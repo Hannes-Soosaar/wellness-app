@@ -51,12 +51,11 @@ export const updateUserProgress: RequestHandler = async (
     return;
   }
 
-    try {
-        const userProgress: UserProgressPost = await 
-        
-    }catch (error) {
-      response.error = "Failed to update user progress";
-      res.status(500).json(response);
-      return;
-    }
+  // try {
+  //   const userProgress: UserProgressPost;
+  // } catch (error) {
+  //   response.error = "Failed to update user progress";
+  //   res.status(500).json(response);
+  //   return;
+  // }
 };
