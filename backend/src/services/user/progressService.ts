@@ -13,7 +13,7 @@ export const getLastUserProgress = async (
     //  will use the history table to get the latest progress
     const result = await pool.query(
       `
-      SELECT weight, neck_circumference, waist_circumference, hip_circumference  FROM profile_history WHERE user_id = $1
+      SELECT weight, neck_circumference, waist_circumference, hip_circumference, date, note FROM profile_history WHERE user_id = $1
       ORDER BY date DESC LIMIT 1`,
       [userId]
     );
@@ -38,10 +38,13 @@ export const getLastUserProgress = async (
 
 // TODO: Need to also calculate and add the BMI and body-fat percentage
 export const updateUserProgress = async (
-  userProgress: UserProgressPost,
+  userId: string,
+  userProgress: ProgressPost,
   userBodyComposition: BodyComposition
 ): Promise<void> => {
-  if (!userProgress || !userProgress.userId) {
+  console.log("Updating user progress :", userProgress);
+
+  if (!userProgress || !userId) {
     throw new Error("User progress data is required");
   }
 
@@ -52,10 +55,10 @@ export const updateUserProgress = async (
     await client.query(
       `
       INSERT INTO profile_history (user_id, weight, neck_circumference, waist_circumference, hip_circumference, date, note, body_fat_percentage, BMI)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) ON CONFLICT (u date)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
       `,
       [
-        userProgress.userId, //1
+        userId, //1
         userProgress.weight, //2
         userProgress.neckCircumference, //3
         userProgress.waistCircumference, //4
@@ -68,11 +71,10 @@ export const updateUserProgress = async (
     );
 
     await client.query(
-      ` UPDATE user_profile SET weight = $1,
+      ` UPDATE user_profiles SET current_weight = $1,
         neck_circumference = $2,
         waist_circumference = $3,
         hip_circumference = $4,
-        date = $5,
         body_fat_percentage = $6,
         current_BMI = $7,
         modified_at = CURRENT_TIMESTAMP
@@ -85,14 +87,15 @@ export const updateUserProgress = async (
         userProgress.date, //5
         userBodyComposition.fatPercentage, //6
         userBodyComposition.BMI, //7
-        userProgress.userId, //8
+        userId, //8
       ]
     );
 
     await client.query("COMMIT");
   } catch (error) {
     await client.query("ROLLBACK");
-    throw new Error(`Failed to update user progress: ${error}`);
+    console.log("Failed to update user progress:", error);
+    throw new Error(`Failed to update user progress`);
   } finally {
     client.release();
   }

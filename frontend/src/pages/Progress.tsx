@@ -1,16 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { ErrorMessage } from "../components/ErrorMessage";
 import { SuccessMessage } from "../components/SuccessMessage";
-import { UserProgressPost, UserProgress } from "../../../shared/types/api";
-interface ActivityPost {
-  id: string;
-  weight: string;
-  neckCircumference: string;
-  waistCircumference: string;
-  hipCircumference: string;
-  progressDate: string;
-  activityNote?: string;
-}
+import api from "../lib/axios";
+import { ProgressPost, ResponseData } from "../../../shared/types/api";
+import { extractErrorMessage } from "../utils/errorUtility";
 
 const Progress: React.FC = () => {
   const getTodayString = () => {
@@ -21,54 +14,59 @@ const Progress: React.FC = () => {
   const [weight, setWeight] = useState("");
   const [neckCircumference, setNeckCircumference] = useState("");
   const [waistCircumference, setWaistCircumference] = useState("");
+  const [hipCircumference, setHipCircumference] = useState("");
   const [progressDate, setProgressDate] = useState(getTodayString());
-  const [activityNote, setActivityNote] = useState("");
+  const [progressNote, setNote] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-  const handleSave = () => {
-    const newProgress = {
-      id: crypto.randomUUID(),
-      userWeight: weight,
-      userNeckCircumference: neckCircumference,
-      userWaistCircumference: waistCircumference,
-      userProgressDate: progressDate,
-      activityNote,
+  const handleSave = async () => {
+    const progressPost: ProgressPost = {
+      weight: Number(weight),
+      neckCircumference: Number(neckCircumference),
+      waistCircumference: Number(waistCircumference),
+      hipCircumference: Number(hipCircumference),
+      date: progressDate,
+      note: progressNote,
     };
 
-    if (!isValidNumber(weight)) {
-      setErrorMessage("Weight must be a valid number!");
-      alert(errorMessage);
-      return errorMessage;
+    try {
+      const response = await api.post<ResponseData<ProgressPost>>(
+        "/user/progress",
+        progressPost
+      );
+      console.log("Progress saved successfully:", response);
+      setSuccessMessage(
+        `Progress updated successfully: ${response.data.message}`
+      );
+    } catch (error) {
+      setErrorMessage(extractErrorMessage(error).message);
+      console.error("Failed to save progress:", error);
+      return;
     }
-
-    if (!isValidNumber(neckCircumference)) {
-      setErrorMessage("Neck Circumference must be a valid number!");
-      alert(errorMessage);
-      return errorMessage;
-    }
-
-    // try {
-    //   console.log("Saving activity:", newProgress);
-    //   localStorage.setItem("newUserProgress", JSON.stringify(newProgress));
-    //   alert("Progress saved successfully!");
-    //   setWeight("");
-    //   setNeckCircumference("");
-    //   setWaistCircumference("");
-    //   setActivityNote("");
-    // } catch (error) {
-    //   console.error("Failed to save activity:", error);
-    //   alert("Failed to save Progress.");
-    // }
-  };
-
-  const isValidNumber = (stringValue: string) => {
-    const normalized = stringValue.replace(",", ".");
-    return /^-?\d+(\.\d+)?$/.test(normalized.trim());
   };
 
   useEffect(() => {
-    const getUserProgress = async () => {};
+    const getUserProgress = async () => {
+      try {
+        const response = await api.get<ResponseData<ProgressPost>>(
+          "/user/progress"
+        );
+        console.log("Fetched user progress:", response.data);
+        if (response.data.success && response.data.data) {
+          const progressPost = response.data.data;
+          setWeight(progressPost.weight.toString());
+          setNeckCircumference(progressPost.neckCircumference.toString());
+          setWaistCircumference(progressPost.waistCircumference.toString());
+          setHipCircumference(progressPost.hipCircumference.toString());
+          setProgressDate(progressPost.date);
+          setNote(progressPost.note || "");
+        }
+      } catch (error) {
+        setErrorMessage(extractErrorMessage(error).message);
+        console.error("Failed to load user progress:", error);
+      }
+    };
     getUserProgress();
   }, []);
 
@@ -90,8 +88,24 @@ const Progress: React.FC = () => {
           Weight in (kg):
           <input
             type="text"
+            placeholder={weight}
             value={weight}
-            onChange={(e) => setWeight(e.target.value)}
+            onChange={(e) => {
+              setWeight(e.target.value.replace(",", "."));
+            }}
+            onBlur={() => {
+              let num = parseFloat(weight);
+              if (isNaN(num)) num = 0;
+              if (num < 30) {
+                setErrorMessage("Weight must be larger than 30kg");
+                num = 30;
+              }
+              if (num > 250) {
+                setErrorMessage("Weight must be smaller than 250kg");
+                num = 60;
+              }
+              setWeight(num.toString());
+            }}
             className="progress-input"
           />
         </label>
@@ -100,9 +114,26 @@ const Progress: React.FC = () => {
           Neck Circumference (cm):
           <input
             type="text"
-            step="any"
+            placeholder={neckCircumference}
             value={neckCircumference}
-            onChange={(e) => setNeckCircumference(e.target.value)}
+            onChange={(e) => {
+              setNeckCircumference(e.target.value.replace(",", "."));
+            }}
+            onBlur={() => {
+              let num = parseFloat(neckCircumference);
+              if (isNaN(num)) num = 0;
+              if (num < 25) {
+                setErrorMessage("Neck circumference must be larger than 25 cm");
+                num = 25;
+              }
+              if (num > 60) {
+                setErrorMessage(
+                  "Neck circumference must be smaller than 60 cm"
+                );
+                num = 60;
+              }
+              setNeckCircumference(num.toString());
+            }}
             className="progress-input"
           />
         </label>
@@ -111,9 +142,56 @@ const Progress: React.FC = () => {
           Waist Circumference (cm):
           <input
             type="text"
-            step="any"
             value={waistCircumference}
-            onChange={(e) => setWaistCircumference(e.target.value)}
+            placeholder={waistCircumference}
+            onChange={(e) => {
+              setWaistCircumference(e.target.value.replace(",", "."));
+            }}
+            onBlur={() => {
+              let num = parseFloat(waistCircumference);
+              if (isNaN(num)) num = 0;
+              if (num < 50) {
+                setErrorMessage(
+                  "Waist circumference must be larger than 50 cm"
+                );
+                num = 50;
+              }
+              if (num > 160) {
+                setErrorMessage(
+                  "Waist circumference must be smaller than 160 cm"
+                );
+                num = 150;
+              }
+              setWaistCircumference(num.toString());
+            }}
+            className="progress-input"
+          />
+        </label>
+
+        <label className="progress-label">
+          Hip Circumference (cm):
+          <input
+            type="text"
+            value={hipCircumference}
+            placeholder={hipCircumference}
+            onChange={(e) => {
+              setHipCircumference(e.target.value.replace(",", "."));
+            }}
+            onBlur={() => {
+              let num = parseFloat(hipCircumference);
+              if (isNaN(num)) num = 0;
+              if (num < 60) {
+                setErrorMessage("Hip circumference must be larger than 60 cm");
+                num = 60;
+              }
+              if (num > 160) {
+                setErrorMessage(
+                  "Hip circumference must be smaller than 160 cm"
+                );
+                num = 160;
+              }
+              setHipCircumference(num.toString());
+            }}
             className="progress-input"
           />
         </label>
@@ -131,8 +209,8 @@ const Progress: React.FC = () => {
         <label className="progress-label">
           Notes:
           <textarea
-            value={activityNote}
-            onChange={(e) => setActivityNote(e.target.value)}
+            value={progressNote}
+            onChange={(e) => setNote(e.target.value)}
           />
         </label>
 

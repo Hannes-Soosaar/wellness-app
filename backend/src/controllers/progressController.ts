@@ -23,6 +23,7 @@ export const getLastUserProgress: RequestHandler = async (
     message: "",
   };
   const userId = getUserId(req);
+  console.log("User ID in getLastUserProgress:", userId);
 
   if (!userId) {
     response.error = "Not logged in";
@@ -38,6 +39,7 @@ export const getLastUserProgress: RequestHandler = async (
     response.message = "User progress loaded successfully";
     res.status(200).json(response);
   } catch (error) {
+    console.error("Error loading user progress", error);
     response.error = "Failed to load user progress";
     res.status(500).json(response);
   }
@@ -57,6 +59,8 @@ export const updateUserProgress: RequestHandler = async (
     fatPercentage: 0,
   };
 
+  console.log("User ID in updateUserProgress:", req.body.userId);
+
   const userId = getUserId(req);
 
   if (!userId) {
@@ -65,27 +69,35 @@ export const updateUserProgress: RequestHandler = async (
     return;
   }
 
+  console.log("User progress data:", req.body);
+
   try {
     const sexAndHeight = await getSexAndHeightByUserId(userId);
     const userSex = sexAndHeight.sex;
     const userHeight = sexAndHeight.height;
+    console.log("parameters that are newly calculated", userSex, userHeight);
+
     userBodyComposition = calculateBodyCompositionGeneric(
       req.body.weight,
-      req.body.neckCircumference,
+      userHeight,
       req.body.waistCircumference,
-      req.body.hipCircumference,
+      req.body.neckCircumference,
       userSex,
-      userHeight
+      req.body.hipCircumference
     );
   } catch (error) {
-    response.error = "Failed to get user sex and height";
+    // TODO: the error handling is not very good here, it should be improved
+    console.log("Failed to calculate body composition", error);
+    response.error = "failed to update user progress" + error;
     res.status(500).json(response);
     return;
   }
 
   try {
+    console.log("the ");
     const updateResponse = await updateUserProgressService(
-      req.body as UserProgressPost,
+      userId,
+      req.body as ProgressPost,
       userBodyComposition
     );
     response.success = true;
@@ -95,6 +107,7 @@ export const updateUserProgress: RequestHandler = async (
     res.status(200).json(response);
     return;
   } catch (error) {
+    console.error("Error updating user progress", error);
     response.error = "Failed to update user progress";
     res.status(500).json(response);
     return;

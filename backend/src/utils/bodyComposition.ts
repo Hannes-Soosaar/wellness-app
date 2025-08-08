@@ -87,7 +87,16 @@ export const calculateBodyCompositionGeneric = (
     fatPercentage: 0,
   };
 
-  if (weight || height) {
+  console.log(
+    "Calculating based on the following parameters Height and sex:",
+    height,
+    sex
+  );
+  console.log("Weight:", weight);
+  console.log("Waist Circumference:", waistCircumference);
+  console.log("Neck Circumference:", neckCircumference);
+
+  if (!weight || !height) {
     throw new Error(
       "Weight and height are required to calculate BMI composition"
     );

@@ -4,7 +4,7 @@ import { getBearerToken } from "./authController";
 import { verifyJWT } from "../utils/tokens";
 
 export const verifyEmail: RequestHandler = async (req, res) => {
-  console.log("verifying email", req);
+  // console.log("verifying email", req);
   const { token } = req.query;
 
   if (!token) {
@@ -34,7 +34,7 @@ export const getUserId = (req: Request): string => {
   }
   try {
     const verified = verifyJWT(token);
-    console.log("Token is valid", verified);
+    // console.log("Token is valid", verified);
     return verified.id;
   } catch (error: any) {
     console.log(" error verifying token");

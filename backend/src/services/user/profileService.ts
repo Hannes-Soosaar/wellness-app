@@ -27,7 +27,7 @@ export const updateUserProfile = async (
     await client.query("BEGIN");
 
     await client.query(
-      `INSERT INTO user_profiles (
+      `INSERT INTO user_profile (
     user_id,
     first_name,
     last_name,
@@ -116,9 +116,9 @@ export const updateUserProgress = async (): Promise<void> => {
 
 export const getUserDashboard = async (
   userId: string
-): Promise<UserDashboard| undefined> => {
-    let userDashboard: UserDashboard;
-    
+): Promise<UserDashboard | undefined> => {
+  let userDashboard: UserDashboard;
+
   const client = await pool.connect();
 
   try {

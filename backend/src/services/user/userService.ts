@@ -153,9 +153,10 @@ export const getSexAndHeightByUserId = async (
     const result = await pool.query(
       `
       SELECT
-      sex, height FROM user_profile WHERE user_id = $1`,
+      sex, height FROM user_profiles WHERE user_id = $1`,
       [userId]
     );
+
     if (result.rows.length === 0) {
       throw new Error("User not found");
     }
