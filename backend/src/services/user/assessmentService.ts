@@ -30,7 +30,7 @@ export const getAssessmentOptions = async (): Promise<AssessmentOptions> => {
 };
 
 export const getUserAssessmentValues = async (
-  userId
+  userId: string
 ): Promise<UserAssessments> => {
   if (!userId) {
     console.log("No user ID provided");
@@ -73,4 +73,25 @@ WHERE ua.user_id = $1;`,
     console.error("Error fetching user assessments:", error);
     throw new Error("Failed to fetch user assessments");
   }
+};
+
+export const updateUserAssessment = async (
+  userId: string,
+  userAssessments: UserAssessments
+): Promise<void> => {
+
+
+    if (!userId) {
+        throw new Error("No user ID provided");
+    }
+    
+    if (!userAssessments || !userAssessments.assessments) {
+        throw new Error("No assessments provided");
+    }
+    
+    try {
+        await pool.query('INSERT INTO user_assessment() ')
+    
+        // Clear existing assessments for the user
+        await client.query(
 };

@@ -60,6 +60,22 @@ const UserAssessment: React.FC = () => {
   };
 
   const saveUserAssessment = async () => {
+    alert("Saving user assessment...");
+    const missingFields = Object.entries(availableOptionsByGroup).filter(
+      ([key]) => !selectedAssessmentOptions[key]
+    );
+
+    console.log("Missing fields:", missingFields);
+
+    if (missingFields.length > 0) {
+      setErrorMessage(
+        `Please fill out all assessment fields. Missing: ${missingFields
+          .map(([key]) => key)
+          .join(", ")}`
+      );
+      return;
+    }
+
     const body: UserAssessments = {
       assessments: Object.entries(selectedAssessmentOptions).map(
         ([category, value]) => ({ category, value })
@@ -74,7 +90,6 @@ const UserAssessment: React.FC = () => {
 
       if (response.data.data) {
         setSuccessMessage(response.data.message);
-        //TODO update the state again
       }
     } catch (error) {
       setErrorMessage(extractErrorMessage(error).message);
@@ -96,10 +111,13 @@ const UserAssessment: React.FC = () => {
           const optionArray = Array.isArray(options)
             ? options
             : options.options;
+          console.log("this is the options array:");
 
-          const assessmentArray = Array.isArray(userAssessments)
-            ? userAssessments
-            : userAssessments.assessments;
+          const assessmentArray = userAssessments
+            ? Array.isArray(userAssessments)
+              ? userAssessments
+              : userAssessments.assessments || []
+            : [];
 
           setAvailableOptionsByGroup(groupByCategory(optionArray));
           setSelectedOptionsByGroup(groupSelectedAssessments(assessmentArray));
@@ -124,15 +142,15 @@ const UserAssessment: React.FC = () => {
         duration={3000}
         onDismiss={() => setSuccessMessage("")}
       />
+
       {Object.entries(availableOptionsByGroup).map(([key, value]) => (
         <AssessmentField
           key={key}
           options={value}
-          title={"Place holder"}
-          description={"Place holder description"}
+          title={value[0]?.title || ""} // This is not needed
+          description={value[0]?.description || ""} //
           selectedValue={selectedAssessmentOptions[key] || ""}
           onChange={(selected) => handleGroupChange(key, selected)}
-          label={key}
         />
       ))}
 

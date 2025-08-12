@@ -1,14 +1,15 @@
 import React from "react";
 import { useState } from "react";
+import { AssessmentOption } from "../../../shared/types/api";
 
 // Update based on needs
 interface AssessmentFieldProps {
-  options: readonly string[];
+  options: readonly AssessmentOption[];
   title?: string;
   description?: string;
   selectedValue: string;
   onChange?: (selected: string) => void;
-  label: string;
+  // label: { category: string };
 }
 
 const AssessmentField: React.FC<AssessmentFieldProps> = ({
@@ -17,7 +18,7 @@ const AssessmentField: React.FC<AssessmentFieldProps> = ({
   description,
   selectedValue: selectedValue,
   onChange,
-  label,
+  // label,
 }) => {
   const [selected, setIsSelected] = useState<string>(selectedValue);
 
@@ -35,15 +36,15 @@ const AssessmentField: React.FC<AssessmentFieldProps> = ({
         {" "}
         {<legend className="legend-title">{description}</legend>}
         {options.map((option) => (
-          <label key={option} className="radiobox-menu-labels">
+          <label key={option.value} className="radiobox-menu-labels">
             <input
               type="radio"
-              name={label}
-              value={option}
-              checked={selected === option}
-              onChange={() => handleChange(option)}
+              name={option.category}
+              value={option.value}
+              checked={selected === option.value}
+              onChange={() => handleChange(option.value)}
             />
-            {" " + option}
+            {" " + option.value}
           </label>
         ))}
       </fieldset>

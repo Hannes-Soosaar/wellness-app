@@ -27,6 +27,7 @@ import {
 } from "../controllers/restrictionsController";
 
 import { getAssessmentOptions } from "../controllers/assessmentController";
+import { getUserAssessmentValues } from "../services/user/assessmentService";
 
 /* 
 All routes here require that the user be authenticated. each page on the front end has its ons section
@@ -62,7 +63,7 @@ userRouter.put("/goal", test); // The goals is static, so it will overwrite the 
 
 //Assessment page
 userRouter.get("/assessment/options", getAssessmentOptions); // Get assessment options
-userRouter.post("/assessment", test); // will update the assessment, not post as there is but one record for each profile
+userRouter.post("/assessment", getUserAssessmentValues); // will update the assessment, not post as there is but one record for each profile
 
 //Profile page
 userRouter.get("/profile/dashboard", getUserDashboard);
