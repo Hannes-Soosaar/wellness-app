@@ -24,15 +24,6 @@ const UserAssessment: React.FC = () => {
     Record<string, string>
   >({});
 
-  // function groupByCategory(data: { category: string; value: string }[]) {
-  //   console.log("Grouping data by category:", data);
-  //   return data.reduce((acc, { category, value }) => {
-  //     if (!acc[category]) acc[category] = [];
-  //     acc[category].push(value);
-  //     return acc;
-  //   }, {} as Record<string, string[]>);
-  // }
-
   function groupByCategory(data: AssessmentOption[]) {
     console.log("Grouping data by category:", data);
     return data.reduce((acc, option) => {

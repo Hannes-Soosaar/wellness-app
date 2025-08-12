@@ -103,7 +103,7 @@ DONE: Wellness score changes when user updates their weekly activity frequency
 
 TODO: System recalculates wellness score components when any contributing metric changes
 TODO: Verify scores update when changing: BMI range, activity level, goal, progress, or health habits
-
+TODO: Update the values read from the DB as constants something more use full
 
 
 AI section

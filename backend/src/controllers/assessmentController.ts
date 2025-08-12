@@ -10,8 +10,8 @@ import {
 } from "@shared/types/api";
 import {
   getAssessmentOptions as getAssessmentOptionsService,
-    getUserAssessmentValues as getUserAssessmentValuesService,
-    updateUserAssessment as updateUserAssessmentService,
+  getUserAssessmentValues as getUserAssessmentValuesService,
+  updateUserAssessment as updateUserAssessmentService,
 } from "../services/user/assessmentService";
 
 export const getAssessmentOptions = async (req: Request, res: Response) => {
@@ -44,30 +44,31 @@ export const getAssessmentOptions = async (req: Request, res: Response) => {
 
     responseData.success = true;
     responseData.message = "Assessment options loaded successfully";
-    return res.status(200).json(responseData);
+    res.status(200).json(responseData);
+    return;
   } catch (error) {
     console.error("Error fetching assessment options:", error);
     responseData.error = "Failed to fetch assessment options";
     res.status(500).json(responseData);
+    return;
   }
 };
-
 export const updateUserAssessment = async (
-    req: Request,
-    res: Response
+  req: Request,
+  res: Response
 ): Promise<void> => {
+  const userId = getUserId(req);
+  if (!userId) {
+    res.status(401).json({ error: "User not authenticated" });
+    return;
+  }
 
-
-    const userId = getUserId(req);
-    if (!userId) {
-        res.status(401).json({ error: "User not authenticated" });
-        return;
-    }
-
-    try {
-        const userAssessment: UserAssessments = req.body;
-        await updateUserAssessmentService(userId, userAssessments);
-
-        res.status(200).json({ message: "User assessment updated successfully" });
-    }
-}
+  try {
+    const userAssessments: UserAssessments = req.body;
+    await updateUserAssessmentService(userId, userAssessments);
+    res.status(200).json({ message: "User assessment updated successfully" });
+  } catch (error) {
+    console.error("Error updating user assessment:", error);
+    res.status(500).json({ error: "Failed to update user assessment" });
+  }
+};

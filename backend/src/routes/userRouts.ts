@@ -26,7 +26,10 @@ import {
   updateRestrictions,
 } from "../controllers/restrictionsController";
 
-import { getAssessmentOptions } from "../controllers/assessmentController";
+import {
+  getAssessmentOptions,
+  updateUserAssessment,
+} from "../controllers/assessmentController";
 import { getUserAssessmentValues } from "../services/user/assessmentService";
 
 /* 
@@ -63,7 +66,7 @@ userRouter.put("/goal", test); // The goals is static, so it will overwrite the 
 
 //Assessment page
 userRouter.get("/assessment/options", getAssessmentOptions); // Get assessment options
-userRouter.post("/assessment", getUserAssessmentValues); // will update the assessment, not post as there is but one record for each profile
+userRouter.post("/assessment", updateUserAssessment); // will update the assessment,
 
 //Profile page
 userRouter.get("/profile/dashboard", getUserDashboard);

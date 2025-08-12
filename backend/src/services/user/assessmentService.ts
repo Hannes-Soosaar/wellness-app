@@ -57,8 +57,6 @@ WHERE ua.user_id = $1;`,
       return { assessments: [] };
     }
 
-    console.log("User assessment values fetched:", response.rows);
-
     if (response.rows.length === 0) {
       return { assessments: [] };
     }
@@ -67,7 +65,6 @@ WHERE ua.user_id = $1;`,
       category: row.category,
       value: row.value,
     }));
-
     return { assessments };
   } catch (error) {
     console.error("Error fetching user assessments:", error);
@@ -79,19 +76,68 @@ export const updateUserAssessment = async (
   userId: string,
   userAssessments: UserAssessments
 ): Promise<void> => {
+  if (!userId) {
+    throw new Error("No user ID provided");
+  }
 
+  if (!userAssessments || !userAssessments.assessments) {
+    throw new Error("No assessments provided");
+  }
 
-    if (!userId) {
-        throw new Error("No user ID provided");
+  const client = await pool.connect();
+  client.query("BEGIN");
+  try {
+    await client.query(`DELETE FROM user_assessment WHERE user_id = $1`, [
+      userId,
+    ]);
+    await client.query(
+      `
+  INSERT INTO user_assessment (user_id, assessment_criteria_id)
+  SELECT
+    $1 AS user_id,
+    ac.id
+  FROM
+    jsonb_to_recordset($2::jsonb)
+      AS r(category text, value text)
+    JOIN assessment_criteria ac
+      ON ac.category = r.category
+      AND ac.value = r.value
+  `,
+      [userId, JSON.stringify(userAssessments.assessments)]
+    );
+
+    await client.query("COMMIT");
+  } catch (error) {
+    await client.query("ROLLBACK");
+    console.error("Failed to update user assessment:", error);
+    throw new Error(`Failed to update user assessment: ${error}`);
+  } finally {
+    client.release();
+  }
+  console.log("User assessment updated successfully");
+};
+
+// This could be added to the user_profile  table, but there was a laps in logic error when building the user_assessment table
+export const getUserAssessmentScore = async (
+  userId: string
+): Promise<number> => {
+  if (!userId) {
+    throw new Error("No user ID provided");
+  }
+
+  try {
+    const response = await pool.query(
+      `SELECT SUM(ac.score) AS total_score
+        FROM user_assessment ua
+        JOIN assessment_criteria ac ON ua.assessment_criteria_id = ac.id WHERE ua.user_id = $1`,
+      [userId]
+    );
+    if (response.rows.length === 0) {
+      return 0;
     }
-    
-    if (!userAssessments || !userAssessments.assessments) {
-        throw new Error("No assessments provided");
-    }
-    
-    try {
-        await pool.query('INSERT INTO user_assessment() ')
-    
-        // Clear existing assessments for the user
-        await client.query(
+    return response.rows[0].total_score || 0;
+  } catch (error) {
+    console.error("Error fetching user assessment score:", error);
+    throw new Error("Failed to fetch user assessment score");
+  }
 };
