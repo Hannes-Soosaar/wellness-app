@@ -1,21 +1,23 @@
-import { Request, RequestHandler, Response } from "express";
+import { Request, RequestHandler, response, Response } from "express";
 import { getUserId } from "./verificationController";
+import { GoalData, ResponseData } from "@shared/types/api";
 
 export const getGoals = async (req: Request, res: Response): Promise<void> => {
+  const response: ResponseData<GoalData> = {
+    success: false,
+    message: "",
+  };
+
   const userId = getUserId(req);
   if (!userId) {
-    res.status(401).json({ message: "User not authenticated" });
+    res.status(401).json(response);
     return;
   }
 
   try {
-    // const userGoal = await getUserGoalService(userId);
-    if (!userGoal) {
-      res.status(404).json({ message: "Goals not found" });
-      return;
-    }
+    // Fetch user goals from the database
 
-    res.status(200).json(userGoal);
+    res.status(200).json(response);
   } catch (error) {
     console.error("Error fetching user goal:", error);
     res.status(500).json({ message: "Internal server error" });
@@ -26,9 +28,15 @@ export const updateUserGoal = async (
   req: Request,
   res: Response
 ): Promise<void> => {
+  const response: ResponseData<null> = {
+    success: false,
+    message: "",
+  };
+
   const userId = getUserId(req);
+
   if (!userId) {
-    res.status(401).json({ message: "User not authenticated" });
+    res.status(401).json(response);
     return;
   }
 

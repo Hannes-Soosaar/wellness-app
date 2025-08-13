@@ -61,8 +61,8 @@ userRouter.delete("/meal/remove", test); // implement v2
 userRouter.post("/meal", updateUserMeals);
 
 //Goal page
-userRouter.get("/goals/options", test);
-userRouter.put("/goal", test); // The goals is static, so it will overwrite the goals
+userRouter.get("/goal", test);
+userRouter.post("/goal", test);
 
 //Assessment page
 userRouter.get("/assessment/options", getAssessmentOptions); // Get assessment options
