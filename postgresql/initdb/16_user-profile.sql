@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS user_profiles(
     body_fat_percentage NUMERIC,
     current_weight NUMERIC,
     current_calories_target NUMERIC,
+    user_wellness_score NUMERIC,
     current_BMI NUMERIC,
     modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     location TEXT,

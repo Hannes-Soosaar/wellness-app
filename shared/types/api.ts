@@ -60,13 +60,13 @@ export interface MealOptions {
 }
 
 // GOALS
-export interface GoalPost {
-  category: string;
-  goal: string;
-  goalTargetValue: number;
-  goalStartDate: string;
-  endAt: string;
-}
+// export interface GoalPost {
+//   category: string;
+//   goal: string;
+//   goalTargetValue: number;
+//   goalStartDate: string;
+//   endAt: string;
+// }
 
 // RESTRICTIONS
 export interface UserRestriction {
@@ -188,4 +188,28 @@ export interface UserProgressPost extends ProgressPost {
 export interface UserSexAndHeight {
   sex: string;
   height: number;
+}
+
+export interface GoalPost {
+  end_date: string;
+  target_value: number;
+  goal_id: number;
+}
+
+export interface AvailableGoal {
+  goal_id: number;
+  category: string;
+  title: string;
+  description: string;
+}
+
+export interface UserGoal {
+  goal_id: number;
+  end_date: string;
+  target_value: number;
+}
+
+export interface GoalData {
+  availableGoals: AvailableGoal[];
+  userGoal: UserGoal | null;
 }

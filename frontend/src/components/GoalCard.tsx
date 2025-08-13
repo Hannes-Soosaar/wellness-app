@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { AvailableGoal } from "../../../shared/types/api";
 
 interface GoalCardProps {
+  goal: AvailableGoal;
   title: string;
   description: string;
   option: string;
@@ -20,6 +22,7 @@ const GoalCard: React.FC<GoalCardProps> = ({
     today.setDate(today.getDate() + 7);
     return today.toISOString().split("T")[0];
   };
+
   const [date, setDate] = useState(getDefaultDate());
   const [targetValue, setTargetValue] = useState<number>(0);
 
