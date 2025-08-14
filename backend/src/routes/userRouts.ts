@@ -31,6 +31,7 @@ import {
   updateUserAssessment,
 } from "../controllers/assessmentController";
 import { getUserAssessmentValues } from "../services/user/assessmentService";
+import { getGoals, updateUserGoal } from "../controllers/goalController";
 
 /* 
 All routes here require that the user be authenticated. each page on the front end has its ons section
@@ -61,15 +62,15 @@ userRouter.delete("/meal/remove", test); // implement v2
 userRouter.post("/meal", updateUserMeals);
 
 //Goal page
-userRouter.get("/goal", test);
-userRouter.post("/goal", test);
+userRouter.get("/goals", getGoals);
+userRouter.post("/goals", updateUserGoal);
 
 //Assessment page
 userRouter.get("/assessment/options", getAssessmentOptions); // Get assessment options
 userRouter.post("/assessment", updateUserAssessment); // will update the assessment,
 
 //Profile page
-userRouter.get("/profile/dashboard", getUserDashboard);
+userRouter.get("/dashboard", getUserDashboard);
 userRouter.get("/profile", getUserProfile);
 userRouter.post("/profile", updateProfile); // will update the profile, not post as there is but one record for each profile
 

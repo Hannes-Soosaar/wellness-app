@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from "react";
 import GoalCard from "../components/GoalCard";
-import { USER_GOALS } from "../types/tempMockConstants";
 import { ErrorMessage } from "../components/ErrorMessage";
 import { SuccessMessage } from "../components/SuccessMessage";
+import { extractErrorMessage } from "../utils/errorUtility";
 import api from "../lib/axios";
-import { ResponseData, GoalPost } from "../../../shared/types/api";
-
-// interface GoalPost {
-//   option: string;
-//   targetDate: string;
-//   targetValue: number;
-// }
+import {
+  ResponseData,
+  GoalPost,
+  GoalData,
+  AvailableGoal,
+} from "../../../shared/types/api";
 
 const Goals: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [goalId, setGoalId] = useState<string | null>(null);
-  const [goalTargetValue, setGoalTargetValue] = useState<string>("");
-  const [goalEndDate, setGoalEndDate] = useState<string>("");
+  // const [goalId, setGoalId] = useState<string | null>(null);
+  // const [goalTargetValue, setGoalTargetValue] = useState<string>("");
+  // const [goalEndDate, setGoalEndDate] = useState<string>("");
+  const [availableGoals, setAvailableGoals] = useState<AvailableGoal[]>([]);
   const [selectedGoal, setSelectedGoal] = useState<GoalPost>({
     goal_id: 0,
     end_date: "",
@@ -35,45 +35,52 @@ const Goals: React.FC = () => {
       target_value,
     };
     setSelectedGoal(goalData);
-    updateGoal();
+    updateGoal(goalData);
   };
 
-  const updateGoal = async () => {
-    const goal: GoalPost = {
-      goal_id: goalId || 0,
-      end_date: goalEndDate,
-      target_value: Number(goalTargetValue),
-    };
-
+  const updateGoal = async (goal: GoalPost) => {
+    if (!goal.goal_id || !goal.end_date || goal.target_value <= 0) {
+      alert("Please select a valid goal with a target value and date.");
+      return;
+    }
     try {
-      const response = await api.post<ResponseData<null>>("/goals", goal);
-      // const serializedGoalData = JSON.stringify(goal);
-      // localStorage.setItem("userGoal", serializedGoalData);
-      // alert(`Goal "${goal.option}" saved for "${goal.targetDate}"!`);
+      const response = await api.post<ResponseData<null>>("/user/goals", goal);
+      if (response.data.success) {
+        setSuccessMessage("Goal updated successfully!");
+        setSelectedGoal(goal);
+      } else {
+        setErrorMessage(response.data.error || "Failed to update goal.");
+      }
     } catch (error) {
       console.log("failed to save user goal" + error);
+      setErrorMessage(extractErrorMessage(error).message);
       alert("An error occurred while saving your goal.");
     }
-  };
-
-  const isValidNumber = (stringValue: string) => {
-    const normalized = stringValue.replace(",", ".");
-    return /^-?\d+(\.\d+)?$/.test(normalized.trim());
   };
 
   useEffect(() => {
     const getGoals = async () => {
       try {
-        const [availableGoals, userGoal] = await api.get<
-          ResponseData<GoalData>
-        >("/goals");
+        const response = await api.get<ResponseData<GoalData>>("user/goals");
 
-        if (!availableGoals.data || !userGoal.data) {
+        if (!response.data?.data) {
           setErrorMessage("Failed to fetch goals or user goal.");
           return;
         }
+
+        const { availableGoals, userGoal } = response.data.data;
+        console.log("Fetched goals:", availableGoals, userGoal);
+
+        setAvailableGoals(availableGoals);
+        if (userGoal) {
+          setSelectedGoal({
+            goal_id: userGoal.goal_id,
+            end_date: userGoal.end_date,
+            target_value: userGoal.target_value,
+          });
+        }
       } catch (error) {
-        setErrorMessage("An error occurred while fetching goals.");
+        setErrorMessage(extractErrorMessage(error).message);
         console.error("Error fetching goals:", error);
       }
     };
@@ -94,16 +101,18 @@ const Goals: React.FC = () => {
         onDismiss={() => setSuccessMessage("")}
       />
       <div className="goals-grid">
-        {USER_GOALS.map((goal) => (
-          <GoalCard
-            key={goal.id}
-            option={goal.id}
-            title={goal.title}
-            description={goal.description}
-            isSelected={selectedGoal?.option === goal.id}
-            onSelect={handleGoalSelect}
-          />
-        ))}
+        {availableGoals.length > 0 ? (
+          availableGoals.map((availableGoal) => (
+            <GoalCard
+              key={availableGoal.goal_id}
+              goal={availableGoal}
+              isSelected={selectedGoal?.goal_id === availableGoal.goal_id}
+              onSelect={handleGoalSelect}
+            />
+          ))
+        ) : (
+          <p>No Active Goals Available to select</p>
+        )}
       </div>
     </>
   );

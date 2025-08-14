@@ -3,20 +3,11 @@ import { AvailableGoal } from "../../../shared/types/api";
 
 interface GoalCardProps {
   goal: AvailableGoal;
-  title: string;
-  description: string;
-  option: string;
   isSelected: boolean;
-  onSelect: (option: string, targetDate: string, targetValue: number) => void;
+  onSelect: (goal_id: number, targetDate: string, targetValue: number) => void;
 }
 
-const GoalCard: React.FC<GoalCardProps> = ({
-  title,
-  description,
-  option,
-  isSelected,
-  onSelect,
-}) => {
+const GoalCard: React.FC<GoalCardProps> = ({ goal, isSelected, onSelect }) => {
   const getDefaultDate = () => {
     const today = new Date();
     today.setDate(today.getDate() + 7);
@@ -31,7 +22,7 @@ const GoalCard: React.FC<GoalCardProps> = ({
       alert("Please enter a goal value");
       return;
     }
-    onSelect(option, date, targetValue);
+    onSelect(goal.goal_id, date, targetValue);
   };
 
   return (
@@ -41,8 +32,8 @@ const GoalCard: React.FC<GoalCardProps> = ({
           isSelected ? "active-card" : "inactive-card"
         }`}
       >
-        <h4>{title}</h4>
-        <p>{description}</p>
+        <h4>{goal.title}</h4>
+        <p>{goal.description}</p>
         <label className="date-label"></label>
 
         <label className="date-label">
@@ -58,12 +49,11 @@ const GoalCard: React.FC<GoalCardProps> = ({
         <label className="value-label">
           Target Value:
           <input
-            type="number"
+            type="text"
             value={targetValue}
             onChange={(e) => setTargetValue(Number(e.target.value))}
             placeholder="Enter target value"
             className="value-input"
-            min={1}
           />
         </label>
 
