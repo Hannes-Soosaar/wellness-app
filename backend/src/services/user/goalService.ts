@@ -71,6 +71,8 @@ export const updateGoal = async (
 
   const client = await pool.connect();
 
+  //TODO: Add the start value from the user_profile
+
   try {
     client.query("BEGIN");
     await client.query("DELETE FROM user_goals WHERE user_id = $1", [userId]);
