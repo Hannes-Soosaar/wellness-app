@@ -14,9 +14,9 @@ import {
 const Goals: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  // const [goalId, setGoalId] = useState<string | null>(null);
-  // const [goalTargetValue, setGoalTargetValue] = useState<string>("");
-  // const [goalEndDate, setGoalEndDate] = useState<string>("");
+  const [goalId, setGoalId] = useState<string | null>(null);
+  const [goalTargetValue, setGoalTargetValue] = useState<string>("");
+  const [goalEndDate, setGoalEndDate] = useState<string>("");
   const [availableGoals, setAvailableGoals] = useState<AvailableGoal[]>([]);
   const [selectedGoal, setSelectedGoal] = useState<GoalPost>({
     goal_id: 0,
@@ -39,6 +39,7 @@ const Goals: React.FC = () => {
   };
 
   const updateGoal = async (goal: GoalPost) => {
+    console.log("Updating goal:", goal);
     if (!goal.goal_id || !goal.end_date || goal.target_value <= 0) {
       alert("Please select a valid goal with a target value and date.");
       return;
@@ -104,9 +105,9 @@ const Goals: React.FC = () => {
         {availableGoals.length > 0 ? (
           availableGoals.map((availableGoal) => (
             <GoalCard
-              key={availableGoal.goal_id}
+              key={availableGoal.id}
               goal={availableGoal}
-              isSelected={selectedGoal?.goal_id === availableGoal.goal_id}
+              isSelected={selectedGoal?.goal_id === availableGoal.id}
               onSelect={handleGoalSelect}
             />
           ))

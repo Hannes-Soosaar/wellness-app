@@ -197,7 +197,7 @@ export interface GoalPost {
 }
 
 export interface AvailableGoal {
-  goal_id: number;
+  id: number;
   category: string;
   title: string;
   description: string;

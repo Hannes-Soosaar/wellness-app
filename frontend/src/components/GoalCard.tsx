@@ -22,7 +22,7 @@ const GoalCard: React.FC<GoalCardProps> = ({ goal, isSelected, onSelect }) => {
       alert("Please enter a goal value");
       return;
     }
-    onSelect(goal.goal_id, date, targetValue);
+    onSelect(goal.id, date, targetValue);
   };
 
   return (
