@@ -115,3 +115,8 @@ export const updateGoal = async (
     client.release();
   }
 };
+
+export const updateGoalProgress = async (userId: string): Promise<void> => {
+  //TODO: find user goal
+  //TODO: find what the current value was set, if it affect the current set goal update the progress value
+};
