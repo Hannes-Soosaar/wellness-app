@@ -9,7 +9,7 @@ import { getUserId } from "./verificationController";
 import { updateUserProfile } from "../services/user/profileService";
 import { calculateBodyComposition } from "../utils/bodyComposition";
 import { getUserDashboard as getUserDashboardService } from "../services/user/dashboardService";
-
+import { emitUserDashboardUpdate } from "../services/wsService";
 // Would be better to add middle ware to handle no ID and no verification
 
 interface ProfileUpdateRequest extends Request {
@@ -44,6 +44,7 @@ export const updateProfile: RequestHandler = async (
     const response = await updateUserProfile(userProfile);
     responseData.success = true;
     responseData.message = "Profile updated successfully";
+    await emitUserDashboardUpdate(userId);
     res.status(200).json(responseData);
     return;
   } catch (error) {

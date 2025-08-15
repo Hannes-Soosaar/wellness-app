@@ -13,7 +13,7 @@ import {
   getUserAssessmentValues as getUserAssessmentValuesService,
   updateUserAssessment as updateUserAssessmentService,
 } from "../services/user/assessmentService";
-
+import { emitUserDashboardUpdate } from "../services/wsService";
 export const getAssessmentOptions = async (req: Request, res: Response) => {
   const userId = getUserId(req);
 
@@ -66,6 +66,7 @@ export const updateUserAssessment = async (
   try {
     const userAssessments: UserAssessments = req.body;
     await updateUserAssessmentService(userId, userAssessments);
+    await emitUserDashboardUpdate(userId);
     res.status(200).json({ message: "User assessment updated successfully" });
   } catch (error) {
     console.error("Error updating user assessment:", error);

@@ -113,29 +113,41 @@ export const updateUserAssessment = async (
     throw new Error(`Failed to update user assessment: ${error}`);
   } finally {
     client.release();
+    setUserAssessmentScore(userId);
   }
   console.log("User assessment updated successfully");
 };
 
 // This could be added to the user_profile  table, but there was a laps in logic error when building the user_assessment table
-export const getUserAssessmentScore = async (
-  userId: string
-): Promise<number> => {
+export const setUserAssessmentScore = async (userId: string): Promise<void> => {
   if (!userId) {
     throw new Error("No user ID provided");
   }
 
   try {
     const response = await pool.query(
-      `SELECT SUM(ac.score) AS total_score
+      `WITH score_cte AS (
+        SELECT COALESCE(SUM(ac.score), 0) AS total_score
         FROM user_assessment ua
-        JOIN assessment_criteria ac ON ua.assessment_criteria_id = ac.id WHERE ua.user_id = $1`,
+        JOIN assessment_criteria ac
+          ON ua.assessment_criteria_id = ac.id
+        WHERE ua.user_id = $1
+      )
+      UPDATE user_profiles
+      SET user_wellness_score = score_cte.total_score,
+          modified_at = CURRENT_TIMESTAMP
+      FROM score_cte
+      WHERE user_id = $1
+      RETURNING score_cte.total_score AS total_score`,
       [userId]
     );
     if (response.rows.length === 0) {
-      return 0;
+      console.log("No rows updated for user assessment score");
     }
-    return response.rows[0].total_score || 0;
+    console.log(
+      "User assessment score updated successfully:",
+      response.rows[0].total_score
+    );
   } catch (error) {
     console.error("Error fetching user assessment score:", error);
     throw new Error("Failed to fetch user assessment score");

@@ -58,6 +58,8 @@ Button
 # Wellness-app
 In version 1.0 the wellness app is designed to help you get into shape with an focus on gathering body composition and weight related metrics. All advice and prompts are curated and carefully crafted to give broad and good advice on how to achieve your goals.
 
+The app assumes you are over 18 and treats all persons as grownups for all and any calculations.
+The app supports two sexes female and male as there are no other formulas available for calculating BMI and body fat content
 
 ## Profile page 
 The profile page holds your basic metrics, that will be used to calculate your progress and metrics.
@@ -66,11 +68,11 @@ The profile page holds your basic metrics, that will be used to calculate your p
 
 The Assessment tab is a stand alone, service and is meant not to track your progress but give an assessment of the form you are currently in.
 
-It does not take into account your age for in this version.
+It does not take into account your age in this version
 
 ## Overview page
 
-Give you a graphical view of your progress and wellness.
+Give you a graphical view of your progress and wellness 
 
 ## Settings page
 
@@ -101,6 +103,10 @@ You can choose from one of the following goals.
 
 All goals need to have a deadline, that the user must choose.
 Only one goal can be the focus as working on any of the goals as will have an effect on all other attributes.
+
+The goal is calculated as StartValue - targetValue / daysToEnd this will be used to calculate if you are on track or not
+The goal progress is form 0 to 100. calculated  CurrentValue/TargetValue.
+
 
 ## Activity page
 

@@ -97,9 +97,20 @@ const User: React.FC = () => {
           {dashboard ? (
             <div>
               <p>Dashboard Data:</p>
+              <p>Wellness Score: {dashboard.wellnessScore}</p>
               <p>BMI: {dashboard.BMI}</p>
               <p>Body fat:{dashboard.fatPercentage} %</p>
-              <p>Goal: {dashboard.goal}</p>
+              <div>
+                <p>Goal: {dashboard.goal}</p>
+                <p>Current Progress : {dashboard.goalCurrentValue}</p>
+                <p>Goal Start Value : {dashboard.goalStartValue}</p>
+                <p>Goal Target Value : {dashboard.goalTargetValue}</p>
+              </div>
+
+              <div>
+                <p>Current Weight: {dashboard.currentWeight} kg</p>
+                <p>Goal Progress: {dashboard.goalProgress} %</p>
+              </div>
               <p>...</p>
             </div>
           ) : (

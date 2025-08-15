@@ -6,6 +6,8 @@ import {
   updateGoal as updateUserGoalService,
 } from "@backend/src/services/user/goalService";
 
+import { emitUserDashboardUpdate } from "../services/wsService";
+
 export const getGoals = async (req: Request, res: Response): Promise<void> => {
   const response: ResponseData<GoalData> = {
     success: false,
@@ -54,7 +56,10 @@ export const updateUserGoal = async (
   }
 
   try {
-    const result = await updateUserGoalService(userId, req.body);
+    await updateUserGoalService(userId, req.body);
+    await emitUserDashboardUpdate(userId);
+    response.success = true;
+    response.message = "Goal updated successfully";
     res.status(200).json({ message: "Goal updated successfully" });
   } catch (error) {
     console.error("Error updating user goal:", error);

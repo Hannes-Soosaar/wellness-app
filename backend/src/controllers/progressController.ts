@@ -13,6 +13,8 @@ import {
 import { getSexAndHeightByUserId } from "@backend/src/services/user/userService";
 import { calculateBodyCompositionGeneric } from "../utils/bodyComposition";
 import { BodyComposition } from "@shared/types/data";
+import { emit } from "process";
+import { emitUserDashboardUpdate } from "../services/wsService";
 
 export const getLastUserProgress: RequestHandler = async (
   req: Request,
@@ -85,6 +87,7 @@ export const updateUserProgress: RequestHandler = async (
       userSex,
       req.body.hipCircumference
     );
+    emitUserDashboardUpdate(userId);
   } catch (error) {
     // TODO: the error handling is not very good here, it should be improved
     console.log("Failed to calculate body composition", error);
