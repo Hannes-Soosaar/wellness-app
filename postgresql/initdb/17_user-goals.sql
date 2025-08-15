@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS user_goals (
     goal_target_value NUMERIC NOT NULL,
     goal_current_value NUMERIC DEFAULT 0,
     goal_start_value NUMERIC DEFAULT 0,
-    goal_start_value TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    goal_last_progress_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (goal_id) REFERENCES goals(id) ON DELETE CASCADE
 ); 

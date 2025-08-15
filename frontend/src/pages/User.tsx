@@ -49,6 +49,7 @@ const User: React.FC = () => {
         if (userProfile.error) {
           allError += userProfile.error + "\n";
         }
+
         if (userDashboard.error) {
           allError += userDashboard.error + "\n";
         }
@@ -57,11 +58,13 @@ const User: React.FC = () => {
           setErrorMessage(allError);
           return;
         }
-
+        console.log("User Profile Data outside IF:", userProfile.data);
         if (userProfile.data) {
+          console.log("User Profile Data:", userProfile.data);
           setUser(userProfile.data);
         }
         if (userDashboard.data) {
+          console.log("User Dashboard Data:", userDashboard.data);
           setDashboard(userDashboard.data);
         }
       } catch (error) {

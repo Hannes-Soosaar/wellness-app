@@ -21,62 +21,72 @@ export const getUserDashboard = async (
     goalStartDate: "",
     goalEndDate: "",
     progressIndicator: "",
+    goalLastProgressDate: "", // Added to match the new structure
   };
-
-  //   export interface UserDashboard {
-  //   wellnessScore: number;
-  //   BMI: number;
-  //   fatPercentage: number;
-  //   currentWeight: number;
-  //   goal: string;
-  //   goalProgress: number;
-  //   goalTargetValue: number;
-  //   goalStartValue: number;
-  //   goalCurrentValue: number;
-  //   goalStartDate: string;
-  //   goalEndDate: string;
-  //   progressIndicator: string; // Milestone or progress indicator %
-  // }
 
   const client = await pool.connect();
 
   try {
     client.query("BEGIN");
-    // fetch user_goal_ progress, target value, start value, end Data,
-    // fetch goal  description by goal_id
+
     const userGoalsResult = await client.query(
-      "SELECT ug.goal_start_value, ug.goal_target_value, ug.progress, ug.end_at, ug.created_at, g.description FROM user_goals ug JOIN goals g  ON ug.goal_id = g.id WHERE ug.user_id = $1",
+      `SELECT 
+      ug.goal_start_value,
+      ug.goal_target_value,
+      ug.goal_current_value,
+      ug.progress,
+      ug.end_at,
+      ug.created_at,
+      ug.goal_last_progress_date,
+      g.description
+      FROM
+      user_goals ug JOIN goals g  ON ug.goal_id = g.id
+      WHERE ug.user_id = $1`,
       [userId]
     );
 
-    if (userGoalsResult.rows.length > 0) {
-      const {
-        goal_start_value,
-        goal_target_value,
-        progress,
-        end_at,
-        created_at,
-        description,
-      } = userGoalsResult.rows[0];
+    const goalRow = userGoalsResult.rows[0];
 
+    console.log("Goal Row:", goalRow);
+
+    if (goalRow) {
       userDashboardData = {
-        ...userDashboardData, // keep defaults
-        goal: description || "",
-        goalProgress: Number(progress) || 0,
-        goalTargetValue: Number(goal_target_value) || 0,
-        goalStartDate: created_at?.toISOString() || "",
-        goalEndDate: end_at?.toISOString() || "",
-        progressIndicator: "", //
+        ...userDashboardData,
+        goal: goalRow.description || "",
+        goalProgress: Number(goalRow.progress) || 0,
+        goalTargetValue: Number(goalRow.goal_target_value) || 0,
+        goalCurrentValue: Number(goalRow.goal_current_value) || 0,
+        goalStartValue: Number(goalRow.goal_start_value) || 0,
+        goalStartDate: goalRow.created_at?.toISOString() || "",
+        goalEndDate: goalRow.end_at?.toISOString() || "",
+        goalLastProgressDate: goalRow.goal_last_progress_date, //
       };
     }
 
-    //   const userData= await client.query(
-    //   "SELECT , end_at"
+    const userProfileResult = await client.query(
+      `SELECT 
+        user_wellness_score,
+        current_weight,
+        current_bmi,
+        body_fat_percentage
+      FROM user_profiles 
+      WHERE user_id = $1`,
+      [userId]
+    );
 
-    // // const userGoals = userGoalsResult.rows;
+    const profileRow = userProfileResult.rows[0];
+    console.log("Profile Row:", profileRow);
 
-    // client.query("COMMIT");
-
+    if (profileRow) {
+      userDashboardData = {
+        ...userDashboardData,
+        wellnessScore: profileRow.user_wellness_score || 0,
+        currentWeight: profileRow.current_weight || 0,
+        BMI: profileRow.current_bmi || 0,
+        fatPercentage: profileRow.body_fat_percentage || 0,
+      };
+    }
+    client.query("COMMIT");
     return userDashboardData;
   } catch (error) {
     client.query("ROLLBACK");

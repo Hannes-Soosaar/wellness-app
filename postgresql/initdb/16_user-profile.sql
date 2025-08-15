@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS user_profiles(
     user_wellness_score NUMERIC  DEFAULT 0,
     current_walking_minutes NUMERIC DEFAULT 0,
     current_pushups NUMERIC DEFAULT 0,
-    current_BMI NUMERIC DEFAULT 0,
+    current_bmi NUMERIC DEFAULT 0,
     modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     location TEXT,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE

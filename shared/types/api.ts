@@ -159,7 +159,8 @@ export interface UserDashboard {
   goalCurrentValue: number;
   goalStartDate: string;
   goalEndDate: string;
-  progressIndicator: string; // Milestone or progress indicator %
+  progressIndicator: string;
+  goalLastProgressDate: string; // Milestone or progress indicator %
 }
 
 // SETTINGS

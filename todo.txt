@@ -65,6 +65,7 @@ DONE: Password reset is handled via email
 
 
 PROGRESS: Authentication options include email-password and at least 2 OAuth providers (Google/GIt +  1 more)
+
 TODO: Verify functionality of 2FA
 
 DONE: New access token is issued when valid refresh token is provided // add token logic
@@ -101,11 +102,12 @@ DONE: Wellness score changes when user updates their weekly activity frequency
 
 
 
-TODO: System recalculates wellness score components when any contributing metric changes
+TODO: System recalculates wellness score components when any contributing metric changes // on Assessment page update
+TODO: Verify scores update when changing: BMI range, activity level, goal, progress, or health habits // Health score is tied to Assessment filed only
 
-TODO: Verify scores update when changing: BMI range, activity level, goal, progress, or health habits
 
-TODO: Update the values read from the DB as constants something more use full
+
+DONE: Update the values read from the DB as constants something more use full
 
 
 AI section
@@ -124,15 +126,13 @@ TODO: System implements response validation to filter out recommendations that d
     - Ask the students to describe their approach
 
 
-
 TODO: System displays cached recommendations when AI service is unavailable // setupHistory
 TODO: Verify system shows most recent cached recommendations when AI service connection is disabled //
 
 
 TODO: System generates weekly and monthly health summaries including progress and key metrics   // what are key metrics
-
 TODO: Verify health summary includes week's activity levels, wellness score changes, and progress towards goals // wellnessScore is not tracked how to track it?
-TODO: Progress chart shows weight tracking over time, wellness score evolution and activity level changes
+
 
 
 TODO: Goal progress includes milestone tracking
@@ -148,18 +148,18 @@ IN-PROGRESS: Health Dashboard shows BMI, wellness score, progress towards goals 
 
 
 TODO: AI insights are visually presented with priority-based highlighting -- Handle with markdown
-
-TODO: Verify insights are displayed with high/medium/low priority indicators and include expandable details // dunno what this mean.
+O: Verify insights are displayed with high/medium/low priority indicators and include expandable details // dunno what this mean.
 
 
 -- CHARTS
 TODO: Weight progress chart displays goal weight as a reference line
-
 DONE: Charts resize without data loss on mobile devices (feature in recharts)
+TODO: Progress chart shows weight tracking over time, wellness score evolution and activity level changes // Implemented my vision with dimension metrics
 
-TODO: Error messages appear without page reload when API requests fail
 
-TODO: Submit health profile form with invalid BMI value (e.g., -1) and verify error message appears without page refresh //input error handling from FE not possible.
+
+DONE: Error messages appear without page reload when API requests fail
+DONE: Submit health profile form with invalid BMI value (e.g., -1) and verify error message appears without page refresh //input error handling from FE not possible.
 
 
 
@@ -168,14 +168,15 @@ TODO: System blocks rapid-fire API requests from the same user
 
 // Apply this for 
 TODO: Verify rate limit kicks in after [x] requests within 1 minute
-TODO: Dashboard loads placeholder UI when data is being fetched
+
+DONE: Dashboard loads placeholder UI when data is being fetched //very basic text for now, can be implemented as an Element 
 
 
 //Bugs
 TODO: logout
 TODO: error messages component
 TODO: password change re-rout + logout
-TODO: 
+TODO: does not auto update the User Profile and Dashboard data.
 
 
 Extra
