@@ -41,6 +41,9 @@ const Menu: React.FC = () => {
             <Link to="/user/progress">Progress</Link>
           </li>
           <li>
+            <Link to="/user/pushupswalk">Traceable</Link>
+          </li>
+          <li>
             <Link to="/user/meal">Meal</Link>
           </li>
           <li>

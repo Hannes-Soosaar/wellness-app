@@ -6,9 +6,9 @@ import {
 } from "@shared/types/api";
 import { Request, Response, RequestHandler } from "express";
 import { getUserId } from "./verificationController";
-import { ResolveFnOutput } from "module";
 import { updateUserProfile } from "../services/user/profileService";
 import { calculateBodyComposition } from "../utils/bodyComposition";
+import { getUserDashboard as getUserDashboardService } from "../services/user/dashboardService";
 
 // Would be better to add middle ware to handle no ID and no verification
 
@@ -76,7 +76,7 @@ export const getUserDashboard: RequestHandler = async (
   req: Request,
   res: Response
 ) => {
-  let responseData: ResponseData<null> = {
+  let responseData: ResponseData<UserDashboard> = {
     success: false,
     message: "",
   };
@@ -89,7 +89,20 @@ export const getUserDashboard: RequestHandler = async (
     return;
   }
 
-  console.log("We arrived at the get dashboard controller!");
-  console.log("request body", req.body);
-  res.status(200).json({ message: "Dashboard data retrieved" });
+  try {
+    const dashboardData = await getUserDashboardService(userId);
+    if (dashboardData) {
+      responseData.success = true;
+      responseData.message = "Dashboard data retrieved successfully";
+      responseData.data = dashboardData;
+      res.status(200).json(responseData);
+      return;
+    }
+  } catch (error) {
+    responseData.error = "Failed to retrieve dashboard data";
+    res.status(500).json(responseData);
+    return;
+  }
 };
+
+//TODO implement the WS to update the dashboard

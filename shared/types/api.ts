@@ -215,3 +215,8 @@ export interface GoalData {
   availableGoals: AvailableGoal[];
   userGoal: UserGoal | null;
 }
+
+export interface PushupAndWalk {
+  currentPushups: number;
+  currentWalkingMinutes: number;
+}

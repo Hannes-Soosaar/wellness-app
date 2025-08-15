@@ -63,11 +63,26 @@ export const updateGoal = async (
   if (!userId) {
     throw new Error("User ID is required");
   }
+
   if (!goalPost || !goalPost.end_date || !goalPost.target_value) {
     throw new Error("Goal data is required");
   }
 
   console.log("Updating user goal:", goalPost);
+
+  if (!goalPost.goal_id) {
+    throw new Error("Goal ID is required");
+  }
+
+  // a constant to help with determining where and what data to get as the starting value
+  // I think this is a bad design, but I will continue with this for now to fully understand why its bad and how to make it better.
+  const goalIdToUserProfile: Record<number, string> = {
+    1: "current_weight",
+    2: "body_fat_percentage",
+    3: "current_calories_target",
+    4: "current_pushups",
+    5: "current_walking_minutes",
+  };
 
   const client = await pool.connect();
 

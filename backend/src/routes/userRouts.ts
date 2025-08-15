@@ -32,7 +32,10 @@ import {
 } from "../controllers/assessmentController";
 import { getUserAssessmentValues } from "../services/user/assessmentService";
 import { getGoals, updateUserGoal } from "../controllers/goalController";
-
+import {
+  getPushupsWalk,
+  updatePushupsWalk,
+} from "../controllers/pushupWalkController";
 /* 
 All routes here require that the user be authenticated. each page on the front end has its ons section
 user services will be broken up into sections for each page.
@@ -43,7 +46,6 @@ const userRouter = Router();
 // User session handling routes
 userRouter.get("/user", handleUser);
 userRouter.get("/refresh-token", handleUser);
-userRouter.get("/dashboard", test); // Get the information for a simple dashboard
 
 //Activity page
 userRouter.get("/activity/options", getActivityOptions);
@@ -70,14 +72,14 @@ userRouter.get("/assessment/options", getAssessmentOptions); // Get assessment o
 userRouter.post("/assessment", updateUserAssessment); // will update the assessment,
 
 //Profile page
-userRouter.get("/dashboard", getUserDashboard);
+
 userRouter.get("/profile", getUserProfile);
 userRouter.post("/profile", updateProfile); // will update the profile, not post as there is but one record for each profile
 
 //Progress page
 userRouter.get("/progress", getLastUserProgress);
-userRouter.get("/progress/history", test);
-userRouter.delete("/progress/remove", test);
+userRouter.get("/progress/history", test); //, not implemented
+userRouter.delete("/progress/remove", test); // not implemented
 userRouter.post("/progress", updateUserProgress);
 
 //Restrictions page
@@ -90,10 +92,15 @@ userRouter.get("/advice/weekly", test);
 userRouter.get("/advice/monthly", test);
 userRouter.get("/advice/goal", test);
 
+// Added traceable under duress
+
+userRouter.get("/pushupswalk", getPushupsWalk);
+userRouter.post("/pushupswalk", updatePushupsWalk);
 //Overview page
 
 //Dashboard
-userRouter.get("/Dashboard", test); // Implement v2
+userRouter.get("/dashboard", getUserDashboard);
+// userRouter.get("/Dashboard", test); // Implement v2
 
 /* 
 Decide what graphs are needed and add routes based on it

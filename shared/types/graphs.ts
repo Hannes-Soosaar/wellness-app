@@ -5,6 +5,8 @@ export interface GraphData {
   bmi: BMIDataPoint[];
   fatPercentage: number[];
   progress: ProgressDataPoint[];
+  pushups: pushupDataPoint[];
+  walk: walkDataPoint[];
 }
 
 export interface ProgressDataPoint {
@@ -27,4 +29,14 @@ export interface BMIDataPoint {
 export interface fatPercentageDataPoint {
   date: string;
   fatPercentage: number;
+}
+
+export interface pushupDataPoint {
+  date: string;
+  pushups: number;
+}
+
+export interface walkDataPoint {
+  date: string;
+  walkMinutes: number;
 }

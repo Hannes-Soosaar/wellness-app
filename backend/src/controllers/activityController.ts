@@ -1,4 +1,4 @@
-import { Request, RequestHandler, response, Response } from "express";
+import { Request, response, Response } from "express";
 import {
   getActiveActivityOptions as getActivityOptionsService,
   updateUserActivity as updateUserActivityService,

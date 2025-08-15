@@ -50,10 +50,8 @@ const sslOptions = {
   cert: fs.readFileSync("./certs/cert.pem"),
 };
 
-// Create the HTTPS server
 const httpsServer = https.createServer(sslOptions, app);
 
-// Initialize Socket.IO
 const io = new Server(httpsServer, {
   cors: {
     origin: allowedOrigins,

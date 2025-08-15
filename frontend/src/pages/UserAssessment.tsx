@@ -1,12 +1,10 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { USER_ASSESSMENT_OPTIONS } from "../types/tempMockConstants";
 import AssessmentField from "../components/AssessmentFiled";
 import { ErrorMessage } from "../components/ErrorMessage";
 import { SuccessMessage } from "../components/SuccessMessage";
 import api from "../lib/axios";
 import {
-  AssessmentOptions,
   AssessmentState,
   ResponseData,
   UserAssessments,

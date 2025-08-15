@@ -20,11 +20,8 @@ import Meal from "./pages/Meal";
 import Profile from "./pages/Profile";
 import Restrictions from "./pages/Restrictions";
 import PasswordReset from "./components/PasswordReset";
-import LoginButton from "./components/LoginButton";
-import { useEffect, useState } from "react";
-import Modal from "./components/Modal";
-import api from "./lib/axios";
-import UserAssessment from "./pages/UserAssesment";
+import PushupsWalk from "./pages/PushupsWalk";
+import UserAssessment from "./pages/UserAssessment";
 import { useAuth } from "./hooks/useAuth";
 
 const App: React.FC = () => {
@@ -60,6 +57,7 @@ const App: React.FC = () => {
                 <Route path="goals" element={<Goals />} />
                 <Route path="activity" element={<Activity />} />
                 <Route path="progress" element={<Progress />} />
+                <Route path="pushupswalk" element={<PushupsWalk />} />
                 <Route path="meal" element={<Meal />} />
                 <Route path="restrictions" element={<Restrictions />} />
               </Route>
