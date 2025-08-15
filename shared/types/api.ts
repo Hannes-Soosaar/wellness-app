@@ -147,7 +147,7 @@ export interface UserProfile extends ProfilePost {
 }
 
 // DASHBOARD
-export interface UserDashboard extends ProfilePost {
+export interface UserDashboard {
   wellnessScore: number;
   BMI: number;
   fatPercentage: number;
@@ -155,9 +155,11 @@ export interface UserDashboard extends ProfilePost {
   goal: string;
   goalProgress: number;
   goalTargetValue: number;
+  goalStartValue: number;
+  goalCurrentValue: number;
   goalStartDate: string;
   goalEndDate: string;
-  progressIndicator: string; // e.g. "On Track", "Behind", "Ahead"
+  progressIndicator: string; // Milestone or progress indicator %
 }
 
 // SETTINGS

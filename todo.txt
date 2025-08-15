@@ -91,7 +91,7 @@ DONE: At rest (https and User data encrypted in SQL) implemented
     -last_name 
 
 
-DONE: Platform collects initial fitness assessment data
+DONE: Platform collects initial fitness assessment data // you can always change the data, but 
 DONE: Platform allows user to change their data sharing preferences. ? what does this mean ? // Available to switch off AI.
 DONE: Historical weight changes are tracked with timestamps
 DONE: Verify each weight entry has a unique timestamp by adding multiple entries and checking their history display // all entires have time stamps
@@ -102,26 +102,38 @@ DONE: Wellness score changes when user updates their weekly activity frequency
 
 
 TODO: System recalculates wellness score components when any contributing metric changes
+
 TODO: Verify scores update when changing: BMI range, activity level, goal, progress, or health habits
+
 TODO: Update the values read from the DB as constants something more use full
 
 
 AI section
 
 TODO: System generates different health insights when user's goals change
+
 TODO: Verify insight adjustment after changing user goals from one type to another (e.g., weight loss to muscle gain)
+
 TODO: AI recommendations include specific references to user's stated fitness goals
 
 TODO: Verify recommendations explicitly mention and align with the specific fitness goal set in user profile
-TODO: AI health insights exclude any personally identifiable information
+
+TODO: AI health insights exclude any personally identifiable information // personal details are to be added later communicate just user.
+
 TODO: System implements response validation to filter out recommendations that don't match user's health restrictions
     - Ask the students to describe their approach
 
-TODO: System displays cached recommendations when AI service is unavailable
-TODO: Verify system shows most recent cached recommendations when AI service connection is disabled
-TODO: System generates weekly and monthly health summaries including progress and key metrics
-TODO: Verify health summary includes week's activity levels, wellness score changes, and progress towards goals
+
+
+TODO: System displays cached recommendations when AI service is unavailable // setupHistory
+TODO: Verify system shows most recent cached recommendations when AI service connection is disabled //
+
+
+TODO: System generates weekly and monthly health summaries including progress and key metrics   // what are key metrics
+
+TODO: Verify health summary includes week's activity levels, wellness score changes, and progress towards goals // wellnessScore is not tracked how to track it?
 TODO: Progress chart shows weight tracking over time, wellness score evolution and activity level changes
+
 
 TODO: Goal progress includes milestone tracking
     Miles stone example:
@@ -131,20 +143,30 @@ TODO: Goal progress includes milestone tracking
         Comparison view shows current vs target metrics, weekly/monthly progress comparison, health trend analysis and AI recommendations
 
 
-TODO: Health Dashboard shows BMI, wellness score, progress towards goals and AI insights based on user data  // this is the User main header element.
+
+IN-PROGRESS: Health Dashboard shows BMI, wellness score, progress towards goals and AI insights based on user data  // this is the User main header element.
+
 
 TODO: AI insights are visually presented with priority-based highlighting -- Handle with markdown
+
 TODO: Verify insights are displayed with high/medium/low priority indicators and include expandable details // dunno what this mean.
+
+
+-- CHARTS
 TODO: Weight progress chart displays goal weight as a reference line
 
 DONE: Charts resize without data loss on mobile devices (feature in recharts)
 
 TODO: Error messages appear without page reload when API requests fail
+
 TODO: Submit health profile form with invalid BMI value (e.g., -1) and verify error message appears without page refresh //input error handling from FE not possible.
+
 
 
 // Rate limit
 TODO: System blocks rapid-fire API requests from the same user
+
+// Apply this for 
 TODO: Verify rate limit kicks in after [x] requests within 1 minute
 TODO: Dashboard loads placeholder UI when data is being fetched
 

@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import https from "https";
+import { Server } from "socket.io";
 import fs from "fs";
 import cookieParser from "cookie-parser";
 dotenv.config({ path: "" });
@@ -52,4 +53,21 @@ const sslOptions = {
 // Create the HTTPS server
 const httpsServer = https.createServer(sslOptions, app);
 
-export { app, pool, httpsServer };
+// Initialize Socket.IO
+const io = new Server(httpsServer, {
+  cors: {
+    origin: allowedOrigins,
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log("Client connected:", socket.id);
+
+  socket.on("disconnect", () => {
+    console.log("Client disconnected:", socket.id);
+  });
+});
+
+export { app, pool, httpsServer, io };
