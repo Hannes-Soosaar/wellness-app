@@ -4,8 +4,12 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const saltRounds: number = parseInt(process.env.SALT_ROUNDS || "10", 10);
-const secretKey: string = process.env.SECRET_KEY || "";
+const secretKey: Buffer = Buffer.from(process.env.SECRET_KEY, "hex") || "";
 const algorithm: string = process.env.ENCRYPTION_METHOD || "aes-256-cbc";
+
+console.log("Using encryption method:", algorithm);
+console.log("Using secret key:", secretKey);
+console.log("Using salt rounds:", saltRounds);
 
 async function hashPassword(password: string): Promise<string> {
   try {
@@ -29,6 +33,9 @@ async function verifyPassword(
 }
 
 function encryptText(text: string): string {
+  console.log("Using encryption method:", algorithm);
+  console.log("Using secret key:", secretKey);
+  console.log("Using salt rounds:", saltRounds);
   const iv = randomBytes(16);
   const cipher = createCipheriv(algorithm, secretKey, iv);
   let encryptedText = cipher.update(text, "utf-8", "hex");
@@ -37,6 +44,9 @@ function encryptText(text: string): string {
 }
 
 function decryptText(encrypted: string): string {
+  console.log("Using encryption method:", algorithm);
+  console.log("Using secret key:", secretKey);
+  console.log("Using salt rounds:", saltRounds);
   const [ivHex, encryptedText] = encrypted.split(":");
   const iv = Buffer.from(ivHex, "hex");
   const decipher = createDecipheriv(algorithm, secretKey, iv);

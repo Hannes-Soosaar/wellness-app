@@ -55,7 +55,7 @@ const handleLogin: RequestHandler = async (req: Request, res: Response) => {
       }
 
       const hasVerifiedEmail = await pool.query(
-        " SELECT is_verified, uuid FROM users WHERE pgp_sym_decrypt(email, $2) = $1 ",
+        " SELECT is_verified FROM users WHERE pgp_sym_decrypt(email, $2) = $1 ",
         [email, dbKey]
       );
 
