@@ -31,7 +31,7 @@ interface JwtPayload {
 function generateJWT(userId: string): string {
   console.log("generating access token for user", userId);
   const accessToken = jwt.sign({ id: userId }, SECRET_KEY, {
-    expiresIn: JWT_EXPIRATION as any, // cheating here a bit as what types sign needs is not very clear.
+    expiresIn: JWT_EXPIRATION as any,
   });
   return accessToken;
 }
@@ -103,6 +103,22 @@ function generateTempToken(userId: string): string {
     expiresIn: "5m" as any,
   });
   return tempToken;
+}
+
+function verifyJWTTemp(token: string): JwtPayload {
+  token = token.replace(/^"|"$/g, "");
+  try {
+    const decoded = jwt.verify(token, SECRET_KEY) as JwtPayload;
+
+    if (!decoded.id) {
+      throw new Error("Token payload missing 'id'");
+    }
+
+    return decoded;
+  } catch (error) {
+    console.error("Error verifying Refresh JWT:", error);
+    throw new Error("Invalid token");
+  }
 }
 
 const decodeJWT = (token: string) => {

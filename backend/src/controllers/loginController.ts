@@ -11,6 +11,8 @@ import {
   verifyJWTRefresh,
 } from "../utils/tokens";
 import dotenv from "dotenv";
+import { generateMfaUri } from "../utils/mfa";
+import { getDecryptedUserSecret } from "../services/mfaService";
 dotenv.config();
 const dbKey = process.env.DB_KEY;
 
@@ -18,7 +20,6 @@ interface loginRequest {
   email: string;
   password: string;
 }
-//TODO: clean up logs
 
 const handleLogin: RequestHandler = async (req: Request, res: Response) => {
   console.log("We arrived at the login controller!");
@@ -72,11 +73,14 @@ const handleLogin: RequestHandler = async (req: Request, res: Response) => {
 
       if (isValidUser) {
         if (user.mfa_enabled) {
+          getDecryptedUserSecret(user.id);
           console.log("MFA is enabled for this user");
           const preAuthToken = generateTempToken(user.id);
+          const mfaUri = await generateMfaUri(user.email);
           res.status(200).json({
             message: "MFA enabled, please verify",
             tempToken: preAuthToken,
+            mfaUri: mfaUri,
           });
         }
 

@@ -3,6 +3,8 @@ import dotenv from "dotenv";
 import { userData } from "@backend/src/models/userModel";
 import { UserSettings, UserProfile } from "@shared/types/api";
 import { UserSexAndHeight } from "@shared/types/api";
+import { setMfaSecret } from "../mfaService";
+import { generateEncryptedMfaSecret } from "@backend/src/utils/mfa";
 
 dotenv.config();
 const dbKey = process.env.DB_KEY;
@@ -111,6 +113,15 @@ export const updateUserSettings = async (
   }
   if (!settings) {
     throw new Error("Settings data is required");
+  }
+
+  if (settings.mfa_enabled) {
+    try {
+      await setMfaSecret(userId, generateEncryptedMfaSecret());
+    } catch (error) {
+      console.error("Error setting MFA secret:", error);
+      throw new Error("Failed to set MFA secret");
+    }
   }
 
   try {
