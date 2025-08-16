@@ -6,6 +6,7 @@ import {
   decodeJWT,
   generateJWT,
   generateRefreshToken,
+  generateTempToken,
   verifyJWT,
   verifyJWTRefresh,
 } from "../utils/tokens";
@@ -18,6 +19,7 @@ interface loginRequest {
   password: string;
 }
 //TODO: clean up logs
+
 const handleLogin: RequestHandler = async (req: Request, res: Response) => {
   console.log("We arrived at the login controller!");
   console.log("request body", req.body);
@@ -35,6 +37,7 @@ const handleLogin: RequestHandler = async (req: Request, res: Response) => {
     }
 
     const user = result.rows[0];
+
     try {
       console.log("Trying to verify");
       const hasValidPassword: boolean = await verifyPassword(
@@ -51,7 +54,7 @@ const handleLogin: RequestHandler = async (req: Request, res: Response) => {
       }
 
       const hasVerifiedEmail = await pool.query(
-        " SELECT is_verified FROM users WHERE pgp_sym_decrypt(email, $2) = $1 ",
+        " SELECT is_verified, uuid FROM users WHERE pgp_sym_decrypt(email, $2) = $1 ",
         [email, dbKey]
       );
 
@@ -66,9 +69,17 @@ const handleLogin: RequestHandler = async (req: Request, res: Response) => {
       }
 
       let isValidUser: boolean = isVerified && hasValidPassword;
-      //TODO: handle m2f  no tokens will be generated before has verified.
 
       if (isValidUser) {
+        if (user.mfa_enabled) {
+          console.log("MFA is enabled for this user");
+          const preAuthToken = generateTempToken(user.id);
+          res.status(200).json({
+            message: "MFA enabled, please verify",
+            tempToken: preAuthToken,
+          });
+        }
+
         console.log("im a VERIFIED USER");
         const accessToken = generateJWT(user.id);
         const refreshToken = generateRefreshToken(user.id);

@@ -26,5 +26,6 @@ authRouter.post("/refresh", handleRefreshToken); // attempt to refresh the token
 authRouter.post("/verify/update", handleUpdateUserPassword);
 authRouter.post("/password/update", handleChangePassword);
 authRouter.post("/logout", test); // logout
+authRouter.post("/mfa/verification", test); // test route
 
 export default authRouter;

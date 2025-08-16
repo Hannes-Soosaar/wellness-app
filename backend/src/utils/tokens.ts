@@ -98,6 +98,12 @@ function generateRefreshToken(userId: string): string {
   });
   return refreshToken;
 }
+function generateTempToken(userId: string): string {
+  const tempToken = jwt.sign({ id: userId }, SECRET_KEY, {
+    expiresIn: "5m" as any,
+  });
+  return tempToken;
+}
 
 const decodeJWT = (token: string) => {
   const payload = jwt.decode(token, { complete: true });
@@ -151,4 +157,5 @@ export {
   decodeAndCheckToken, // DEBUG
   generatePasswordResetJWT,
   verifyPasswordResetJWT,
+  generateTempToken,
 };

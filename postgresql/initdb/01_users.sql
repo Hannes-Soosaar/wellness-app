@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS users (
     google_id TEXT UNIQUE,
     github_id TEXT UNIQUE,
     mfa_enabled BOOLEAN DEFAULT FALSE,
+    mfa_secret TEXT,
     failed_attempts INT DEFAULT 0,
     locked_until TIMESTAMPTZ,
     user_name BYTEA,
