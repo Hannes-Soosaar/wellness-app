@@ -1,5 +1,6 @@
 import pg from "pg";
 import express from "express";
+import rateLimit from "express-rate-limit";
 import cors from "cors";
 import dotenv from "dotenv";
 import https from "https";
@@ -17,6 +18,25 @@ const pool = new Pool({
   password: process.env.DB_PASSWORD,
   port: Number(process.env.DB_PORT),
 });
+
+const GlobalLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    error: "Too many requests, please try again later.",
+  },
+});
+
+const aiLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 5,
+  message: { error: "Too many AI requests, please slow down." },
+});
+
+app.use(GlobalLimiter);
+app.use("/ai", aiLimiter);
 
 const allowedOrigins = [
   "https://localhost:5173",

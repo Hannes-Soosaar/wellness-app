@@ -46,11 +46,12 @@ const Goals: React.FC = () => {
     }
     try {
       const response = await api.post<ResponseData<null>>("/user/goals", goal);
-      if (response.data.success) {
+      console.log("Goal update response:", response.data);
+      if (response.data) {
         setSuccessMessage("Goal updated successfully!");
         setSelectedGoal(goal);
       } else {
-        setErrorMessage(response.data.error || "Failed to update goal.");
+        setErrorMessage("Failed to update goal from response.data");
       }
     } catch (error) {
       console.log("failed to save user goal" + error);

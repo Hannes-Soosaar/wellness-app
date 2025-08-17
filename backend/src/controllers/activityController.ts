@@ -10,7 +10,6 @@ import {
   ActivityPost,
   UserActivity,
 } from "@shared/types/api";
-import { handleIsUser } from "./userController";
 import { getUserId } from "./verificationController";
 import { calculateCalories } from "../utils/calories";
 

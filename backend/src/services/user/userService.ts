@@ -86,18 +86,42 @@ export const getUserSettings = async (
       "SELECT * FROM user_settings WHERE user_id = $1",
       [userId]
     );
-    if (result.rows.length === 0) {
-      throw new Error("User settings not found");
+    if (result.rows.length > 0) {
+      return {
+        mfa_enabled: result.rows[0].mfa_enabled,
+        email_notifications: result.rows[0].email_notifications,
+        notification_active: result.rows[0].notification_active,
+        privacy_accepted: result.rows[0].privacy_accepted,
+        cookies_allowed: result.rows[0].cookie_allowed,
+        ai_enabled: result.rows[0].ai_enabled,
+      };
     }
 
-    return {
-      mfa_enabled: result.rows[0].mfa_enabled,
-      email_notifications: result.rows[0].email_notifications,
-      notification_active: result.rows[0].notification_active,
-      privacy_accepted: result.rows[0].privacy_accepted,
-      cookies_allowed: result.rows[0].cookie_allowed,
-      ai_enabled: result.rows[0].ai_enabled,
+    const defaultSettings: UserSettings = {
+      mfa_enabled: false,
+      email_notifications: true,
+      notification_active: false,
+      privacy_accepted: false,
+      cookies_allowed: true,
+      ai_enabled: false,
     };
+
+    await pool.query(
+      `INSERT INTO user_settings 
+       (user_id, mfa_enabled, email_notifications, notification_active, privacy_accepted, cookies_allowed, ai_enabled) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+      [
+        userId,
+        defaultSettings.mfa_enabled,
+        defaultSettings.email_notifications,
+        defaultSettings.notification_active,
+        defaultSettings.privacy_accepted,
+        defaultSettings.cookies_allowed,
+        defaultSettings.ai_enabled,
+      ]
+    );
+
+    return defaultSettings;
   } catch (error) {
     console.error("Error fetching user settings:", error);
     throw error;

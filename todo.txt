@@ -66,7 +66,7 @@ DONE: Password reset is handled via email
 
 PROGRESS: Authentication options include email-password and at least 2 OAuth providers (Google/GIt +  1 more)
 
-TODO: Verify functionality of 2FA
+DONE: Verify functionality of 2FA
 
 DONE: New access token is issued when valid refresh token is provided // add token logic
 DONE: User cannot access protected routes without verifying email // no login without being verified. 
@@ -99,14 +99,8 @@ DONE: Verify each weight entry has a unique timestamp by adding multiple entries
 DONE: System prevents duplicate activity entries for the same timestamp: Time will be added as now.
 DONE: Health metrics are converted to standard units before storage.
 DONE: Wellness score changes when user updates their weekly activity frequency
-
-
-
-TODO: System recalculates wellness score components when any contributing metric changes // on Assessment page update
-TODO: Verify scores update when changing: BMI range, activity level, goal, progress, or health habits // Health score is tied to Assessment filed only
-
-
-
+DONE: System recalculates wellness score components when any contributing metric changes // on Assessment page update
+DONE: Verify scores update when changing: BMI range, activity level, goal, progress, or health habits // Health score is tied to Assessment filed only
 DONE: Update the values read from the DB as constants something more use full
 
 

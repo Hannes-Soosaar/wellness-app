@@ -41,7 +41,6 @@ export const getUserAssessmentValues = async (
     const response = await pool.query(
       `SELECT
     ua.user_id,
-    ua.user_wellness_score,
     ac.category,
     ac.value,
     ac.title,
@@ -56,11 +55,7 @@ WHERE ua.user_id = $1;`,
     if (response.rows.length === 0) {
       return { assessments: [] };
     }
-
-    if (response.rows.length === 0) {
-      return { assessments: [] };
-    }
-
+    console.log("User assessments fetched successfully:", response.rows);
     const assessments: userAssessment[] = response.rows.map((row) => ({
       category: row.category,
       value: row.value,
@@ -83,6 +78,7 @@ export const updateUserAssessment = async (
   if (!userAssessments || !userAssessments.assessments) {
     throw new Error("No assessments provided");
   }
+  console.log("this is the userAssessments", userAssessments.assessments);
 
   const client = await pool.connect();
   client.query("BEGIN");
@@ -95,13 +91,13 @@ export const updateUserAssessment = async (
   INSERT INTO user_assessment (user_id, assessment_criteria_id)
   SELECT
     $1 AS user_id,
-    ac.id
+    ac.id  -- This gets assessment_criteria_id from assessment_criteria table
   FROM
     jsonb_to_recordset($2::jsonb)
       AS r(category text, value text)
     JOIN assessment_criteria ac
       ON ac.category = r.category
-      AND ac.value = r.value
+      AND ac.value = r.value  -- This finds the matching criteria
   `,
       [userId, JSON.stringify(userAssessments.assessments)]
     );

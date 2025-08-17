@@ -20,5 +20,9 @@ declare namespace NodeJS {
     LOW_MET: number;
     MED_MET: number;
     HIGH_MET: number;
+    SCW_ACCESS_KEY: string; // Access key for Scaleway
+    SCW_SECRET_KEY: string; // Secret key for Scaleway
+    SCW_DEFAULT_ORGANIZATION_ID: string; //  organization ID Scaleway
+    SCW_DEFAULT_PROJECT_ID: string; // Scaleway project ID
   }
 }

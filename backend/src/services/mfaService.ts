@@ -33,6 +33,7 @@ export const getDecryptedUserSecret = async (
     throw new Error("User ID is required");
   }
 
+  console.log("Fetching MFA secret for user:", userId);
   try {
     const result = await pool.query(
       "SELECT mfa_secret FROM users WHERE id = $1",

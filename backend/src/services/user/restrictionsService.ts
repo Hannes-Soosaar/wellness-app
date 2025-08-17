@@ -52,6 +52,9 @@ export const updateUserRestrictions = async (
   userId: string,
   restrictions: RestrictionPost
 ): Promise<void> => {
+  console.log(`Updating restrictions for user: ${userId}`);
+  console.log(`Input restrictions:`, restrictions.restrictions);
+
   if (!userId) {
     throw new Error("User ID is required");
   }
@@ -60,15 +63,38 @@ export const updateUserRestrictions = async (
   try {
     await client.query("BEGIN");
 
-    await client.query("DELETE FROM user_restrictions WHERE user_id = $1", [
-      userId,
-    ]);
+    const deleteResult = await client.query(
+      "DELETE FROM user_restrictions WHERE user_id = $1 RETURNING *",
+      [userId]
+    );
+
+    console.log(
+      `Deleted ${deleteResult.rowCount} existing restrictions:`,
+      deleteResult.rows
+    );
 
     for (const restriction of restrictions.restrictions) {
-      await client.query(
-        "INSERT INTO user_restrictions (user_id, type_id) SELECT $1, id FROM restriction_types WHERE category = $2 AND restriction = $3",
-        [userId, restriction.category, restriction.restriction]
+      console.log(
+        `Inserting restriction: ${restriction.category} - ${restriction.restriction}`
       );
+
+      try {
+        await client.query(
+          "INSERT INTO user_restrictions (user_id, type_id) SELECT $1, id FROM restriction_types WHERE category = $2 AND restriction = $3",
+          [userId, restriction.category, restriction.restriction]
+        );
+        console.log(
+          `Successfully inserted restriction ${restriction.category} - ${restriction.restriction}`
+        );
+      } catch (error) {
+        console.log(
+          " failed to insert " +
+            restriction.category +
+            " - " +
+            restriction.restriction
+        );
+        throw new Error(`Failed to insert restriction: ${error}`);
+      }
     }
 
     await client.query("COMMIT");

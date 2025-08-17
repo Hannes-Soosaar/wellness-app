@@ -15,6 +15,7 @@ app.use("/api", apiRouter);
 app.use("/user", userRouter);
 app.use("/test", testRouter);
 app.use("/auth", authRouter);
+app.use("/ai", authRouter);
 
 app.post("/test", async (req, res) => {
   console.log("Test request received:", req.body);

@@ -32,12 +32,23 @@ const handleLogin: RequestHandler = async (req: Request, res: Response) => {
       [email, dbKey]
     );
     if (result.rows.length === 0) {
-      console.log("user not found", result.rows);
       res.status(404).json({ message: "Please check your login details" });
       return;
     }
 
     const user = result.rows[0];
+
+    let mfaEnable = false;
+    try {
+      const mfrStatus = await pool.query(
+        "SELECT mfa_enabled FROM user_settings WHERE user_id = $1",
+        [user.id]
+      );
+      mfaEnable = mfrStatus.rows[0]?.mfa_enabled;
+      console.log("MFA status:", mfrStatus.rows[0]?.mfa_enabled);
+    } catch (error) {
+      console.error("Error fetching MFA status:", error);
+    }
 
     try {
       console.log("Trying to verify");
@@ -72,16 +83,17 @@ const handleLogin: RequestHandler = async (req: Request, res: Response) => {
       let isValidUser: boolean = isVerified && hasValidPassword;
 
       if (isValidUser) {
-        if (user.mfa_enabled) {
+        if (mfaEnable) {
           getDecryptedUserSecret(user.id);
           console.log("MFA is enabled for this user");
           const preAuthToken = generateTempToken(user.id);
-          const mfaUri = await generateMfaUri(user.email);
+          const mfaUri = await generateMfaUri(user.id);
           res.status(200).json({
             message: "MFA enabled, please verify",
             tempToken: preAuthToken,
             mfaUri: mfaUri,
           });
+          return;
         }
 
         console.log("im a VERIFIED USER");

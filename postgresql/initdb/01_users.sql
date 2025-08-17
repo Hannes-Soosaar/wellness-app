@@ -3,7 +3,6 @@ CREATE TABLE IF NOT EXISTS users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     google_id TEXT UNIQUE,
     github_id TEXT UNIQUE,
-    mfa_enabled BOOLEAN DEFAULT FALSE,
     mfa_secret TEXT,
     failed_attempts INT DEFAULT 0,
     locked_until TIMESTAMPTZ,
