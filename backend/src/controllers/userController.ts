@@ -127,7 +127,7 @@ const handleUpdateUserPassword: RequestHandler = async (req, res) => {
         "Error, updating password, please request new update link";
       response.message = "";
       response.success = false;
-      res.status(200).json(response);
+      res.status(500).json(response);
     }
   } catch (error) {
     response.error = "Server error, saving password";

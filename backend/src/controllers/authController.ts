@@ -245,13 +245,12 @@ export const handleRefreshToken: RequestHandler = async (req, res) => {
   }
 };
 
-export const handleChangePassword: RequestHandler = async (req, res) => {
+export const handleChangePassword: RequestHandler = async (req:Request, res:Response) => {
   let requestResponse: ResponseData<null> = {
     success: true,
     message: "",
   };
 
-  // Should never be triggered check on FE
   if (!req.body.email) {
     requestResponse.success = false;
     requestResponse.message = "";
@@ -260,7 +259,7 @@ export const handleChangePassword: RequestHandler = async (req, res) => {
     return;
   }
 
-  // No user, but does not give a hint about if the user exists or not.
+
   if (!findUserIdByEmail(req.body.email)) {
     requestResponse.success = false;
     requestResponse.message = "";
@@ -271,6 +270,7 @@ export const handleChangePassword: RequestHandler = async (req, res) => {
   }
 
   const resetToken = generatePasswordResetJWT();
+  console.log("Reset token generated:", resetToken);
 
   if (!resetToken) {
     requestResponse.success = false;
@@ -295,13 +295,14 @@ export const handleChangePassword: RequestHandler = async (req, res) => {
   } catch (error: any) {
     requestResponse.success = false;
     requestResponse.message = "Please try again later";
-    requestResponse.data = error; // CHECK THE FLOW HERE!
+    requestResponse.data = error;
     requestResponse.error = "Error setting a verification token";
     res.status(500).json(requestResponse);
     return;
   }
 
   try {
+    console.log("Sending password reset token :", resetToken);
     const response = await sendPasswordResetEmail(req.body.email, resetToken);
   } catch (error: any) {
     requestResponse.success = false;
@@ -311,6 +312,7 @@ export const handleChangePassword: RequestHandler = async (req, res) => {
     res.status(500).json(requestResponse);
     return;
   }
+;
 
   requestResponse.success = true;
   requestResponse.message = "The reset link has been sent to" + req.body.email;

@@ -25,6 +25,7 @@ const sendVerificationEmail = async (to: string, token: string) => {
 
 const sendPasswordResetEmail = async (to: string, token: string) => {
   try {
+    console.log("Reset token sent :", token);
     const resetLink = `https://localhost:5173/reset/${token}`;
 
     const data = await resend.emails.send({

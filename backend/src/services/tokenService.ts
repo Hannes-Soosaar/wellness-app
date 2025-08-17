@@ -33,36 +33,39 @@ export const setUserPasswordResetJWT = async (
   }
 };
 
-export const getUserPasswordResetJWT = async (
-  resetJWT: string
-): Promise<string | null> => {
-  try {
-    const response = await pool.query(
-      "SELECT password_reset_token FROM users WHERE id = $1",
-      [resetJWT]
-    );
-    if (response.rows.length > 0) {
-      return response.rows[0]?.password_reset_token as string;
-    } else {
-      return null;
-    }
-  } catch (error) {
-    console.log("error getting the reset JWT", error);
-    return null;
-  }
-};
+// export const getUserPasswordResetJWT = async (
+//   resetJWT: string
+// ): Promise<string | null> => {
+//   try {
+//     const response = await pool.query(
+//       "SELECT password_reset_token FROM users WHERE id = $1",
+//       [resetJWT]
+//     );
+//     if (response.rows.length > 0) {
+//       return response.rows[0]?.password_reset_token as string;
+//     } else {
+//       return null;
+//     }
+//   } catch (error) {
+//     console.log("error getting the reset JWT", error);
+//     return null;
+//   }
+// };
 
 export const setUserPasswordByResetToken = async (
   resetJWT: string,
-  password: string
+  passwordHash: string
 ): Promise<boolean> => {
-  console.log("updating the token", resetJWT, password);
+  console.log("updating the token", resetJWT, passwordHash);
   try {
     const response = await pool.query(
       "UPDATE users SET password =$1, password_reset_token = NULL WHERE password_reset_token = $2 RETURNING id",
-      [password, resetJWT]
+      [passwordHash, resetJWT]
     );
-    console.log("Handling the User password set and deletion", response.rows);
+    console.log(
+      "Handling the User password set and deletion",
+      response.rows[0]?.id
+    );
     if (response.rows.length > 0) {
       console.log("The Id is ", response.rows[0].id);
       return true;

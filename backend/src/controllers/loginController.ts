@@ -1,14 +1,11 @@
 import { Request, Response, RequestHandler } from "express";
 import { pool } from "../../server";
-import { hashPassword, verifyPassword } from "../utils/crypto";
-import handleProfile from "./profileController";
+import { verifyPassword } from "../utils/crypto";
+
 import {
-  decodeJWT,
   generateJWT,
   generateRefreshToken,
   generateTempToken,
-  verifyJWT,
-  verifyJWTRefresh,
 } from "../utils/tokens";
 import dotenv from "dotenv";
 import { generateMfaUri } from "../utils/mfa";
