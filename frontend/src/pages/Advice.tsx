@@ -1,10 +1,71 @@
 import React from "react";
 import { ErrorMessage } from "../components/ErrorMessage";
 import { SuccessMessage } from "../components/SuccessMessage";
+import api from "../lib/axios";
+import { ResponseData } from "../../../shared/types/api";
 
 const Advice: React.FC = () => {
   const [errorMessage, setErrorMessage] = React.useState("");
   const [successMessage, setSuccessMessage] = React.useState("");
+  const [advice, setAdvice] = React.useState<string>("");
+  const [weeklyAdvice, setWeeklyAdvice] = React.useState<string>("");
+  const [monthlyAdvice, setMonthlyAdvice] = React.useState<string>("");
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  const handleGetAdvice = async () => {
+    try {
+      const response = await api.get<ResponseData<any>>("ai/advice", {
+        timeout: 15000,
+      });
+      if (response.data.success) {
+        setAdvice(response.data.data);
+        setSuccessMessage("Advice fetched successfully");
+      } else {
+        setErrorMessage(response.data.message || "Failed to fetch advice");
+      }
+    } catch (error) {
+      console.error("Error fetching advice:", error);
+      setErrorMessage("An error occurred while fetching advice");
+    }
+  };
+
+  const handleGetWeeklyAdvice = async () => {
+    try {
+      const response = await api.get<ResponseData<any>>("ai/advice/week", {
+        timeout: 15000,
+      });
+      if (response.data.success) {
+        setAdvice(response.data.data);
+        setSuccessMessage("Weekly advice fetched successfully");
+      } else {
+        setErrorMessage(
+          response.data.message || "Failed to fetch weekly advice"
+        );
+      }
+    } catch (error) {
+      console.error("Error fetching weekly advice:", error);
+      setErrorMessage("An error occurred while fetching weekly advice");
+    }
+  };
+
+  const handleGetMonthlyAdvice = async () => {
+    try {
+      const response = await api.get<ResponseData<any>>("ai/advice/month", {
+        timeout: 15000,
+      });
+      if (response.data.success) {
+        setAdvice(response.data.data);
+        setSuccessMessage("Monthly advice fetched successfully");
+      } else {
+        setErrorMessage(
+          response.data.message || "Failed to fetch monthly advice"
+        );
+      }
+    } catch (error) {
+      console.error("Error fetching monthly advice:", error);
+      setErrorMessage("An error occurred while fetching monthly advice");
+    }
+  };
 
   return (
     <>
@@ -20,10 +81,38 @@ const Advice: React.FC = () => {
           duration={3000}
           onDismiss={() => setSuccessMessage("")}
         />
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-        <button className="advice-button">Today</button>
-        <button className="advice-button">Week</button>
-        <button className="advice-button">Month</button>
+        <div className="advice">
+          <div>
+            {advice ? (
+              <div>${advice}</div>
+            ) : (
+              <div>No advice yet, press the button </div>
+            )}
+          </div>
+          <div>
+            {weeklyAdvice ? (
+              <div> ${weeklyAdvice}</div>
+            ) : (
+              <div>No weekly advice yet, press the button</div>
+            )}
+          </div>
+          <div>
+            {monthlyAdvice ? (
+              <div> ${monthlyAdvice}</div>
+            ) : (
+              <div>No monthly advice yet, press the button</div>
+            )}
+          </div>
+        </div>
+        <button onClick={handleGetAdvice} className="advice-button">
+          Today
+        </button>
+        <button onClick={handleGetWeeklyAdvice} className="advice-button">
+          Week
+        </button>
+        <button onClick={handleGetMonthlyAdvice} className="advice-button">
+          Month
+        </button>
       </div>
     </>
   );

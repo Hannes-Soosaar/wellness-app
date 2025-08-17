@@ -1,10 +1,9 @@
 import { pool } from "@backend/server";
 import { generateUserAdvice } from "./aiService";
 
-export const createAiAdvice = async (
-  userId: string,
-  userData: any
-): Promise<void> => {
+export const createAiAdvice = async (userId: string): Promise<void> => {
+  let userData: string =
+    "I have not started any training yet, and my goal is to lose weight";
   const createAiAdvice = await generateUserAdvice(userData);
   if (!createAiAdvice) {
     throw new Error("Failed to generate AI advice");

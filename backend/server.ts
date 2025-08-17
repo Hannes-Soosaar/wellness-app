@@ -31,7 +31,7 @@ const GlobalLimiter = rateLimit({
 
 const aiLimiter = rateLimit({
   windowMs: 60 * 1000,
-  max: 5,
+  max: 50,
   message: { error: "Too many AI requests, please slow down." },
 });
 
