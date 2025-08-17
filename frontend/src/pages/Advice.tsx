@@ -3,6 +3,7 @@ import { ErrorMessage } from "../components/ErrorMessage";
 import { SuccessMessage } from "../components/SuccessMessage";
 import api from "../lib/axios";
 import { ResponseData } from "../../../shared/types/api";
+import ReactMarkdown from "../components/MarkdownRenderer";
 
 const Advice: React.FC = () => {
   const [errorMessage, setErrorMessage] = React.useState("");
@@ -84,21 +85,21 @@ const Advice: React.FC = () => {
         <div className="advice">
           <div>
             {advice ? (
-              <div>${advice}</div>
+              <ReactMarkdown content={advice} />
             ) : (
               <div>No advice yet, press the button </div>
             )}
           </div>
           <div>
             {weeklyAdvice ? (
-              <div> ${weeklyAdvice}</div>
+              <ReactMarkdown content={weeklyAdvice} />
             ) : (
               <div>No weekly advice yet, press the button</div>
             )}
           </div>
           <div>
             {monthlyAdvice ? (
-              <div> ${monthlyAdvice}</div>
+              <ReactMarkdown content={monthlyAdvice} />
             ) : (
               <div>No monthly advice yet, press the button</div>
             )}

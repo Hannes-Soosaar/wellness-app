@@ -106,12 +106,10 @@ DONE: Update the values read from the DB as constants something more use full
 
 AI section
 
-TODO: System generates different health insights when user's goals change
-
-TODO: Verify insight adjustment after changing user goals from one type to another (e.g., weight loss to muscle gain)
+DONE: System generates different health insights when user's goals change
+DONE: Verify insight adjustment after changing user goals from one type to another (e.g., weight loss to muscle gain)
 
 TODO: AI recommendations include specific references to user's stated fitness goals
-
 TODO: Verify recommendations explicitly mention and align with the specific fitness goal set in user profile
 
 TODO: AI health insights exclude any personally identifiable information // personal details are to be added later communicate just user.
@@ -141,7 +139,7 @@ TODO: Goal progress includes milestone tracking
 IN-PROGRESS: Health Dashboard shows BMI, wellness score, progress towards goals and AI insights based on user data  // this is the User main header element.
 
 
-TODO: AI insights are visually presented with priority-based highlighting -- Handle with markdown
+DONE: AI insights are visually presented with priority-based highlighting -- Handle with markdown
 O: Verify insights are displayed with high/medium/low priority indicators and include expandable details // dunno what this mean.
 
 

@@ -68,7 +68,6 @@ const Profile: React.FC = () => {
     }
   };
 
-  // NOT used at the moment, but could be used to validate input
   const isValidNumber = (stringValue: string) => {
     const normalized = stringValue.replace(",", ".");
     return /^-?\d+(\.\d+)?$/.test(normalized.trim());
@@ -77,7 +76,7 @@ const Profile: React.FC = () => {
   useEffect(() => {
     const getUserProfile = async () => {
       try {
-        const response = await api.get<ResponseData<UserDashboard>>(
+        const response = await api.get<ResponseData<UserProfile>>(
           "/user/profile/",
           {
             timeout: 15000,
