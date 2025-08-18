@@ -31,10 +31,11 @@ export interface ActivityPost {
   activityIntensity: string;
   activityDate: string;
   activityNote?: string;
+  caloriesBurned?: number;
 }
 export interface UserActivity extends ActivityPost {
   userId: string;
-  caloriesBurned?: number; // Optional, can be calculated later
+  caloriesBurned?: number;
 }
 
 export interface ActivityOptions {
