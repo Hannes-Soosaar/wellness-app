@@ -61,7 +61,7 @@ export interface GraphRequest {
 }
 
 export interface ActivityDataPoint {
-  date: Date;
+  date: string;
   total_duration: number;
   total_calories: number;
   count: number;

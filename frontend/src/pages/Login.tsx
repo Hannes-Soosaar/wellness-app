@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { ErrorMessage } from "../components/ErrorMessage";
 import { SuccessMessage } from "../components/SuccessMessage";
 import { QRCodeSVG } from "qrcode.react";
+import { extractErrorMessage } from "../utils/errorUtility";
 interface LoginData {
   email: string;
   password: string;
@@ -22,7 +23,6 @@ const Login: React.FC = () => {
   const [mfaCode, setMfaCode] = React.useState("");
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
-    console.log("Login button clicked", email, password);
     event.preventDefault();
 
     const loginData: LoginData = {
@@ -34,22 +34,24 @@ const Login: React.FC = () => {
       const response = await api.post("api/login", loginData, {
         withCredentials: true,
       });
-      console.log(response.data);
+      if (response.status === 401) {
+        setErrorMessage("login failed please try again");
+        return;
+      }
       if (response.data.tempToken && response.data.mfaUri) {
         setTempToken(response.data.tempToken);
         setMfaUri(response.data.mfaUri);
         setSuccessMessage(
           "MFA required. Enter the code from your authenticator."
         );
-
         // do I not need to set the TempToken to local storage
       } else if (response.data.token) {
-        // Normal login
+        setSuccessMessage("Welcome back!");
         localStorage.setItem("authToken", response.data.token);
         window.location.href = "/";
       }
     } catch (error) {
-      console.error("Login failed:", error);
+      setErrorMessage("Login failed: " + extractErrorMessage(error).message);
     }
   };
 

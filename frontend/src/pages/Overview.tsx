@@ -1,6 +1,7 @@
 import React from "react";
 import { ErrorMessage } from "../components/ErrorMessage";
 import { SuccessMessage } from "../components/SuccessMessage";
+import ActivityHistory from "../components/graphs/ActivityHistory";
 
 //TODO enable export of data that is being viewed
 //TODO System generates weekly and monthly health summaries including progress and key metrics
@@ -45,7 +46,12 @@ const Overview: React.FC = () => {
         duration={3000}
         onDismiss={() => setSuccessMessage("")}
       />
-      <ResponsiveContainer width="80%" height={300}>
+
+      <details>
+        <summary>Show Activity History</summary>
+        <ActivityHistory />
+      </details>
+      {/* <ResponsiveContainer width="80%" height={300}>
         <LineChart
           data={data}
           margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
@@ -62,7 +68,7 @@ const Overview: React.FC = () => {
             dot={{ r: 4 }}
           />
         </LineChart>
-      </ResponsiveContainer>
+      </ResponsiveContainer> */}
     </>
   );
 };

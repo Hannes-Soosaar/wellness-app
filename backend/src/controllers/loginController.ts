@@ -10,6 +10,7 @@ import {
 import dotenv from "dotenv";
 import { generateMfaUri } from "../utils/mfa";
 import { getDecryptedUserSecret } from "../services/mfaService";
+
 dotenv.config();
 const dbKey = process.env.DB_KEY;
 
@@ -21,6 +22,7 @@ interface loginRequest {
 const handleLogin: RequestHandler = async (req: Request, res: Response) => {
   console.log("We arrived at the login controller!");
   console.log("request body", req.body);
+
   const { email, password }: loginRequest = req.body;
 
   try {

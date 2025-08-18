@@ -57,6 +57,9 @@ export const getUserActivities = async (
   if (!userId) {
     throw new Error("User ID is required");
   }
+
+  console.log("Fetching user activities for userId:", userId);
+  console.log("Request parameters:", params);
   const granularity = params.granularity || "day";
   const sortOrder = params.sort?.toUpperCase() === "DESC" ? "DESC" : "ASC";
   const fromStr = params.from || "1970-01-01";
@@ -80,10 +83,10 @@ export const getUserActivities = async (
   } else {
     query = {
       text: `SELECT
-          date_trunc(${granularity}, date) AS period,
+          date_trunc('${granularity}', date) AS period,
           COUNT(*) AS activity_count,
           SUM(duration) AS total_duration,
-          SUM(calories) AS total_calories
+          SUM(calories_burned) AS total_calories
         FROM user_activities
         WHERE user_id = $1
           AND date BETWEEN $2 AND $3
