@@ -9,6 +9,8 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  padding: 1rem;
+  overflow: auto;
 }
 
 .modal-content {
@@ -16,7 +18,9 @@
   padding: 2rem;
   border-radius: 8px;
   min-width: 300px;
-  max-width: 500px;
+  max-width: 1200px;
+  max-height: 90vh;
+  overflow: auto;
   position: relative;
 }
 
