@@ -227,7 +227,7 @@ export const getRawUserActivities = async (
   if (!userId) {
     throw new Error("User ID is required");
   }
-
+  // on years of data with 365 newest entries
   try {
     const response = await pool.query(
       `
@@ -238,6 +238,7 @@ export const getRawUserActivities = async (
           AND date::date >= CURRENT_DATE - interval '365 days'
           AND date::date < CURRENT_DATE
       ORDER BY date DESC
+      LIMIT 365
     `,
       [userId]
     );

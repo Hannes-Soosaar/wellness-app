@@ -16,6 +16,7 @@ export interface ProgressDataPoint {
   date: string;
   weight: number;
   bmi: number;
+  wellnessScore: number;
   fatPercentage: number;
   pushups: number;
   walk: number;

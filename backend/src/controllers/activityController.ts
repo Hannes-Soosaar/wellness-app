@@ -100,13 +100,12 @@ export const getActivityHistory = async (
     success: false,
     message: "",
   };
-  console.log("getting activities for user:", userId);
+
   if (!userId) {
     responseData.error = "Not logged in";
     res.status(401).json(responseData);
     return;
   }
-  console.log("Request body:", req.query);
   try {
     const activities = await getUserActivitiesService(
       userId,

@@ -122,11 +122,13 @@ TODO: Verify system shows most recent cached recommendations when AI service con
 
 
 TODO: System generates weekly and monthly health summaries including progress and key metrics   // what are key metrics
-TODO: Verify health summary includes week's activity levels, wellness score changes, and progress towards goals // wellnessScore is not tracked how to track it?
+TODO: Verify health summary includes week's activity levels, wellness score changes, and progress towards goals //
 
 
 
 IN-PROGRESS: Health Dashboard shows BMI, wellness score, progress towards goals and AI insights based on user data  // this is the User main header element.
+
+
 
 TODO: Goal progress includes milestone tracking
     Miles stone example:
@@ -147,10 +149,8 @@ TODO: Weight progress chart displays goal weight as a reference line
 DONE: Charts resize without data loss on mobile devices (feature in recharts)
 TODO: Progress chart shows weight tracking over time, wellness score evolution and 
 
+
 DONE: separate chart: activity level changes // Implemented my vision with dimension metrics
-
-
-
 DONE: Error messages appear without page reload when API requests fail
 DONE: Submit health profile form with invalid BMI value (e.g., -1) and verify error message appears without page refresh //input error handling from FE not possible.
 

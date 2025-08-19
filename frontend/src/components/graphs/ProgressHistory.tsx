@@ -27,9 +27,9 @@ const ProgressHistory: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [granularity, setGranularity] = useState<"day" | "week" | "month">(
-    "day"
-  );
+  const [granularity, setGranularity] = useState<
+    "day" | "week" | "month" | "none"
+  >("none");
   const [goal, setGoal] = useState<string>("");
 
   const today = new Date();
@@ -46,12 +46,12 @@ const ProgressHistory: React.FC = () => {
         granularity: "day",
         from: firstDayOfMonth.toISOString().split("T")[0],
         to: today.toISOString().split("T")[0],
-        metrics: ["total_duration", "total_calories", "count"],
+        metrics: ["all"],
       };
       try {
         setLoading(true);
         const data = await api.get<ResponseData<ProgressDataPoint[]>>(
-          "api/activity/progress",
+          "api/progress/history",
           { params: requestParams }
         );
         setProgress(data.data?.data || []);
@@ -76,13 +76,13 @@ const ProgressHistory: React.FC = () => {
       granularity: granularity,
       from: fromDate.toISOString().split("T")[0],
       to: toDate.toISOString().split("T")[0],
-      metrics: ["total_duration", "total_calories", "count"],
+      metrics: ["all"], // Fetch all metrics for the progress chart
     };
 
     try {
       setLoading(true);
       const data = await api.get<ResponseData<ProgressDataPoint[]>>(
-        "api/activity/progress",
+        "api/progress/history",
         { params: requestParams }
       );
       setProgress(data.data?.data || []);
@@ -157,7 +157,7 @@ const ProgressHistory: React.FC = () => {
             </div>
             <p>Select the summary range and update</p>
             <div style={{ marginBottom: "1rem" }}>
-              {(["day", "week", "month"] as const).map((g) => (
+              {(["day", "week", "month", "none"] as const).map((g) => (
                 <button
                   key={g}
                   style={{
@@ -222,7 +222,7 @@ const ProgressHistory: React.FC = () => {
                   />
                   <Line
                     type="monotone"
-                    dataKey="calories"
+                    dataKey="bodyFat"
                     stroke="#82ca9d"
                     name="Body fat %"
                   />

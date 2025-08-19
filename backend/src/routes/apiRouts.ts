@@ -11,6 +11,7 @@ import {
   getActivityHistory,
   getActivityPeriodSummary,
 } from "../controllers/activityController";
+import { getProgressHistory } from "../controllers/progressController";
 const apiRouter = Router();
 
 apiRouter.post("/login", handleLogin);
@@ -21,9 +22,9 @@ apiRouter.post("/reset", handleChangePassword); // not in use?
 
 apiRouter.get("/activity/history", getActivityHistory);
 //TODO: add the correct endpoint for activity summary
-apiRouter.get("activity/summary", getActivityPeriodSummary); // get this for the dashboard
-apiRouter.get("progress/history", test); // for graphs
-apiRouter.get("progress/summary", test); //  for Dashboard
+apiRouter.get("/activity/summary", getActivityPeriodSummary); // get this for the dashboard
+apiRouter.get("/progress/history", getProgressHistory); // for graphs
+apiRouter.get("/progress/summary", test); //  for Dashboard
 
 apiRouter.get("/user", handleIsUser); // Ensure isUserAuthenticated is a valid middleware
 
