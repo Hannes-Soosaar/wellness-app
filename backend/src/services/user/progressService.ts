@@ -191,6 +191,7 @@ ORDER BY ph.date DESC;`,
     if (result.rows.length === 2 && params.granularity !== "none") {
       //There is some cheating going on here as this returns a single object and of a summary type, so Ideally it would be good to have a new interface for the summary
       const summary = computeProgressSummary(result.rows[1], result.rows[0]);
+      console.log("The Summary for ");
       return [summary];
     }
     return [];
@@ -243,28 +244,28 @@ export const geRawUserProgressHistory = async (
 };
 
 // this will compute the change between two days.
-function computeProgressSummary(
-  dataFrom: ProgressDataPoint,
-  dataTo: ProgressDataPoint
-): ProgressDataPoint {
+function computeProgressSummary(dataFrom: any, dataTo: any): ProgressDataPoint {
   if (!dataFrom || !dataTo) {
     throw new Error("Both data points are required for summary computation");
   }
   console.log("Computing progress summary from:", dataFrom, "to:", dataTo);
 
-  const first = dataFrom;
-  const last = dataTo;
+  console.log("First data point:", dataFrom);
+  console.log("Last data point:", dataTo);
 
-  return {
-    date: last.date,
-    weight: last.weight - first.weight,
-    bmi: last.bmi - first.bmi,
-    fatPercentage: last.fatPercentage - first.fatPercentage,
-    pushups: last.pushups - first.pushups,
-    walk: last.walk - first.walk,
-    neckCircumference: last.neckCircumference - first.neckCircumference,
-    waistCircumference: last.waistCircumference - first.waistCircumference,
-    hipCircumference: last.hipCircumference - first.hipCircumference,
-    wellnessScore: last.wellnessScore - first.wellnessScore,
+  const summary: ProgressDataPoint = {
+    date: dataTo.date,
+    weight: dataTo.weight - dataFrom.weight,
+    bmi: dataTo.bmi - dataFrom.bmi,
+    fatPercentage: dataTo.body_fat_percentage - dataFrom.body_fat_percentage,
+    pushups: dataTo.max_pushups - dataFrom.max_pushups,
+    walk: dataTo.max_walking_time - dataFrom.max_walking_time,
+    neckCircumference: dataTo.neck_circumference - dataFrom.neck_circumference,
+    waistCircumference:
+      dataTo.waist_circumference - dataFrom.waist_circumference,
+    hipCircumference: dataTo.hip_circumference - dataFrom.hip_circumference,
+    wellnessScore: dataTo.wellness_score - dataFrom.wellness_score,
   };
+
+  return summary;
 }
