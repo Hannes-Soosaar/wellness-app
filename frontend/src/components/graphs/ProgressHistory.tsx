@@ -31,6 +31,7 @@ const ProgressHistory: React.FC = () => {
     "day" | "week" | "month" | "none"
   >("none");
   const [goal, setGoal] = useState<string>("");
+  const [showGoal, setShowGoal] = useState(false);
 
   const today = new Date();
   const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -103,6 +104,12 @@ const ProgressHistory: React.FC = () => {
     bmi: a.bmi,
     bodyFat: a.fatPercentage,
     weight: a.weight,
+    wellnessScore: a.wellnessScore,
+    pushups: a.pushups,
+    walk: a.walk,
+    neckCircumference: a.neckCircumference,
+    waistCircumference: a.waistCircumference,
+    hipCircumference: a.hipCircumference,
   }));
 
   if (loading)
@@ -135,27 +142,44 @@ const ProgressHistory: React.FC = () => {
           <>
             <p>Select the progress type to view</p>
             <div style={{ marginBottom: "1rem" }}>
-              {(["measures", "weight", "physical", "goal"] as const).map(
-                (vm) => (
-                  <button
-                    key={vm}
-                    style={{
-                      marginRight: "0.5rem",
-                      backgroundColor: viewMode === vm ? "#4caf50" : "#ddd",
-                      color: viewMode === vm ? "white" : "black",
-                      padding: "0.5rem 1rem",
-                      border: "none",
-                      borderRadius: "4px",
-                      cursor: "pointer",
-                    }}
-                    onClick={() => setViewMode(vm)}
-                  >
-                    {vm.charAt(0).toUpperCase() + vm.slice(1)}
-                  </button>
-                )
-              )}
+              {(["measures", "weight", "physical"] as const).map((vm) => (
+                <button
+                  key={vm}
+                  style={{
+                    marginRight: "0.5rem",
+                    backgroundColor: viewMode === vm ? "#4caf50" : "#ddd",
+                    color: viewMode === vm ? "white" : "black",
+                    padding: "0.5rem 1rem",
+                    border: "none",
+                    borderRadius: "4px",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => setViewMode(vm)}
+                >
+                  {vm.charAt(0).toUpperCase() + vm.slice(1)}
+                </button>
+              ))}
             </div>
-            <p>Select the summary range and update</p>
+
+            <button
+              onClick={() => setShowGoal(!showGoal)}
+              style={{
+                marginRight: "0.5rem",
+                backgroundColor: showGoal ? "#4caf50" : "#ddd",
+                color: showGoal ? "white" : "black",
+                padding: "0.5rem 1rem",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+              }}
+            >
+              Show Goal
+            </button>
+
+            {showGoal ? <div>Goal On</div> : <div>Goal off</div>}
+
+            {/* The below summary toggle has a use I just have not figured it out yet */}
+            {/* <p>Select the summary range and update</p>
             <div style={{ marginBottom: "1rem" }}>
               {(["day", "week", "month", "none"] as const).map((g) => (
                 <button
@@ -174,7 +198,7 @@ const ProgressHistory: React.FC = () => {
                   {g.charAt(0).toUpperCase() + g.slice(1)}
                 </button>
               ))}
-            </div>
+            </div> */}
 
             <button
               onClick={getProgress}
@@ -187,7 +211,7 @@ const ProgressHistory: React.FC = () => {
                 cursor: "pointer",
               }}
             >
-              update Activities
+              Update Date Range
             </button>
 
             <div style={{ display: "flex", gap: "1rem", marginBottom: "1rem" }}>
@@ -214,18 +238,96 @@ const ProgressHistory: React.FC = () => {
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Line
-                    type="monotone"
-                    dataKey="weight"
-                    stroke="#8884d8"
-                    name="Weight"
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="bodyFat"
-                    stroke="#82ca9d"
-                    name="Body fat %"
-                  />
+
+                  {viewMode === "measures" && (
+                    <>
+                      <Line
+                        type="monotone"
+                        dataKey="neckCircumference"
+                        stroke="#8884d8"
+                        name="Neck Circumference"
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="waistCircumference"
+                        stroke="#82ca9d"
+                        name="Waist Circumference"
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="hipCircumference"
+                        stroke="#ff7300"
+                        name="Hip Circumference"
+                      />
+                    </>
+                  )}
+
+                  {viewMode === "weight" && (
+                    <>
+                      <Line
+                        type="monotone"
+                        dataKey="weight"
+                        stroke="#8884d8"
+                        name="Weight"
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="bodyFat"
+                        stroke="#82ca9d"
+                        name="Body fat %"
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="bmi"
+                        stroke="#ff7300"
+                        name="BMI"
+                      />
+                      {showGoal && goal === "weight" && (
+                        <Line
+                          type="monotone"
+                          dataKey="goal"
+                          stroke="#ff7300"
+                          name="Goal Weight"
+                        />
+                      )}
+                    </>
+                  )}
+
+                  {viewMode === "physical" && (
+                    <>
+                      <Line
+                        type="monotone"
+                        dataKey="pushups"
+                        stroke="#8884d8"
+                        name="Pushups"
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="walk"
+                        stroke="#82ca9d"
+                        name="Walk (min)"
+                      />
+
+                      {showGoal && goal === "strength" && (
+                        <Line
+                          type="monotone"
+                          dataKey="strength"
+                          stroke="#ff7300"
+                          name="Pushup Goal"
+                        />
+                      )}
+
+                      {showGoal && goal === "endurance" && (
+                        <Line
+                          type="monotone"
+                          dataKey="endurance"
+                          stroke="#ff7300"
+                          name="Walking Goal"
+                        />
+                      )}
+                    </>
+                  )}
+
                   {goal ? (
                     <Line
                       type="monotone"
@@ -234,12 +336,6 @@ const ProgressHistory: React.FC = () => {
                       name="${goal}"
                     />
                   ) : null}
-                  <Line
-                    type="monotone"
-                    dataKey="bmi"
-                    stroke="#ff7300"
-                    name="BMI"
-                  />
                 </LineChart>
               </ResponsiveContainer>
             </>
