@@ -10,6 +10,8 @@
 
 -- DELETE FROM user_settings WHERE id = 2;
 
+
+
 INSERT INTO user_activities (
   activity_type, 
   user_id, 

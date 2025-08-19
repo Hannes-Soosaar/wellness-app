@@ -13,6 +13,9 @@ import {
 import api from "../lib/axios";
 import { io, Socket } from "socket.io-client";
 import { extractErrorMessage } from "../utils/errorUtility";
+import { ErrorMessage } from "../components/ErrorMessage";
+import { SuccessMessage } from "../components/SuccessMessage";
+import Loader from "../components/Loader";
 
 const User: React.FC = () => {
   const [user, setUser] = React.useState<ProfileData | null>(null);
@@ -114,7 +117,10 @@ const User: React.FC = () => {
               <p>...</p>
             </div>
           ) : (
-            <p>Loading dashboard...</p>
+            <>
+              <p>Loading ...</p>
+              <Loader />
+            </>
           )}
         </div>
 

@@ -9,9 +9,6 @@ You can only improve what you measure and track. So the only thing you need to w
 - Physical parameters diary.
 
 
-
-
-
 Color Schema
 
 | Purpose              | Color                    | Hex Code  | Notes                                      |
@@ -82,6 +79,8 @@ Here you can toggle the settings related to your account with the wellness-app
 
 This page is meant fo you to get AI generated advice the questions are hardcoded and meant for the 1.0 version of the app. The chat functionality will be added in version 3.0
 
+
+
 ## Progress page
 
 Your progress currently has two categories it tracks.
@@ -98,8 +97,8 @@ You can choose from one of the following goals.
 * Targe body weight.
 * Targe body fat %.
 * Targe calories balance.
-* Target strength.
-* Target endurance.
+* Target strength. aka pushpus
+* Target endurance. aka. walking
 
 All goals need to have a deadline, that the user must choose.
 Only one goal can be the focus as working on any of the goals as will have an effect on all other attributes.
@@ -110,7 +109,7 @@ The goal progress is form 0 to 100. calculated  CurrentValue/TargetValue.
 
 ## Activity page
 
-On the activity page you can add activities that will count towards your goal.
+On the activity page you can add activities that will count towards your activity and calories balance.
 
 ## Progress page
 

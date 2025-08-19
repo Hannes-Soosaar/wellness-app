@@ -18,7 +18,6 @@ import {
   CartesianGrid,
   ResponsiveContainer,
 } from "recharts";
-
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -111,7 +110,7 @@ const ActivityHistory: React.FC = () => {
 
   return (
     <div>
-      <h2>Activity History</h2>
+      <h3>Activity History</h3>
       <ErrorMessage
         message={errorMessage}
         duration={5000}
@@ -126,6 +125,7 @@ const ActivityHistory: React.FC = () => {
         <p>No activity data found.</p>
       ) : (
         <>
+          <p>Select the summary range and update</p>
           <div style={{ marginBottom: "1rem" }}>
             {(["day", "week", "month"] as const).map((g) => (
               <button

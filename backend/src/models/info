@@ -1,3 +1,1 @@
-fill out with the data structures of the BE for easy reference.
-
-responses and request interfaces have been moved to the /shared folder.
+The folder still acts as a "historic landmark". Functionality has or will be moved to the shared folder.

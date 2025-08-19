@@ -21,7 +21,11 @@ const Logout: React.FC = () => {
   return (
     <div className="logout-container">
       <h2>Logout</h2>
-      <button onClick={handleLogout}>Logout</button>
+      <p>Are you sure you want to logout?</p>
+      <button onClick={handleLogout}>Confirm Logout</button>
+      <button onClick={() => (window.location.href = "/user/profile")}>
+        Cancel
+      </button>
     </div>
   );
 };

@@ -7,15 +7,23 @@ export interface GraphData {
   bmi: BMIDataPoint[];
   fatPercentage: number[];
   progress: ProgressDataPoint[];
-  pushups: pushupDataPoint[];
-  walk: walkDataPoint[];
+  pushups?: pushupDataPoint[];
+  walk?: walkDataPoint[];
 }
 
+// Created a simpler object to use in the graphs it has less control over the parameters
 export interface ProgressDataPoint {
   date: string;
+  weight: number;
+  bmi: number;
+  fatPercentage: number;
+  pushups: number;
+  walk: number;
   neckCircumference: number;
   waistCircumference: number;
   hipCircumference: number;
+  goal?: string;
+  goalValue?: number;
 }
 
 export interface WeightDataPoint {
