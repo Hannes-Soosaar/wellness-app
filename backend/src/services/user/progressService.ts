@@ -120,39 +120,25 @@ export const getUserProgressHistory = async (
 
   if (params.granularity === "none") {
     query = {
-      text: `WITH daily_ranked AS (
-    SELECT
-        user_id,
-        date::date AS day,
-        weight,
-        bmi,
-        body_fat_percentage,
-        max_pushups,
-        max_walking_time,
-        neck_circumference,
-        waist_circumference,
-        hip_circumference,
-        wellness_score,
-        created_at,
-        ROW_NUMBER() OVER (PARTITION BY date::date ORDER BY created_at DESC) AS rn
-    FROM profile_history
-    WHERE user_id = $1
-      AND date BETWEEN $2 AND $3
-)
-SELECT
-    day,
-    COALESCE(MAX(weight) FILTER (WHERE weight != 0), 0) AS weight,
-    COALESCE(MAX(bmi) FILTER (WHERE bmi != 0), 0) AS bmi,
-    COALESCE(MAX(body_fat_percentage) FILTER (WHERE body_fat_percentage != 0), 0) AS fatPercentage,
-    COALESCE(MAX(max_pushups) FILTER (WHERE max_pushups != 0), 0) AS pushups,
-    COALESCE(MAX(max_walking_time) FILTER (WHERE max_walking_time != 0), 0) AS walk,
-    COALESCE(MAX(neck_circumference) FILTER (WHERE neck_circumference != 0), 0) AS neckCircumference,
-    COALESCE(MAX(waist_circumference) FILTER (WHERE waist_circumference != 0), 0) AS waistCircumference,
-    COALESCE(MAX(hip_circumference) FILTER (WHERE hip_circumference != 0), 0) AS hipCircumference,
-    COALESCE(MAX(wellness_score) FILTER (WHERE wellness_score != 0), 0) AS wellnessScore
-FROM daily_ranked
-GROUP BY day
-ORDER BY day;`,
+      text: `SELECT
+    user_id,
+    date,
+    body_fat_percentage,
+    wellness_score,
+    neck_circumference,
+    waist_circumference,
+    hip_circumference,
+    max_pushups,
+    max_walking_time,
+    weight,
+    calories_required,
+    bmi,
+    note,
+    created_at
+FROM profile_history
+WHERE user_id = $1
+  AND date BETWEEN $2 AND  $3
+ORDER BY date DESC;`,
       values: [
         userId, //1
         fromStr, //2
@@ -161,42 +147,21 @@ ORDER BY day;`,
     };
   } else {
     query = {
-      text: `WITH first_day AS (
-        SELECT MIN(date::date) as date
-        FROM profile_history
-        WHERE user_id = $1 AND date BETWEEN $2 AND $3
-      ),
-      last_day AS (
-        SELECT MAX(date::date) as date
-        FROM profile_history
-        WHERE user_id = $1 AND date BETWEEN $2 AND $3
-      ),
-      days AS (
-        SELECT date FROM first_day
-        UNION ALL
-        SELECT date FROM last_day
-      )
-      SELECT DISTINCT ON (ph.date::date)
-        ph.date::date as date,
-        ph.weight,
-        ph.BMI as bmi,
-        ph.body_fat_percentage as fatPercentage,
-        ph.max_pushups as pushups,
-        ph.max_walking_time as walk,
-        ph.neck_circumference as neckCircumference,
-        ph.waist_circumference as waistCircumference,
-        ph.hip_circumference as hipCircumference,
-        ph.wellness_score as wellnessScore
-      FROM profile_history ph
-      JOIN days d ON ph.date::date = d.date
-      WHERE ph.user_id = $1
-        AND (
-          ph.weight != 0 OR ph.BMI != 0 OR ph.body_fat_percentage != 0 OR
-          ph.max_pushups != 0 OR ph.max_walking_time != 0 OR
-          ph.neck_circumference != 0 OR ph.waist_circumference != 0 OR
-          ph.hip_circumference != 0 OR ph.wellness_score != 0
-        )
-      ORDER BY ph.date::date, ph.date DESC`,
+      text: `SELECT
+    ph.date,
+    ph.weight,
+    ph.bmi,
+    ph.body_fat_percentage,
+    ph.max_pushups,
+    ph.max_walking_time,
+    ph.neck_circumference,
+    ph.waist_circumference,
+    ph.hip_circumference,
+    ph.wellness_score
+FROM profile_history ph
+WHERE ph.user_id = $1
+  AND ph.date IN ($2, $3)
+ORDER BY ph.date DESC;`,
       values: [
         userId, //1
         fromStr, //2
@@ -210,15 +175,15 @@ ORDER BY day;`,
     if (params.granularity === "none" && result.rows.length > 0) {
       const rawUserProgressHistory = result.rows.map((row) => ({
         weight: Number(row.weight) || 0,
-        neckCircumference: Number(row.neckCircumference) || 0,
-        waistCircumference: Number(row.waistCircumference) || 0,
-        hipCircumference: Number(row.hipCircumference) || 0,
+        neckCircumference: Number(row.neck_circumference),
+        waistCircumference: Number(row.waist_circumference),
+        hipCircumference: Number(row.hip_circumference),
         date: row.date,
-        fatPercentage: Number(row.fatPercentage) || 0,
+        fatPercentage: Number(row.body_fat_percentage),
         bmi: Number(row.bmi) || 0,
-        wellnessScore: Number(row.wellnessScore) || 0,
-        pushups: Number(row.pushups) || 0,
-        walk: Number(row.walk) || 0,
+        wellnessScore: Number(row.wellness_score),
+        pushups: Number(row.max_pushups) || 0,
+        walk: Number(row.max_walking_time) || 0,
       }));
       console.log("Raw user progress history:", rawUserProgressHistory);
       return rawUserProgressHistory;
