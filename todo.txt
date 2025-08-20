@@ -131,10 +131,15 @@ IN-PROGRESS: Health Dashboard shows BMI, wellness score, progress towards goals 
 
 
 TODO: Goal progress includes milestone tracking
+
     Miles stone example:
         Weight: every 5% towards goal
-        Activity: each additional day/week
-        Habits: streak achievements
+
+        ----
+        Activity: each additional day/week  -- implement at the very end
+        Habits: streak achievements         -- implement at the very end  
+
+-- the below is done in several steps and on different pages---
         Comparison view shows current vs target metrics, weekly/monthly progress comparison, health trend analysis and AI recommendations
 
 
@@ -147,7 +152,7 @@ O: Verify insights are displayed with high/medium/low priority indicators and in
 -- CHARTS
 TODO: Weight progress chart displays goal weight as a reference line
 DONE: Charts resize without data loss on mobile devices (feature in recharts)
-TODO: Progress chart shows weight tracking over time, wellness score evolution and 
+DONE: Progress chart shows weight tracking over time, wellness score evolution and 
 
 
 DONE: separate chart: activity level changes // Implemented my vision with dimension metrics

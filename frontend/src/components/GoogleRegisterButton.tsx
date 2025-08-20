@@ -6,7 +6,7 @@ import { FaGoogle } from "react-icons/fa";
 const GoogleRegisterButton = () => {
   const handleGoogleRegister = async () => {
     console.log("Google Register button clicked");
-    window.location.href = "http://localhost:5000/auth/google/register"; 
+    window.location.href = "https://localhost:5000/auth/google/register"; 
   };
 
   return (

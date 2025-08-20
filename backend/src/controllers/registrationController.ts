@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { pool } from "../../server";
 import { hashPassword } from "../utils/crypto";
 import { sendVerificationEmail } from "../utils/emailService";
-import { GoogleUser } from "../models/googleUserModel";
+import { GoogleUser, DiscordUser } from "../models/googleUserModel";
 import dotenv from "dotenv";
 dotenv.config();
 const dbKey = process.env.DB_KEY;
@@ -34,7 +34,6 @@ const handleRegister: RequestHandler = async (req, res) => {
 
     const verificationToken = uuidv4();
 
-    // TODO: refactor under service.
     const result = await pool.query(
       `
       INSERT INTO users(email,password,verification_token)
@@ -57,15 +56,28 @@ const handleRegister: RequestHandler = async (req, res) => {
   }
 };
 
+interface oauth2RegisterResponse {
+  isRegistered: boolean;
+  state: string;
+  message: string;
+}
+
+// Functions Reg. with google and discord could be merged into one, but for now they are separate for clarity and would need to handle the different provider ID's
+
 const handleRegisterWithGoogle = async (
   user: any
-): Promise<{ state: string; message: string }> => {
+): Promise<oauth2RegisterResponse> => {
   console.log("Register with google");
   console.log("user to register", user);
 
   let newUser: GoogleUser = {
     id: user.id,
     email: user.email,
+  };
+  let response: oauth2RegisterResponse = {
+    isRegistered: false,
+    state: "error",
+    message: "",
   };
 
   console.log("new user", newUser);
@@ -76,7 +88,11 @@ const handleRegisterWithGoogle = async (
     );
     if (existingUser.rows.length > 0) {
       console.log("User already exists");
-      return { state: "error", message: "please choose another email" };
+      response.isRegistered = true;
+      response.state = "error";
+      response.message = "User already exists";
+      //Login!
+      return response;
     }
     const verificationToken = uuidv4();
     try {
@@ -87,25 +103,85 @@ const handleRegisterWithGoogle = async (
       `,
         [newUser.id, newUser.email, verificationToken, dbKey]
       );
+      // it should already catch but just want to handle any edge case and it bugs me that result was not used.
+      if (result.rowCount === 0) {
+        response.state = "error";
+        response.message = "Error creating user";
+        return response;
+      }
+      console.log("User created successfully");
     } catch (error) {
       console.error("Error during user registration", error);
-      return { state: "error", message: "Internal server error" };
+      throw new Error("Internal server error" + error);
     }
-    //TODO: handle the registration more gracefully
     sendVerificationEmail(newUser.email, verificationToken);
-    return { state: "success", message: "new user created" };
+    response.state = "success";
+    response.message = "User created successfully and verification email sent";
+    return response;
   } catch (error) {
     console.error("Error during user registration", error);
-    return { state: "error", message: "Internal server error" };
+    throw new Error("Internal server error" + error);
   }
 };
 
 const handleRegisterWithDiscord = async (
   user: any
-): Promise<{ state: string; message: string }> => {
+): Promise<oauth2RegisterResponse> => {
   console.log("Register with discord");
   console.log("user to register", user);
-  //TODO : Implement discord registration
+
+  let newUser: DiscordUser = {
+    id: user.id,
+    email: user.email,
+  };
+
+  let response: oauth2RegisterResponse = {
+    isRegistered: false,
+    state: "error",
+    message: "",
+  };
+
+  console.log("new user", newUser);
+  try {
+    const existingUser = await pool.query(
+      "SELECT * FROM users WHERE email= pgp_sym_decrypt($1, $2)",
+      [newUser.email, dbKey]
+    );
+    if (existingUser.rows.length > 0) {
+      console.log("User already exists");
+      response.isRegistered = true;
+      response.state = "error";
+      response.message = "User already exists";
+      return response;
+    }
+    const verificationToken = uuidv4();
+    try {
+      const result = await pool.query(
+        `
+      INSERT INTO users(discord_id, email, verification_token)
+      VALUES ($1,pgp_sym_encrypt($2,$4), $3)
+      `,
+        [newUser.id, newUser.email, verificationToken, dbKey]
+      );
+      // it should already catch but just want to handle any edge case and it bugs me that result was not used.
+      if (result.rowCount === 0) {
+        response.state = "error";
+        response.message = "Error creating user";
+        return response;
+      }
+      console.log("User created successfully");
+    } catch (error) {
+      console.error("Error during user registration", error);
+      throw new Error("Internal server error" + error);
+    }
+    sendVerificationEmail(newUser.email, verificationToken);
+    response.state = "success";
+    response.message = "User created successfully and verification email sent";
+    return response;
+  } catch (error) {
+    console.error("Error during user registration", error);
+    throw new Error("Internal server error" + error);
+  }
 };
 
 export { handleRegister, handleRegisterWithDiscord, handleRegisterWithGoogle };

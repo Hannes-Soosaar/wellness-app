@@ -10,6 +10,7 @@ import {
 import dotenv from "dotenv";
 import { generateMfaUri } from "../utils/mfa";
 import { getDecryptedUserSecret } from "../services/mfaService";
+import { DiscordAuthOptions, GoogleAuthOptions } from "../models/authModels";
 
 dotenv.config();
 const dbKey = process.env.DB_KEY;
@@ -18,6 +19,16 @@ interface loginRequest {
   email: string;
   password: string;
 }
+
+// Google
+const redirectUri: string =
+  process.env.REDIRECT_URL_GOOGLE ||
+  "http://localhost:5000/auth/google/callback";
+
+// Discord
+const redirectUriDiscord: string =
+  process.env.REDIRECT_URL_DISCORD ||
+  "http://localhost:5000/auth/discord/callback";
 
 const handleLogin: RequestHandler = async (req: Request, res: Response) => {
   console.log("We arrived at the login controller!");
@@ -135,11 +146,59 @@ const handleLogin: RequestHandler = async (req: Request, res: Response) => {
   }
 };
 
+// export const loginWithoauth = async (
+//   req: Request,
+
+export const handleLoginGoogle: RequestHandler = async (req, res) => {
+  console.log("Register with Google started");
+  const rootUrl = "https://accounts.google.com/o/oauth2/v2/auth";
+  const options: GoogleAuthOptions = {
+    redirect_uri: redirectUri,
+    client_id:
+      process.env.GOOGLE_CLIENT_ID ||
+      "285075991742-u2ngj3bpoo2empncndftc6vv0g7e9361.apps.googleusercontent.com",
+    access_type: "offline",
+    response_type: "code",
+    prompt: "consent",
+    scope: [
+      "https://www.googleapis.com/auth/userinfo.profile",
+      "https://www.googleapis.com/auth/userinfo.email",
+    ].join(" "),
+  };
+  const qs: string = new URLSearchParams(
+    options as unknown as Record<string, string>
+  ).toString();
+  res.redirect(`${rootUrl}?${qs}`);
+  return;
+};
+
+export const handleLoginDiscord: RequestHandler = async (req, res) => {
+  console.log("Register with Discord started");
+  const rootUrl = "https://discord.com/api/oauth2/authorize";
+  const options: DiscordAuthOptions = {
+    redirect_uri: redirectUriDiscord,
+    client_id: process.env.DISCORD_CLIENT_ID || "1367455291721121865", // Replace with your Discord client ID
+    access_type: "offline",
+    response_type: "code",
+    prompt: "consent",
+    scope: ["identify", "email"].join(" "),
+  };
+
+  const qs: string = new URLSearchParams(
+    options as unknown as Record<string, string>
+  ).toString(); // the URLSearchParams constructor expects a record of string key-value pairs hence a direct cast with the interface is not possible.
+  res.redirect(`${rootUrl}?${qs}`);
+  return;
+};
+
 const handleLogout: RequestHandler = async (req, res) => {
+  // Delete the refresh token
+  // Delete the cookie?
   console.log("Logout started");
   res.status(200).json({ message: "Task completed" });
   return;
 };
+
 export { handleLogin, handleLogout };
 
 //TODO: Login with discord

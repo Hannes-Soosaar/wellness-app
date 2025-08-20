@@ -2,7 +2,10 @@ import { Request, RequestHandler, response, Response } from "express";
 import dotenv from "dotenv";
 import { DiscordAuthOptions, GoogleAuthOptions } from "../models/authModels";
 import axios from "axios";
-import { handleRegisterWithGoogle } from "./registrationController";
+import {
+  handleRegisterWithDiscord,
+  handleRegisterWithGoogle,
+} from "./registrationController";
 import {
   decodeAndCheckToken,
   generateJWT,
@@ -11,12 +14,15 @@ import {
   hashToken,
   verifyJWT,
   verifyJWTRefresh,
+  generateTempToken,
 } from "../utils/tokens";
 
 import { ResponseData } from "@shared/types/api";
 import { findUserIdByEmail } from "../services/user/userService";
 import { sendPasswordResetEmail } from "../utils/emailService";
-import { request } from "http";
+import { pool } from "../../server";
+import { generateMfaUri } from "../utils/mfa";
+import { getDecryptedUserSecret } from "../services/mfaService";
 
 import { setUserPasswordResetJWT } from "@backend/src/services/tokenService";
 dotenv.config();
@@ -27,12 +33,12 @@ const dbKey = process.env.DB_KEY;
 // Google
 const redirectUri: string =
   process.env.REDIRECT_URL_GOOGLE ||
-  "http://localhost:5000/auth/google/callback";
+  "https://localhost:5000/auth/google/callback";
 
 // Discord
 const redirectUriDiscord: string =
   process.env.REDIRECT_URL_DISCORD ||
-  "http://localhost:5000/auth/discord/callback";
+  "https://localhost:5000/auth/discord/callback";
 
 //Functions
 
@@ -119,13 +125,67 @@ export const discordCallback = async (
 
     const user = userInfoResponse.data;
 
-    const registrationResult = await handleRegisterWithGoogle(user);
+    //TODO: check to see if you can just login.
+
+    const registrationResult = await handleRegisterWithDiscord(user);
+
+    if (registrationResult.isRegistered) {
+      // GET MFA status by oauth provider Id.
+
+      let mfaEnable = false;
+      try {
+        const mfrStatus = await pool.query(
+          "SELECT mfa_enabled FROM user_settings WHERE discord_id = $1",
+          [user.id]
+        );
+        mfaEnable = mfrStatus.rows[0]?.mfa_enabled;
+        console.log("MFA status:", mfrStatus.rows[0]?.mfa_enabled);
+      } catch (error) {
+        console.error("Error fetching MFA status:", error);
+      }
+      if (mfaEnable) {
+        getDecryptedUserSecret(user.id);
+        console.log("MFA is enabled for this user");
+        const preAuthToken = generateTempToken(user.id);
+        const mfaUri = await generateMfaUri(user.id);
+        res.status(200).json({
+          message: "MFA enabled, please verify",
+          tempToken: preAuthToken,
+          mfaUri: mfaUri, // Need to change this probably
+        });
+        return;
+      }
+      const accessToken = generateJWT(user.id);
+      const refreshToken = generateRefreshToken(user.id);
+
+      await pool.query(
+        "UPDATE users SET refresh_token = $1 WHERE  discord_id =$2",
+        [refreshToken, user.id]
+      );
+      res
+        .cookie("refreshToken", refreshToken, {
+          httpOnly: true,
+          secure: true,
+          sameSite: "none",
+          path: "/",
+          maxAge: 7 * 24 * 60 * 60 * 1000,
+        })
+        .status(200)
+        .json({
+          message: "All good, user found",
+          token: accessToken,
+          user: user.email,
+        });
+      return;
+    }
+
+    // Bypass password verification for OAuth users they already have a valid passwords auth from google or discord.
 
     if (registrationResult.state === "success") {
-      res.redirect("http://localhost:5173/login");
+      res.redirect("https://localhost:5173/login");
     } else {
       res.redirect(
-        "http://localhost:5173/register?status=error&message=" +
+        "https://localhost:5173/register?status=error&message=" +
           encodeURIComponent(registrationResult.message)
       );
     }
@@ -180,14 +240,67 @@ export const googleCallback = async (
 
     const user = userInfoResponse.data;
 
+    //TODO: check to see if you can just login.
+
     console.log("User info:", user);
+
     const registrationResult = await handleRegisterWithGoogle(user);
 
+    if (registrationResult.isRegistered) {
+      // GET MFA status by oauth provider Id.
+
+      let mfaEnable = false;
+      try {
+        const mfrStatus = await pool.query(
+          "SELECT mfa_enabled FROM user_settings WHERE google_id = $1",
+          [user.id]
+        );
+        mfaEnable = mfrStatus.rows[0]?.mfa_enabled;
+        console.log("MFA status:", mfrStatus.rows[0]?.mfa_enabled);
+      } catch (error) {
+        console.error("Error fetching MFA status:", error);
+      }
+      if (mfaEnable) {
+        getDecryptedUserSecret(user.id);
+        console.log("MFA is enabled for this user");
+        const preAuthToken = generateTempToken(user.id);
+        const mfaUri = await generateMfaUri(user.id);
+        res.status(200).json({
+          message: "MFA enabled, please verify",
+          tempToken: preAuthToken,
+          mfaUri: mfaUri, // Need to change this probably
+        });
+        return;
+      }
+      const accessToken = generateJWT(user.id);
+      const refreshToken = generateRefreshToken(user.id);
+
+      await pool.query(
+        "UPDATE users SET refresh_token = $1 WHERE  google_id =$2",
+        [refreshToken, user.id]
+      );
+      res
+        .cookie("refreshToken", refreshToken, {
+          httpOnly: true,
+          secure: true,
+          sameSite: "none",
+          path: "/",
+          maxAge: 7 * 24 * 60 * 60 * 1000,
+        })
+        .status(200)
+        .json({
+          message: "All good, user found",
+          token: accessToken,
+          user: user.email,
+        });
+      return;
+    }
+
     if (registrationResult.state === "success") {
-      res.redirect("http://localhost:5173/login");
+      res.redirect("https://localhost:5173/login");
     } else {
       res.redirect(
-        "http://localhost:5173/register?status=error&message=" +
+        "https://localhost:5173/register?status=error&message=" +
           encodeURIComponent(registrationResult.message)
       );
     }
@@ -245,7 +358,10 @@ export const handleRefreshToken: RequestHandler = async (req, res) => {
   }
 };
 
-export const handleChangePassword: RequestHandler = async (req:Request, res:Response) => {
+export const handleChangePassword: RequestHandler = async (
+  req: Request,
+  res: Response
+) => {
   let requestResponse: ResponseData<null> = {
     success: true,
     message: "",
@@ -258,7 +374,6 @@ export const handleChangePassword: RequestHandler = async (req:Request, res:Resp
     res.status(200).json(requestResponse);
     return;
   }
-
 
   if (!findUserIdByEmail(req.body.email)) {
     requestResponse.success = false;
@@ -312,8 +427,6 @@ export const handleChangePassword: RequestHandler = async (req:Request, res:Resp
     res.status(500).json(requestResponse);
     return;
   }
-;
-
   requestResponse.success = true;
   requestResponse.message = "The reset link has been sent to" + req.body.email;
 
