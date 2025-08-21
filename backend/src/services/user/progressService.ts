@@ -55,8 +55,27 @@ export const updateUserProgress = async (
 
     await client.query(
       `
-      INSERT INTO profile_history (user_id, weight, neck_circumference, waist_circumference, hip_circumference, date, note, body_fat_percentage, BMI)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+INSERT INTO profile_history (
+  user_id,
+  weight,
+  neck_circumference,
+  waist_circumference,
+  hip_circumference,
+  date,
+  note,
+  body_fat_percentage,
+  BMI
+) 
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+ON CONFLICT (user_id, date)
+DO UPDATE SET
+  weight = EXCLUDED.weight,
+  neck_circumference = EXCLUDED.neck_circumference,
+  waist_circumference = EXCLUDED.waist_circumference,
+  hip_circumference = EXCLUDED.hip_circumference,
+  note = EXCLUDED.note,
+  body_fat_percentage = EXCLUDED.body_fat_percentage,
+  BMI = EXCLUDED.BMI;
       `,
       [
         userId, //1
@@ -113,6 +132,7 @@ export const getUserProgressHistory = async (
 
   const granularity = params.granularity || "day";
   // const sortOrder = params.sort?.toUpperCase() === "DESC" ? "DESC" : "ASC";
+
   const fromStr = params.from || "1970-01-01";
   const toStr = params.to || "9999-12-31";
 

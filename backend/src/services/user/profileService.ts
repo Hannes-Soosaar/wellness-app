@@ -71,19 +71,30 @@ export const updateUserProfile = async (
         userProfile.fatPercentage,
       ]
     );
+
+    const today = new Date().toISOString().split("T")[0];
     // From the profile update window the history gets the posting time stamp, when adding from the progress window a custom time for the entry can be added
     await client.query(
       `
-        INSERT INTO profile_history (
-        user_id,
-        body_fat_percentage,
-        neck_circumference,
-        waist_circumference,
-        hip_circumference,
-        weight,
-        bmi
-        ) VALUES
-        ($1, $2, $3, $4, $5, $6, $7)
+INSERT INTO profile_history (
+  user_id,
+  weight,
+  neck_circumference,
+  waist_circumference,
+  hip_circumference,
+  body_fat_percentage,
+  bmi,
+  date
+) VALUES ($1, $2, $3, $4, $5, $6, $7,$8)
+ON CONFLICT (user_id, date)
+DO UPDATE SET
+  weight = EXCLUDED.weight,
+  neck_circumference = EXCLUDED.neck_circumference,
+  waist_circumference = EXCLUDED.waist_circumference,
+  hip_circumference = EXCLUDED.hip_circumference,
+  body_fat_percentage = EXCLUDED.body_fat_percentage,
+  bmi = EXCLUDED.bmi,
+  note = EXCLUDED.note;
         `,
       [
         userProfile.userId,
@@ -93,6 +104,7 @@ export const updateUserProfile = async (
         userProfile.hipCircumference,
         userProfile.weight,
         userProfile.BMI,
+        today,
       ]
     );
 

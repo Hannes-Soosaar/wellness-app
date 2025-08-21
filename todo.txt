@@ -169,6 +169,10 @@ DONE: Dashboard loads placeholder UI when data is being fetched //very basic tex
 
 
 //Bugs
+TODO:can only use one method of logon, if PW is set, one can logon with PW if registered with google of Discord
+TODO: user Name does not render on the welcome screen when profile update is done
+TODO: Error on userMeal
+TODO:Progress on update with same date 500  as there is uniqe on date, it needs to overwrite on conflict
 DONE: logout
 DONE: error messages component
 DONE: password change re-rout + logout
@@ -183,6 +187,9 @@ Relevance and practicality of AI-generated weekly and monthly health summaries a
 System's handling of AI service limitations during testing (rate limits, availability)
 Student has implemented additional technologies, security enhancements and/or features beyond the core requirements
 
+
+//CORNERS 
+        -removed mfa and email verification for the oAuth for now. iplement once everything else is working
 
 occupation type
 activity level

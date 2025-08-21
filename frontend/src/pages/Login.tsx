@@ -7,6 +7,7 @@ import { ErrorMessage } from "../components/ErrorMessage";
 import { SuccessMessage } from "../components/SuccessMessage";
 import { QRCodeSVG } from "qrcode.react";
 import { extractErrorMessage } from "../utils/errorUtility";
+
 interface LoginData {
   email: string;
   password: string;

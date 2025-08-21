@@ -83,14 +83,14 @@ const handleRegisterWithGoogle = async (
   console.log("new user", newUser);
   try {
     const existingUser = await pool.query(
-      "SELECT * FROM users WHERE email= pgp_sym_decrypt($1, $2)",
+      "SELECT * FROM users WHERE pgp_sym_decrypt(email, $2) =$1 ",
       [newUser.email, dbKey]
     );
     if (existingUser.rows.length > 0) {
       console.log("User already exists");
       response.isRegistered = true;
       response.state = "error";
-      response.message = "User already exists";
+      response.message = "User already exists try a different login method";
       //Login!
       return response;
     }
@@ -98,12 +98,11 @@ const handleRegisterWithGoogle = async (
     try {
       const result = await pool.query(
         `
-      INSERT INTO users(google_id, email, verification_token)
-      VALUES ($1,pgp_sym_encrypt($2,$4), $3)
+      INSERT INTO users(google_id, email, verification_token, is_verified)
+      VALUES ($1,pgp_sym_encrypt($2,$4), $3, true)
       `,
         [newUser.id, newUser.email, verificationToken, dbKey]
       );
-      // it should already catch but just want to handle any edge case and it bugs me that result was not used.
       if (result.rowCount === 0) {
         response.state = "error";
         response.message = "Error creating user";
@@ -114,9 +113,8 @@ const handleRegisterWithGoogle = async (
       console.error("Error during user registration", error);
       throw new Error("Internal server error" + error);
     }
-    sendVerificationEmail(newUser.email, verificationToken);
     response.state = "success";
-    response.message = "User created successfully and verification email sent";
+    response.message = "User created successfully";
     return response;
   } catch (error) {
     console.error("Error during user registration", error);
@@ -144,26 +142,25 @@ const handleRegisterWithDiscord = async (
   console.log("new user", newUser);
   try {
     const existingUser = await pool.query(
-      "SELECT * FROM users WHERE email= pgp_sym_decrypt($1, $2)",
+      "SELECT * FROM users WHERE pgp_sym_decrypt(email, $2) = $1 ",
       [newUser.email, dbKey]
     );
     if (existingUser.rows.length > 0) {
       console.log("User already exists");
       response.isRegistered = true;
       response.state = "error";
-      response.message = "User already exists";
+      response.message = "User already exists try a different login method";
       return response;
     }
     const verificationToken = uuidv4();
     try {
       const result = await pool.query(
         `
-      INSERT INTO users(discord_id, email, verification_token)
-      VALUES ($1,pgp_sym_encrypt($2,$4), $3)
+      INSERT INTO users(discord_id, email, verification_token, is_verified)
+      VALUES ($1,pgp_sym_encrypt($2,$4), $3,true)
       `,
         [newUser.id, newUser.email, verificationToken, dbKey]
       );
-      // it should already catch but just want to handle any edge case and it bugs me that result was not used.
       if (result.rowCount === 0) {
         response.state = "error";
         response.message = "Error creating user";
@@ -174,9 +171,8 @@ const handleRegisterWithDiscord = async (
       console.error("Error during user registration", error);
       throw new Error("Internal server error" + error);
     }
-    sendVerificationEmail(newUser.email, verificationToken);
     response.state = "success";
-    response.message = "User created successfully and verification email sent";
+    response.message = "User created successfully ";
     return response;
   } catch (error) {
     console.error("Error during user registration", error);

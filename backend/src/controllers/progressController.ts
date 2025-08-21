@@ -142,6 +142,7 @@ export const getProgressHistory: RequestHandler = async (
       userId,
       req.query as unknown as GraphRequest
     );
+    console.log("Progress history fetched:", progressHistory);
     if (!progressHistory || progressHistory.length === 0) {
       response.error = "No progress history found for the user";
       res.status(404).json(response);

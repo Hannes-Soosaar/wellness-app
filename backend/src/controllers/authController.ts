@@ -129,57 +129,53 @@ export const discordCallback = async (
 
     const registrationResult = await handleRegisterWithDiscord(user);
 
+    // TODO does not handle veri
     if (registrationResult.isRegistered) {
       // GET MFA status by oauth provider Id.
 
-      let mfaEnable = false;
+      // let mfaEnable = false;
+      // try {
+      //   const mfrStatus = await pool.query(
+      //     "SELECT mfa_enabled FROM user_settings WHERE discord_id = $1",
+      //     [user.id]
+      //   );
+      //   mfaEnable = mfrStatus.rows[0]?.mfa_enabled;
+      //   console.log("MFA status:", mfrStatus.rows[0]?.mfa_enabled);
+      // } catch (error) {
+      //   console.error("Error fetching MFA status:", error);
+      // }
+      // if (mfaEnable) {
+      //   getDecryptedUserSecret(user.id);
+      //   console.log("MFA is enabled for this user");
+      //   const preAuthToken = generateTempToken(user.id);
+      //   const mfaUri = await generateMfaUri(user.id);
+      //   res.status(200).json({
+      //     message: "MFA enabled, please verify",
+      //     tempToken: preAuthToken,
+      //     mfaUri: mfaUri, // Need to change this probably
+      //   });
+      //   return;
+      // }
+      const tempToken = generateTempToken(user.id);
       try {
-        const mfrStatus = await pool.query(
-          "SELECT mfa_enabled FROM user_settings WHERE discord_id = $1",
-          [user.id]
+        await pool.query(
+          `
+          UPDATE users
+          SET o_auth_token = $1
+          WHERE discord_id = $2;
+          `,
+          [tempToken, user.id]
         );
-        mfaEnable = mfrStatus.rows[0]?.mfa_enabled;
-        console.log("MFA status:", mfrStatus.rows[0]?.mfa_enabled);
+        console.log("OAuth token inserted successfully");
+        console.log("Redirecting to OAuth login with tempToken:", tempToken);
+        res.redirect(`https://localhost:5173/oauth/login/${tempToken}`);
+        return;
       } catch (error) {
-        console.error("Error fetching MFA status:", error);
-      }
-      if (mfaEnable) {
-        getDecryptedUserSecret(user.id);
-        console.log("MFA is enabled for this user");
-        const preAuthToken = generateTempToken(user.id);
-        const mfaUri = await generateMfaUri(user.id);
-        res.status(200).json({
-          message: "MFA enabled, please verify",
-          tempToken: preAuthToken,
-          mfaUri: mfaUri, // Need to change this probably
-        });
+        console.error("Error inserting OAuth token:", error);
+        res.redirect("https://localhost:5173/login");
         return;
       }
-      const accessToken = generateJWT(user.id);
-      const refreshToken = generateRefreshToken(user.id);
-
-      await pool.query(
-        "UPDATE users SET refresh_token = $1 WHERE  discord_id =$2",
-        [refreshToken, user.id]
-      );
-      res
-        .cookie("refreshToken", refreshToken, {
-          httpOnly: true,
-          secure: true,
-          sameSite: "none",
-          path: "/",
-          maxAge: 7 * 24 * 60 * 60 * 1000,
-        })
-        .status(200)
-        .json({
-          message: "All good, user found",
-          token: accessToken,
-          user: user.email,
-        });
-      return;
     }
-
-    // Bypass password verification for OAuth users they already have a valid passwords auth from google or discord.
 
     if (registrationResult.state === "success") {
       res.redirect("https://localhost:5173/login");
@@ -240,8 +236,6 @@ export const googleCallback = async (
 
     const user = userInfoResponse.data;
 
-    //TODO: check to see if you can just login.
-
     console.log("User info:", user);
 
     const registrationResult = await handleRegisterWithGoogle(user);
@@ -249,51 +243,48 @@ export const googleCallback = async (
     if (registrationResult.isRegistered) {
       // GET MFA status by oauth provider Id.
 
-      let mfaEnable = false;
+      // let mfaEnable = false;
+      // try {
+      //   const mfrStatus = await pool.query(
+      //     "SELECT mfa_enabled FROM user_settings WHERE discord_id = $1",
+      //     [user.id]
+      //   );
+      //   mfaEnable = mfrStatus.rows[0]?.mfa_enabled;
+      //   console.log("MFA status:", mfrStatus.rows[0]?.mfa_enabled);
+      // } catch (error) {
+      //   console.error("Error fetching MFA status:", error);
+      // }
+      // if (mfaEnable) {
+      //   getDecryptedUserSecret(user.id);
+      //   console.log("MFA is enabled for this user");
+      //   const preAuthToken = generateTempToken(user.id);
+      //   const mfaUri = await generateMfaUri(user.id);
+      //   res.status(200).json({
+      //     message: "MFA enabled, please verify",
+      //     tempToken: preAuthToken,
+      //     mfaUri: mfaUri, // Need to change this probably
+      //   });
+      //   return;
+      // }
+      const tempToken = generateTempToken(user.id);
       try {
-        const mfrStatus = await pool.query(
-          "SELECT mfa_enabled FROM user_settings WHERE google_id = $1",
-          [user.id]
+        await pool.query(
+          `
+          UPDATE users
+          SET o_auth_token = $1
+          WHERE google_id = $2;
+          `,
+          [tempToken, user.id]
         );
-        mfaEnable = mfrStatus.rows[0]?.mfa_enabled;
-        console.log("MFA status:", mfrStatus.rows[0]?.mfa_enabled);
+        console.log("OAuth token inserted successfully");
+        console.log("Redirecting to OAuth login with tempToken:", tempToken);
+        res.redirect(`https://localhost:5173/oauth/login/${tempToken}`);
+        return;
       } catch (error) {
-        console.error("Error fetching MFA status:", error);
-      }
-      if (mfaEnable) {
-        getDecryptedUserSecret(user.id);
-        console.log("MFA is enabled for this user");
-        const preAuthToken = generateTempToken(user.id);
-        const mfaUri = await generateMfaUri(user.id);
-        res.status(200).json({
-          message: "MFA enabled, please verify",
-          tempToken: preAuthToken,
-          mfaUri: mfaUri, // Need to change this probably
-        });
+        console.error("Error inserting OAuth token:", error);
+        res.redirect("https://localhost:5173/login");
         return;
       }
-      const accessToken = generateJWT(user.id);
-      const refreshToken = generateRefreshToken(user.id);
-
-      await pool.query(
-        "UPDATE users SET refresh_token = $1 WHERE  google_id =$2",
-        [refreshToken, user.id]
-      );
-      res
-        .cookie("refreshToken", refreshToken, {
-          httpOnly: true,
-          secure: true,
-          sameSite: "none",
-          path: "/",
-          maxAge: 7 * 24 * 60 * 60 * 1000,
-        })
-        .status(200)
-        .json({
-          message: "All good, user found",
-          token: accessToken,
-          user: user.email,
-        });
-      return;
     }
 
     if (registrationResult.state === "success") {
@@ -431,4 +422,72 @@ export const handleChangePassword: RequestHandler = async (
   requestResponse.message = "The reset link has been sent to" + req.body.email;
 
   res.status(200).json(requestResponse);
+};
+
+export const handleOauthLogin: RequestHandler = async (
+  req: Request,
+  res: Response
+) => {
+  console.log("We arrived at the oauth login controller!");
+  console.log("request params", req.body);
+  const { token } = req.body;
+
+  if (!token) {
+    res.status(400).json({ message: "No token provided" });
+    return;
+  }
+
+  const payload = verifyJWT(token);
+  const userId = payload.id;
+
+  if (!userId) {
+    res.status(403).json({ message: "Invalid token payload" });
+    return;
+  }
+
+  try {
+    const user = await pool.query(
+      "SELECT id FROM users WHERE o_auth_token = $1",
+      [token]
+    );
+    if (user.rows.length === 0) {
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
+
+    // need to get the real uuid from the  DB
+    const accessToken = generateJWT(user.rows[0].id);
+    const refreshToken = generateRefreshToken(user.rows[0].id);
+    try {
+      await pool.query(
+        "UPDATE users SET refresh_token = $1 WHERE  o_auth_token =$2",
+        [refreshToken, token]
+      );
+      res
+        .cookie("refreshToken", refreshToken, {
+          httpOnly: true,
+          secure: true,
+          sameSite: "none",
+          path: "/",
+          maxAge: 7 * 24 * 60 * 60 * 1000,
+        })
+        .status(200)
+        .json({
+          message: "All good, user found",
+          token: accessToken,
+        });
+      return;
+    } catch (error) {
+      console.error("Login failed", error);
+      res.status(401).json({
+        message:
+          "Please check your login details and make sure you have verified your email  not valid",
+      });
+      return;
+    }
+  } catch (error) {
+    console.error("Error during OAuth login:", error);
+    res.status(500).json({ message: "Internal server error" });
+    return;
+  }
 };

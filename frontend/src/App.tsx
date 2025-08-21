@@ -22,6 +22,7 @@ import Restrictions from "./pages/Restrictions";
 import PasswordReset from "./components/PasswordReset";
 import PushupsWalk from "./pages/PushupsWalk";
 import UserAssessment from "./pages/UserAssessment";
+import { OauthLogin } from "./components/OauthLogin";
 import { useAuth } from "./hooks/useAuth";
 
 const App: React.FC = () => {
@@ -46,6 +47,7 @@ const App: React.FC = () => {
             <Route path="/logout" element={<Logout />} />
             <Route path="/register" element={<Register />} />
             <Route path="/reset/:token" element={<PasswordReset />} />
+            <Route path="oauth/login/:token" element={<OauthLogin />} />
             {isLoggedIn ? (
               <Route path="/user" element={<User />}>
                 <Route index element={<User />} />

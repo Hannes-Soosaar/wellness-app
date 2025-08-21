@@ -7,6 +7,7 @@ import {
   test,
   handleRefreshToken,
   handleChangePassword,
+  handleOauthLogin,
 } from "../controllers/authController";
 
 import { handleUpdateUserPassword } from "@backend/src/controllers/userController";
@@ -27,5 +28,6 @@ authRouter.post("/verify/update", handleUpdateUserPassword);
 authRouter.post("/password/update", handleChangePassword);
 authRouter.post("/logout", test); // logout
 authRouter.post("/mfa/verification", test); // test route
+authRouter.post("/oauth/finalize", handleOauthLogin); //
 
 export default authRouter;
