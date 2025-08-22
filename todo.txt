@@ -109,12 +109,11 @@ AI section
 DONE: System generates different health insights when user's goals change
 DONE: Verify insight adjustment after changing user goals from one type to another (e.g., weight loss to muscle gain)
 
+
+
 TODO: AI recommendations include specific references to user's stated fitness goals
 TODO: Verify recommendations explicitly mention and align with the specific fitness goal set in user profile
 TODO: AI health insights exclude any personally identifiable information // personal details are to be added later communicate just user.
-
-
-
 TODO: System implements response validation to filter out recommendations that don't match user's health restrictions
     - Ask the students to describe their approach
 
@@ -170,10 +169,12 @@ DONE: Dashboard loads placeholder UI when data is being fetched //very basic tex
 
 
 //Bugs
-TODO:can only use one method of logon, if PW is set, one can logon with PW if registered with google of Discord
+TOOD: if there is no name yet, just display Welcome!
+TODO: Register retains values entered, if the T&C is accepted
+TODO: can only use one method of logon, if PW is set, one can logon with PW if registered with google of Discord
 TODO: user Name does not render on the welcome screen when profile update is done
 TODO: Error on userMeal
-TODO:Progress on update with same date 500  as there is uniqe on date, it needs to overwrite on conflict
+TODO: Progress on update with same date 500  as there is uniqe on date, it needs to overwrite on conflict
 DONE: logout
 DONE: error messages component
 DONE: password change re-rout + logout

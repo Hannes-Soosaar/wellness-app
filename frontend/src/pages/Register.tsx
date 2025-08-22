@@ -3,7 +3,6 @@ import api from "../lib/axios";
 import GoogleRegisterButton from "../components/GoogleRegisterButton";
 import DiscordRegisterButton from "../components/DiscordRegisterButton";
 interface RegistrationForm {
-  username: string;
   email: string;
   confirmEmail: string;
   password: string;
@@ -13,7 +12,7 @@ interface RegistrationForm {
 let isFilled: boolean = false;
 
 const Register: React.FC = () => {
-  const [username, setUsername] = React.useState("");
+  // const [username, setUsername] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [confirmEmail, setConfirmEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -24,10 +23,9 @@ const Register: React.FC = () => {
     if (agreed) {
       console.log("Register button clicked", email, password);
       event.preventDefault();
-      console.log("Register button clicked", username, email, password);
+      console.log("Register button clicked", email, password);
 
       const registerData: RegistrationForm = {
-        username,
         email,
         confirmEmail,
         password,
@@ -55,7 +53,7 @@ const Register: React.FC = () => {
     <div className="register-container">
       <h2>Register</h2>
       <form onSubmit={handleRegister}>
-        <div className="form-group">
+        {/* <div className="form-group">
           <label htmlFor="username">Username</label>
           <input
             type="username"
@@ -65,7 +63,7 @@ const Register: React.FC = () => {
             onChange={(e) => setUsername(e.target.value)}
             required
           />
-        </div>
+        </div> */}
         <div className="form-group">
           <label htmlFor="email">Email</label>
           <input
@@ -100,7 +98,7 @@ const Register: React.FC = () => {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="confirm-password">Password</label>
+          <label htmlFor="confirm-password">Confirm Password</label>
           <input
             type="confirm-password"
             id="confirm-password"
@@ -112,8 +110,6 @@ const Register: React.FC = () => {
         </div>
         <button type="submit">Register</button>
       </form>
-      <GoogleRegisterButton />
-      <DiscordRegisterButton />
       <label style={{ display: "block", marginTop: "1rem" }}>
         <input
           type="checkbox"

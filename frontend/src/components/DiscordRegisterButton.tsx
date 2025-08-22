@@ -8,8 +8,7 @@ const DiscordRegisterButton = () => {
 
   return (
     <button onClick={handleDiscordRegister} className="discord-register-button">
-      <FaDiscord />
-      Register with Discord
+      <FaDiscord /> Login with Discord
     </button>
   );
 };

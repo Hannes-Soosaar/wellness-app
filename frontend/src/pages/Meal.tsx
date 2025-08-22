@@ -86,7 +86,7 @@ const Meal: React.FC = () => {
   return (
     <>
       <div className="meal-container">
-        <h3 className="meal-heading">Add a meal</h3>
+        <h3 className="meal-heading">Functionality added with meals</h3>
         <label className="meal-label">
           Choose a meal type
           <select

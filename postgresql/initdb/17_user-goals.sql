@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS user_goals (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     end_at DATE NOT NULL,
     progress NUMERIC DEFAULT 0,
-    milestone TEXT 
+    milestone TEXT, 
     goal_target_value NUMERIC NOT NULL,
     goal_current_value NUMERIC DEFAULT 0,
     goal_start_value NUMERIC DEFAULT 0,

@@ -8,4 +8,5 @@ INSERT INTO advice_categories (category, status) VALUES
 ('Exercise', 'active'),
 ('Lifestyle', 'active'),
 ('Mental Health', 'active'),
-('Sleep', 'active');
+('Sleep', 'active'),
+('Summary', 'active');
