@@ -116,7 +116,45 @@ export const updateGoal = async (
   }
 };
 
-export const updateGoalProgress = async (userId: string): Promise<void> => {
+export const updateGoalProgress = async (
+  userId: string,
+  goalId: string,
+  goalValue: number,
+  goalDate: string
+): Promise<void> => {
   //TODO: find user goal
   //TODO: find what the current value was set, if it affect the current set goal update the progress value
+};
+
+// 1: Weight
+// 2: Body fat percentage
+// 3: Daily calories intake
+// 4: Pushups
+// 5: Walking minutes
+export const getUserGoalId = async (userId: string): Promise<UserGoal> => {
+  if (!userId) {
+    throw new Error("User ID is required");
+  }
+
+  try {
+    const result = await pool.query(
+      "SELECT goal_id FROM user_goals WHERE user_id = $1",
+      [userId]
+    );
+
+    if (result.rows.length === 0) {
+      throw new Error("No goal found for the user");
+    }
+
+    const row = result.rows[0];
+    const userGoal: UserGoal = {
+      goal_id: row.goal_id,
+      end_date: row.end_at,
+      target_value: row.goal_target_value,
+    };
+    return userGoal;
+  } catch (error) {
+    console.error("Error fetching user goal ID:", error);
+    throw new Error("Failed to fetch user goal ID");
+  }
 };

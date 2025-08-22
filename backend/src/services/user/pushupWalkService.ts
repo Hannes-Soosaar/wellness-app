@@ -63,11 +63,16 @@ export const updatePushupsWalk = async (
         UPDATE user_profiles
         SET current_pushups = CASE WHEN $1>= 0 THEN $1 ELSE current_pushups END, current_walking_minutes = CASE WHEN $2 >= 0 THEN $2 ELSE current_walking_minutes END,
         modified_at = NOW()
-        WHERE user_id = $3`,
+        WHERE user_id = $3 `,
       [currentPushups, currentWalkingMinutes, userId]
     );
 
-    //TODO do wa ws controller link here to update the dashboard
+    await pool.query(
+      `
+      INSERT into profile_history (user_id, pushups, walking_minutes) VALUES ($1, $2, $3)
+      `,
+      [userId, currentPushups, currentWalkingMinutes]
+    );
   } catch (error) {
     console.error("Error updating pushups and walk data:", error);
     throw new Error(`Failed to update pushups and walk data: ${error}`);

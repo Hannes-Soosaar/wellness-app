@@ -50,9 +50,14 @@ export const updatePushupsWalk = async (req: Request, res: Response) => {
 
   try {
     await updatePushupsWalkService(userId, pushupAndWalkData);
+    const goal = await getUserGoalId(userId);
+    if (goal.Id ===  ) {
+
     responseData.success = true;
     responseData.message = "Pushups and walk data updated successfully";
-    await updateGoalProgress;
+
+    
+    await updateGoalProgress (userId, );
 
     res.status(200).json(responseData);
   } catch (error) {

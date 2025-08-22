@@ -43,9 +43,11 @@ const Menu: React.FC = () => {
           <li>
             <Link to="/user/pushupswalk">Traceable</Link>
           </li>
+          {/*
+          Commented out until v2 of the app
           <li>
             <Link to="/user/meal">Meal</Link>
-          </li>
+          </li> */}
           <li>
             <Link to="/user/restrictions">Restrictions</Link>
           </li>
