@@ -12,47 +12,89 @@ const handleRegister: RequestHandler = async (req, res) => {
   console.log("We arrived at the register controller!");
   console.log("request body", req.body);
 
-  try {
-    const { email, password } = req.body;
-    if (!email || !password) {
-      res.status(400).json({ message: "Email and password are required" });
-      return;
+  const { email, password } = req.body;
+  if (!email || !password) {
+    res.status(400).json({ message: "Email and password are required" });
+    return;
+  }
+
+  const existingUser = await pool.query(
+    "SELECT * FROM users WHERE pgp_sym_decrypt(email, $2) = $1",
+    [email, dbKey]
+  );
+
+  if (existingUser.rows[0].password !== null) {
+    res.status(400).json({ message: "Error creating user" });
+    return;
+  }
+
+  if (
+    existingUser.rows[0].google_id == null &&
+    existingUser.rows[0].discord_id === null
+  ) {
+    res.status(400).json({ message: "Error creating user" });
+    return;
+  }
+
+  console.log("Password to hash", password);
+  const hashedPassword = await hashPassword(password);
+  console.log("hashed password", hashedPassword);
+
+  const verificationToken = uuidv4();
+  if (existingUser.rows.length > 0) {
+    try {
+      const result = await pool.query(
+        `
+UPDATE users
+SET email = pgp_sym_encrypt($1, $4),
+    password = $2,
+    verification_token = $3
+WHERE id = $5
+RETURNING id, pgp_sym_decrypt(email,$4), created_at;
+
+    `,
+        [
+          email,
+          hashedPassword,
+          verificationToken,
+          dbKey,
+          existingUser.rows[0].id,
+        ]
+      );
+
+      const newUser = result.rows[0];
+      res.status(200).json({
+        message: "Waiting for email confirmation",
+        user: result.rows[0],
+      });
+
+      sendVerificationEmail(email, verificationToken);
+    } catch (err) {
+      console.error("error during user registration", err);
+      res.status(500).json({ message: " Internal server error." });
     }
-
-    const existingUser = await pool.query(
-      "SELECT * FROM users WHERE pgp_sym_decrypt(email, $2) = $1",
-      [email, dbKey]
-    );
-
-    if (existingUser.rows.length > 0) {
-      res.status(400).json({ message: "Error creating user" });
-      return;
-    }
-    console.log("Password to hash", password);
-    const hashedPassword = await hashPassword(password);
-    console.log("hashed password", hashedPassword);
-
-    const verificationToken = uuidv4();
-
-    const result = await pool.query(
-      `
+  } else {
+    try {
+      const result = await pool.query(
+        `
       INSERT INTO users(email,password,verification_token)
       VALUES (pgp_sym_encrypt($1,$4),$2,$3)
       RETURNING id, pgp_sym_decrypt(email,$4),created_at
     `,
-      [email, hashedPassword, verificationToken, dbKey]
-    );
+        [email, hashedPassword, verificationToken, dbKey]
+      );
 
-    const newUser = result.rows[0];
-    res.status(200).json({
-      message: "Waiting for email confirmation",
-      user: result.rows[0],
-    });
+      const newUser = result.rows[0];
+      res.status(200).json({
+        message: "Waiting for email confirmation",
+        user: result.rows[0],
+      });
 
-    sendVerificationEmail(email, verificationToken);
-  } catch (err) {
-    console.error("error during user registration", err);
-    res.status(500).json({ message: " Internal server error." });
+      sendVerificationEmail(email, verificationToken);
+    } catch (err) {
+      console.error("error during user registration", err);
+      res.status(500).json({ message: " Internal server error." });
+    }
   }
 };
 
@@ -83,36 +125,43 @@ const handleRegisterWithGoogle = async (
   console.log("new user", newUser);
   try {
     const existingUser = await pool.query(
-      "SELECT * FROM users WHERE pgp_sym_decrypt(email, $2) =$1 ",
+      "SELECT id FROM users WHERE pgp_sym_decrypt(email, $2) =$1 ",
       [newUser.email, dbKey]
     );
     if (existingUser.rows.length > 0) {
-      console.log("User already exists");
-      response.isRegistered = true;
-      response.state = "error";
-      response.message = "User already exists try a different login method";
-      //Login!
-      return response;
-    }
-    const verificationToken = uuidv4();
-    try {
-      const result = await pool.query(
+      const userId = existingUser.rows[0].id;
+      await pool.query(
         `
+      UPDATE users
+      SET google_id = $1
+      WHERE id = $2
+      `,
+        [newUser.id, userId]
+      );
+      console.log("User updated successfully");
+    } else {
+      const verificationToken = uuidv4();
+      try {
+        const result = await pool.query(
+          `
       INSERT INTO users(google_id, email, verification_token, is_verified)
       VALUES ($1,pgp_sym_encrypt($2,$4), $3, true)
       `,
-        [newUser.id, newUser.email, verificationToken, dbKey]
-      );
-      if (result.rowCount === 0) {
-        response.state = "error";
-        response.message = "Error creating user";
-        return response;
+          [newUser.id, newUser.email, verificationToken, dbKey]
+        );
+        // it should already catch but just want to handle any edge case and it bugs me that result was not used.
+        if (result.rowCount === 0) {
+          response.state = "error";
+          response.message = "Error creating user";
+          return response;
+        }
+        console.log("User created successfully");
+      } catch (error) {
+        console.error("Error during user registration", error);
+        throw new Error("Internal server error" + error);
       }
-      console.log("User created successfully");
-    } catch (error) {
-      console.error("Error during user registration", error);
-      throw new Error("Internal server error" + error);
     }
+    // sendVerificationEmail(newUser.email, verificationToken);
     response.state = "success";
     response.message = "User created successfully";
     return response;
@@ -142,34 +191,42 @@ const handleRegisterWithDiscord = async (
   console.log("new user", newUser);
   try {
     const existingUser = await pool.query(
-      "SELECT * FROM users WHERE pgp_sym_decrypt(email, $2) = $1 ",
+      "SELECT id FROM users WHERE pgp_sym_decrypt(email, $2) = $1 ",
       [newUser.email, dbKey]
     );
     if (existingUser.rows.length > 0) {
-      console.log("User already exists");
-      response.isRegistered = true;
-      response.state = "error";
-      response.message = "User already exists try a different login method";
-      return response;
-    }
-    const verificationToken = uuidv4();
-    try {
-      const result = await pool.query(
+      const userId = existingUser.rows[0].id;
+      await pool.query(
         `
+      UPDATE users
+      SET discord_id = $1
+      WHERE id = $2
+      `,
+        [newUser.id, userId]
+      );
+      console.log("User updated successfully");
+    } else {
+      const verificationToken = uuidv4();
+      try {
+        const result = await pool.query(
+          `
       INSERT INTO users(discord_id, email, verification_token, is_verified)
       VALUES ($1,pgp_sym_encrypt($2,$4), $3,true)
       `,
-        [newUser.id, newUser.email, verificationToken, dbKey]
-      );
-      if (result.rowCount === 0) {
-        response.state = "error";
-        response.message = "Error creating user";
-        return response;
+          [newUser.id, newUser.email, verificationToken, dbKey]
+        );
+        // it should already catch but just want to handle any edge case and it bugs me that result was not used.
+        if (result.rowCount === 0) {
+          response.state = "error";
+          response.message = "Error creating user";
+          return response;
+        }
+        console.log("User created successfully");
+      } catch (error) {
+        console.error("Error during user registration", error);
+        throw new Error("Internal server error" + error);
       }
-      console.log("User created successfully");
-    } catch (error) {
-      console.error("Error during user registration", error);
-      throw new Error("Internal server error" + error);
+      // sendVerificationEmail(newUser.email, verificationToken);
     }
     response.state = "success";
     response.message = "User created successfully ";

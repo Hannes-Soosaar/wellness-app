@@ -130,63 +130,63 @@ export const discordCallback = async (
     const registrationResult = await handleRegisterWithDiscord(user);
 
     // TODO does not handle veri
-    if (registrationResult.isRegistered) {
-      // GET MFA status by oauth provider Id.
+    // if (registrationResult.isRegistered || ) {
+    // GET MFA status by oauth provider Id.
 
-      // let mfaEnable = false;
-      // try {
-      //   const mfrStatus = await pool.query(
-      //     "SELECT mfa_enabled FROM user_settings WHERE discord_id = $1",
-      //     [user.id]
-      //   );
-      //   mfaEnable = mfrStatus.rows[0]?.mfa_enabled;
-      //   console.log("MFA status:", mfrStatus.rows[0]?.mfa_enabled);
-      // } catch (error) {
-      //   console.error("Error fetching MFA status:", error);
-      // }
-      // if (mfaEnable) {
-      //   getDecryptedUserSecret(user.id);
-      //   console.log("MFA is enabled for this user");
-      //   const preAuthToken = generateTempToken(user.id);
-      //   const mfaUri = await generateMfaUri(user.id);
-      //   res.status(200).json({
-      //     message: "MFA enabled, please verify",
-      //     tempToken: preAuthToken,
-      //     mfaUri: mfaUri, // Need to change this probably
-      //   });
-      //   return;
-      // }
-      const tempToken = generateTempToken(user.id);
-      try {
-        await pool.query(
-          `
+    // let mfaEnable = false;
+    // try {
+    //   const mfrStatus = await pool.query(
+    //     "SELECT mfa_enabled FROM user_settings WHERE discord_id = $1",
+    //     [user.id]
+    //   );
+    //   mfaEnable = mfrStatus.rows[0]?.mfa_enabled;
+    //   console.log("MFA status:", mfrStatus.rows[0]?.mfa_enabled);
+    // } catch (error) {
+    //   console.error("Error fetching MFA status:", error);
+    // }
+    // if (mfaEnable) {
+    //   getDecryptedUserSecret(user.id);
+    //   console.log("MFA is enabled for this user");
+    //   const preAuthToken = generateTempToken(user.id);
+    //   const mfaUri = await generateMfaUri(user.id);
+    //   res.status(200).json({
+    //     message: "MFA enabled, please verify",
+    //     tempToken: preAuthToken,
+    //     mfaUri: mfaUri, // Need to change this probably
+    //   });
+    //   return;
+    // }
+    const tempToken = generateTempToken(user.id);
+    try {
+      await pool.query(
+        `
           UPDATE users
           SET o_auth_token = $1
           WHERE discord_id = $2;
           `,
-          [tempToken, user.id]
-        );
-        console.log("OAuth token inserted successfully");
-        console.log("Redirecting to OAuth login with tempToken:", tempToken);
-        res.redirect(`https://localhost:5173/oauth/login/${tempToken}`);
-        return;
-      } catch (error) {
-        console.error("Error inserting OAuth token:", error);
-        res.redirect("https://localhost:5173/login");
-        return;
-      }
-    }
-
-    if (registrationResult.state === "success") {
-      res.redirect("https://localhost:5173/login");
-    } else {
-      res.redirect(
-        "https://localhost:5173/register?status=error&message=" +
-          encodeURIComponent(registrationResult.message)
+        [tempToken, user.id]
       );
+      console.log("OAuth token inserted successfully");
+      console.log("Redirecting to OAuth login with tempToken:", tempToken);
+      res.redirect(`https://localhost:5173/oauth/login/${tempToken}`);
+      return;
+    } catch (error) {
+      console.error("Error inserting OAuth token:", error);
+      res.redirect("https://localhost:5173/login");
+      return;
     }
+    // }
 
-    console.log("User info:", user);
+    // if (registrationResult.state === "success") {
+    //   res.redirect("https://localhost:5173/login");
+    // } else {
+    //   res.redirect(
+    //     "https://localhost:5173/register?status=error&message=" +
+    //       encodeURIComponent(registrationResult.message)
+    //   );
+    // }
+
+    // console.log("User info:", user);
   } catch (error) {
     console.error("Error during Discord callback:", error);
     res.status(500).json({ message: "Internal server error" });
@@ -240,64 +240,63 @@ export const googleCallback = async (
 
     const registrationResult = await handleRegisterWithGoogle(user);
 
-    if (registrationResult.isRegistered) {
-      // GET MFA status by oauth provider Id.
+    // if (registrationResult.isRegistered) {
+    // GET MFA status by oauth provider Id.
 
-      // let mfaEnable = false;
-      // try {
-      //   const mfrStatus = await pool.query(
-      //     "SELECT mfa_enabled FROM user_settings WHERE discord_id = $1",
-      //     [user.id]
-      //   );
-      //   mfaEnable = mfrStatus.rows[0]?.mfa_enabled;
-      //   console.log("MFA status:", mfrStatus.rows[0]?.mfa_enabled);
-      // } catch (error) {
-      //   console.error("Error fetching MFA status:", error);
-      // }
-      // if (mfaEnable) {
-      //   getDecryptedUserSecret(user.id);
-      //   console.log("MFA is enabled for this user");
-      //   const preAuthToken = generateTempToken(user.id);
-      //   const mfaUri = await generateMfaUri(user.id);
-      //   res.status(200).json({
-      //     message: "MFA enabled, please verify",
-      //     tempToken: preAuthToken,
-      //     mfaUri: mfaUri, // Need to change this probably
-      //   });
-      //   return;
-      // }
-      const tempToken = generateTempToken(user.id);
-      try {
-        await pool.query(
-          `
+    // let mfaEnable = false;
+    // try {
+    //   const mfrStatus = await pool.query(
+    //     "SELECT mfa_enabled FROM user_settings WHERE discord_id = $1",
+    //     [user.id]
+    //   );
+    //   mfaEnable = mfrStatus.rows[0]?.mfa_enabled;
+    //   console.log("MFA status:", mfrStatus.rows[0]?.mfa_enabled);
+    // } catch (error) {
+    //   console.error("Error fetching MFA status:", error);
+    // }
+    // if (mfaEnable) {
+    //   getDecryptedUserSecret(user.id);
+    //   console.log("MFA is enabled for this user");
+    //   const preAuthToken = generateTempToken(user.id);
+    //   const mfaUri = await generateMfaUri(user.id);
+    //   res.status(200).json({
+    //     message: "MFA enabled, please verify",
+    //     tempToken: preAuthToken,
+    //     mfaUri: mfaUri, // Need to change this probably
+    //   });
+    //   return;
+    // }
+    const tempToken = generateTempToken(user.id);
+    try {
+      await pool.query(
+        `
           UPDATE users
           SET o_auth_token = $1
           WHERE google_id = $2;
           `,
-          [tempToken, user.id]
-        );
-        console.log("OAuth token inserted successfully");
-        console.log("Redirecting to OAuth login with tempToken:", tempToken);
-        res.redirect(`https://localhost:5173/oauth/login/${tempToken}`);
-        return;
-      } catch (error) {
-        console.error("Error inserting OAuth token:", error);
-        res.redirect("https://localhost:5173/login");
-        return;
-      }
-    }
-
-    if (registrationResult.state === "success") {
-      res.redirect("https://localhost:5173/login");
-    } else {
-      res.redirect(
-        "https://localhost:5173/register?status=error&message=" +
-          encodeURIComponent(registrationResult.message)
+        [tempToken, user.id]
       );
+      console.log("OAuth token inserted successfully");
+      console.log("Redirecting to OAuth login with tempToken:", tempToken);
+      res.redirect(`https://localhost:5173/oauth/login/${tempToken}`);
+      return;
+    } catch (error) {
+      console.error("Error inserting OAuth token:", error);
+      res.redirect("https://localhost:5173/login");
+      return;
     }
+  } catch (error) {
+    // if (registrationResult.state === "success") {
+    //   res.redirect("https://localhost:5173/login");
+    // } else {
+    //   res.redirect(
+    //     "https://localhost:5173/register?status=error&message=" +
+    //       encodeURIComponent(registrationResult.message)
+    //   );
+    // }
 
     // res.json(user);
-  } catch (error) {
+    // }
     console.error("Error during Google callback:", error);
     res.status(500).json({ message: "Internal server error" });
   }

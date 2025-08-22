@@ -7,6 +7,8 @@ import { ErrorMessage } from "../components/ErrorMessage";
 import { SuccessMessage } from "../components/SuccessMessage";
 import { QRCodeSVG } from "qrcode.react";
 import { extractErrorMessage } from "../utils/errorUtility";
+import GoogleRegisterButton from "../components/GoogleRegisterButton";
+import DiscordRegisterButton from "../components/DiscordRegisterButton";
 
 interface LoginData {
   email: string;
@@ -139,6 +141,8 @@ const Login: React.FC = () => {
             <button onClick={handleVerifyMfa}>Verify MFA</button>
           </div>
         )}
+        <GoogleRegisterButton />
+        <DiscordRegisterButton />
         <div className="vertical-container">
           <button onClick={handleUpdatePassword}>Forgot Password </button>
           <Link to="/register">Not a user Register an Account</Link>

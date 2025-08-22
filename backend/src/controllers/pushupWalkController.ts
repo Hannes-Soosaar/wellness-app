@@ -6,6 +6,7 @@ import {
 
 import { ResponseData, PushupAndWalk } from "@shared/types/api";
 import { getUserId } from "./verificationController";
+import { updateGoal, updateGoalProgress } from "../services/user/goalService";
 
 export const getPushupsWalk = async (req: Request, res: Response) => {
   let responseData: ResponseData<PushupAndWalk> = {
@@ -51,6 +52,8 @@ export const updatePushupsWalk = async (req: Request, res: Response) => {
     await updatePushupsWalkService(userId, pushupAndWalkData);
     responseData.success = true;
     responseData.message = "Pushups and walk data updated successfully";
+    await updateGoalProgress;
+
     res.status(200).json(responseData);
   } catch (error) {
     console.error("Error updating pushups and walk data:", error);

@@ -113,6 +113,8 @@ TODO: AI recommendations include specific references to user's stated fitness go
 TODO: Verify recommendations explicitly mention and align with the specific fitness goal set in user profile
 TODO: AI health insights exclude any personally identifiable information // personal details are to be added later communicate just user.
 
+
+
 TODO: System implements response validation to filter out recommendations that don't match user's health restrictions
     - Ask the students to describe their approach
 
@@ -134,7 +136,6 @@ TODO: Goal progress includes milestone tracking
 
     Miles stone example:
         Weight: every 5% towards goal
-
         ----
         Activity: each additional day/week  -- implement at the very end
         Habits: streak achievements         -- implement at the very end  
@@ -179,6 +180,7 @@ DONE: password change re-rout + logout
 TODO: CHECK: does not auto update the User Profile and Dashboard data.
 DONE: password rest token has been compromised some how // changed BE token key, probably that messed with the update
 TODO: Have more than one assessment and get the latest so you can have a history
+TODO: Load goal value when a goal is selected
 
 Extra
 Quality of AI-generated health insights and progress evaluations during testing
