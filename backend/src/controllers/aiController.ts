@@ -98,3 +98,75 @@ export const getMonthlyAdvice = async (
     return;
   }
 };
+
+
+
+export const getAdviceController = async (req:Request, res:Response): Promise<void>  => {
+  const adviceType  = req.body;
+
+
+    const response: ResponseData<string> = {
+      success: false,
+      message: "",
+    };
+    const userId = getUserId(req);
+
+
+  try {
+    let instruction = "";
+    let category = "";
+
+    switch (adviceType) {
+      case "summary":
+        instruction =
+          "Summarize the last 7 days of progress and suggest 2 tasks for tomorrow.";
+        category = "wellness";
+        break;
+      case "nutrition":
+        instruction =
+          "Review calorie intake and give nutrition tips for tomorrow.";
+        category = "nutrition";
+        break;
+      case "fitness":
+        instruction =
+          "Review exercise history and suggest a workout plan for tomorrow.";
+        category = "fitness";
+        break;
+      default:
+        return res.status(400).json({ error: "Invalid advice type" });
+    }
+
+
+    // Try generating advice
+    let advice;
+    try {
+      advice = await generateAndSaveUserAdvice(
+        userId,
+        userData,
+        instruction,
+        category
+      );
+    } catch (err) {
+      console.error(
+        "AI advice generation failed, falling back to latest advice"
+      );
+
+      // fallback
+      const fallbackQuery = `
+        SELECT * 
+        FROM user_advice ua
+        JOIN advice_categories ac ON ac.id = ua.advice_category_id
+        WHERE user_id = $1 AND ac.category = $2
+        ORDER BY ua.created_at DESC
+        LIMIT 1;
+      `;
+      const result = await pool.query(fallbackQuery, [userId, category]);
+      advice = result.rows[0];
+    }
+
+    res.json({ advice });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+};

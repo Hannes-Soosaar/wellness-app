@@ -17,4 +17,25 @@
 // query
 
 // summarize
-// for next period
+// for next perioe
+
+export const generateUserDataForGoalAdvice = (userid: string): string => {
+  // Have
+
+  return "";
+};
+export const generateUserDataForWeeklyAdvice = (userid: string): string => {
+  // Have
+
+  return "";
+};
+export const generateUserDataForDailyAdvice = (userid: string): string => {
+  // Have
+
+  return "";
+};
+export const generateUserDataForMonthlyAdvice = (userid: string): string => {
+  // Have
+
+  return "";
+};

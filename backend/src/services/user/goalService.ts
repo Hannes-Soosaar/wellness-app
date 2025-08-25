@@ -100,7 +100,6 @@ export const updateGoal = async (
       [userId, goalPost.goal_id, goalPost.end_date, goalPost.target_value]
     );
 
-    // TODO: see if we need to update anything on other tables
     if (updateResult.rowCount === 0) {
       throw new Error("Failed to update user goal");
     }
@@ -116,6 +115,7 @@ export const updateGoal = async (
   }
 };
 
+// called, when, there is a profile update.
 export const updateGoalProgress = async (
   userId: string,
   goalId: string,
