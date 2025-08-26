@@ -1,5 +1,4 @@
 // Exporting out everything from here
-import { generateUserDataForGoalAdvice } from "./advicePrompts";
+import { generateDataForGoalAdvice } from "./advicePrompts";
 
-
-export { generateUserDataForGoalAdvice };
+export { generateDataForGoalAdvice as generateUserDataForGoalAdvice };

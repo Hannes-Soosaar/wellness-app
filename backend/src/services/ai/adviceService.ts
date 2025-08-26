@@ -1,5 +1,6 @@
 import { pool } from "@backend/server";
 import { generateUserAdvice } from "./aiService";
+import { UserPromptData } from "@backend/src/models/aiModels";
 
 export const createAiAdvice = async (userId: string): Promise<void> => {
   let userData: string =
@@ -27,3 +28,7 @@ export const createAiAdvice = async (userId: string): Promise<void> => {
     throw new Error("Failed to create AI advice");
   }
 };
+
+export const getUserDataForPrompt = async (
+  userId: string
+): Promise<UserPromptData> => {};
