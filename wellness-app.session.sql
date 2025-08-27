@@ -1,5 +1,5 @@
 
--- DROP TABLE profile_history
+DROP TABLE user_advice;
 
 -- SELECT id from users WHERE is_verified = TRUE;
 
@@ -8,7 +8,7 @@
 -- VALUES ('51a5b7cf-ab07-4333-b83b-5e2c7516d017');
 
 
-DELETE FROM users WHERE failed_attempts = '0'
+-- DELETE FROM users WHERE failed_attempts = '0'
 
 
 -- INSERT INTO user_activities (

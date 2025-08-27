@@ -1,14 +1,10 @@
 import { Router } from "express";
-import {
-  getAiAdvice,
-  getWeeklyAdvice,
-  getMonthlyAdvice,
-} from "../controllers/aiController";
+import { getAiAdvice } from "../controllers/aiController";
+import test from "node:test";
 
 const aiRouter = Router();
 
-aiRouter.get("/advice", getAiAdvice);
-aiRouter.get("/advice/week", getWeeklyAdvice); // summary of the week and advice for the next week
-aiRouter.get("/advice/month", getMonthlyAdvice); // summary of the month and advice for the next month
+// aiRouter.post("/advice", getAiAdvice);
+aiRouter.post("/advice", getAiAdvice);
 
 export default aiRouter;

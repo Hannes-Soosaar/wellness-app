@@ -121,9 +121,9 @@ TODO: System displays cached recommendations when AI service is unavailable // s
 TODO: Verify system shows most recent cached recommendations when AI service connection is disabled //
 
 
+DONE: System generates weekly and monthly health summaries including progress and key metrics       AI does it what ever we think is key we can ask.               // what are key metrics
 
-TODO: System generates weekly and monthly health summaries including progress and key metrics                     // what are key metrics
-TODO: Verify health summary includes week's activity levels, wellness score changes, and progress towards goals   //
+TODO: Verify health summary includes week's activity levels, wellness score changes, and progress towards goals   // 
 
 
 
@@ -181,6 +181,7 @@ TODO: CHECK: does not auto update the User Profile and Dashboard data.
 DONE: password rest token has been compromised some how // changed BE token key, probably that messed with the update
 TODO: Have more than one assessment and get the latest so you can have a history
 TODO: Load goal value when a goal is selected
+TODO: handle refreshToken expire and reload grasefully when accessToken expires
 
 Extra
 Quality of AI-generated health insights and progress evaluations during testing

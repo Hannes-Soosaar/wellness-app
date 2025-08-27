@@ -9,32 +9,32 @@ import {
   UserGoalData,
 } from "@backend/src/models/aiModels";
 
-export const createAiAdvice = async (userId: string): Promise<void> => {
-  let userData: string =
-    "I have not started any training yet, and my goal is to lose weight";
-  const createAiAdvice = await generateUserAdvice(userData);
-  if (!createAiAdvice) {
-    throw new Error("Failed to generate AI advice");
-  }
+// export const createAiAdvice = async (userId: string): Promise<void> => {
+//   let userData: string =
+//     "I have not started any training yet, and my goal is to lose weight";
+//   const createAiAdvice = await generateUserAdvice(userData);
+//   if (!createAiAdvice) {
+//     throw new Error("Failed to generate AI advice");
+//   }
 
-  try {
-    const response = await pool.query(
-      `
-    INSERT INTO user_advice (user_id, advice_markdown, advice_metadata, advice_category_id, user_input)
-    VALUES ($1, $2, '{}'::jsonb, 1, $3)
-    RETURNING *
-    `,
-      [userId, createAiAdvice, JSON.stringify(userData)]
-    );
+//   try {
+//     const response = await pool.query(
+//       `
+//     INSERT INTO user_advice (user_id, advice_markdown, advice_metadata, advice_category_id, user_input)
+//     VALUES ($1, $2, '{}'::jsonb, 1, $3)
+//     RETURNING *
+//     `,
+//       [userId, createAiAdvice, JSON.stringify(userData)]
+//     );
 
-    const advice = response.rows[0];
-    console.log("AI advice created successfully:", advice);
-    return advice;
-  } catch (error) {
-    console.error("Error creating AI advice:", error);
-    throw new Error("Failed to create AI advice");
-  }
-};
+//     const advice = response.rows[0];
+//     console.log("AI advice created successfully:", advice);
+//     return advice;
+//   } catch (error) {
+//     console.error("Error creating AI advice:", error);
+//     throw new Error("Failed to create AI advice");
+//   }
+// };
 
 export const getUserDataForPrompt = async (
   userId: string,
@@ -61,7 +61,7 @@ export const getUserDataForPrompt = async (
     // Fetch User Profile Dateless
     const profileResult = await client.query(
       `
-      SELECT user_id, age, weight, bmi, fat_percentage, pushups, walk, neck_circumference, waist_circumference, hip_circumference
+      SELECT user_id, age, current_weight, current_bmi, body_fat_percentage, current_pushups, current_walking_minutes, neck_circumference, waist_circumference, hip_circumference
       FROM user_profiles
       WHERE user_id = $1
     `,
@@ -101,7 +101,7 @@ export const getUserDataForPrompt = async (
     ug.goal_start_value,
     ug.goal_current_value,
     ug.goal_last_progress_date,
-    ug.start_at,
+    ug.created_at,
     ug.end_at
   FROM user_goals ug
   JOIN goals g ON g.id = ug.goal_id
@@ -160,11 +160,11 @@ export const getUserDataForPrompt = async (
 
     const progressDataResult = await client.query(
       `
-      SELECT data, weight, BMI, wellness_score, body_fat_percentage, max_pushups, max_walking_time , neck_circumference, waist_circumference, hip_circumference
+      SELECT date, weight, BMI, wellness_score, body_fat_percentage, max_pushups, max_walking_time , neck_circumference, waist_circumference, hip_circumference
       FROM profile_history
       WHERE user_id = $1
       AND date::date BETWEEN $2::date AND $3::date
-      ORDER BY data ASC
+      ORDER BY date ASC
     `,
       [userId, from, to]
     );
@@ -202,7 +202,7 @@ export const getUserDataForPrompt = async (
 
     const activityDataResult = await client.query(
       `
-      SELECT date, total_duration, activity_type, calories_burned
+      SELECT date, duration, activity_type, calories_burned
       FROM user_activities
       WHERE user_id = $1
       AND date::date BETWEEN $2::date AND $3::date

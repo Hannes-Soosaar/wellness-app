@@ -7,9 +7,8 @@ export interface UserAdvice {
   user_input: string;
   created_at: string;
 }
-
 export interface AiRequestData {
-  userId: string;
+  userId?: string;
   from?: string;
   to?: string;
   type?: string;

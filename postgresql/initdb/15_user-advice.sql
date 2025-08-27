@@ -6,6 +6,5 @@ CREATE TABLE IF NOT EXISTS user_advice(
     advice_category TEXT NOT NULL,
     user_input TEXT NOT NULL,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (advice_category_id) REFERENCES advice_categories(id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );

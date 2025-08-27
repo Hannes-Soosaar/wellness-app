@@ -50,16 +50,13 @@ export const updatePushupsWalk = async (req: Request, res: Response) => {
 
   try {
     await updatePushupsWalkService(userId, pushupAndWalkData);
-    const goal = await getUserGoalId(userId);
-    if (goal.Id ===  ) {
-
-    responseData.success = true;
-    responseData.message = "Pushups and walk data updated successfully";
-
-    
-    await updateGoalProgress (userId, );
-
+    // const goal = await getUserGoalId(userId);
+    // if (goal.Id === "") {
+    //   responseData.success = true;
+    //   responseData.message = "Pushups and walk data updated successfully";
+    //   // await updateGoalProgress (userId, goal.Id);
     res.status(200).json(responseData);
+    // }
   } catch (error) {
     console.error("Error updating pushups and walk data:", error);
     responseData.error = "Failed to update pushups and walk data";

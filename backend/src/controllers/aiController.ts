@@ -4,7 +4,7 @@ import { generateUserAdvice, getSavedAdvice } from "../services/ai/aiService";
 import { getUserId } from "./verificationController";
 import { generatePrompt } from "../prompts/advicePrompts";
 import { saveAiAdvice } from "../services/ai/aiService";
-import { ca } from "zod/v4/locales/index.cjs";
+import { AiRequestContent } from "../models/aiModels";
 
 export const getAiAdvice = async (
   req: Request,
@@ -22,43 +22,44 @@ export const getAiAdvice = async (
     return;
   }
   try {
-    const prompt = await generatePrompt(userId, req.body);
+    const prompt: AiRequestContent = await generatePrompt(userId, req.body);
 
     if (!prompt) {
       throw new Error("Failed to generate prompt");
     }
 
     const advice = await generateUserAdvice(prompt);
+
     if (advice) {
       response.success = true;
       response.data = advice;
       response.message = "AI advice generated successfully";
       try {
         console.log("Saving AI advice to database for user:", userId);
-        await saveAiAdvice(userId, advice, prompt, req.body.category);
+        await saveAiAdvice(userId, advice, prompt, req.body.type);
         console.log("AI advice saved successfully for user:", userId);
       } catch (error) {
         console.error("Error saving AI advice:", error);
       }
     }
-
     res.status(200).json(response);
   } catch (error) {
     console.error("Error generating AI advice:", error);
     response.error = "Failed to generate AI advice";
     try {
-      const advice = await getSavedAdvice(userId, req.body.category);
+      const advice = await getSavedAdvice(userId, req.body.type);
       if (advice) {
         response.success = true;
         response.data = advice;
         response.message = "Fallback to latest saved advice";
       }
+      res.status(200).json(response);
     } catch (error) {
       console.error("Error fetching saved advice:", error);
       response.error = "Failed to get live advice and fetch saved advice";
+      res.status(500).json(response);
+      return;
     }
-    res.status(500).json(response);
-    return;
   }
 };
 
