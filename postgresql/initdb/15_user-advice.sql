@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS user_advice(
     user_id UUID NOT NULL,
     advice_markdown TEXT NOT NULL,
     advice_metadata JSONB,
-    advice_category_id INT NOT NULL,
+    advice_category TEXT NOT NULL,
     user_input TEXT NOT NULL,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,

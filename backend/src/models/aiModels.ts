@@ -1,18 +1,21 @@
 export interface AiRequestContent {
-  useData: UserPromptData;
-  request: string;
+  userPrompt: string;
+  systemMessage: string;
+  tokens: number;
 }
 
 // Add goal history
 export interface UserGoalDataPoint {
   date: string;
-  goal_current_value: number;
+  goalCurrentValue: number;
+  goalTitle: string;
 }
 
 // Add the current goal
 export interface UserGoalData {
   userGoal: string;
   goalTargetValue: number;
+  goalCurrentValue: number;
   goalStartValue: number;
   startAt: string;
   endAt: string;

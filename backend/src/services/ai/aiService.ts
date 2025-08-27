@@ -1,5 +1,7 @@
 import dotenv from "dotenv";
 import OpenAI from "openai";
+import { AiRequestContent } from "../../models/aiModels";
+import { pool } from "@backend/server";
 
 dotenv.config();
 
@@ -23,19 +25,17 @@ export const getEmbedding = async (text: string): Promise<number[]> => {
   }
 };
 
-export const generateUserAdvice = async (userData: any) => {
-  console.log("Generating advice for user data:", userData);
-  const prompt = `
-    You are a wellness assistant.
-    Here is the user data: ${JSON.stringify(userData, null, 2)}.
-    Provide concise, actionable advice in markdown.
-  `;
+export const generateUserAdvice = async (requestContent: AiRequestContent) => {
+  console.log("Generating advice for user data:", requestContent.userPrompt);
   try {
     const response = await client.chat.completions.create({
-      model: "llama-3.1-8b-instruct", // or another chat-capable model
-      messages: [{ role: "user", content: prompt }],
+      model: "llama-3.1-8b-instruct",
+      messages: [
+        { role: "system", content: requestContent.systemMessage },
+        { role: "user", content: requestContent.userPrompt },
+      ],
       temperature: 0.7,
-      max_tokens: 300,
+      max_tokens: requestContent.tokens || 500,
     });
     const advice = response.choices[0].message.content;
     console.log("AI response:", advice);
@@ -43,5 +43,52 @@ export const generateUserAdvice = async (userData: any) => {
   } catch (error) {
     console.error("Error generating advice:", error);
     throw new Error("Failed to generate advice");
+  }
+};
+
+export const saveAiAdvice = async (
+  userId: string,
+  advice: string, // response from AI
+  prompt: AiRequestContent,
+  category: string // original user request content
+): Promise<void> => {
+  try {
+    console.log("Saving AI advice to database for user:", userId);
+    const response = await pool.query(
+      `
+    INSERT INTO user_advice (user_id, advice_markdown, advice_category, user_input)
+    VALUES ($1, $2, $3, $4)
+    RETURNING *
+    `,
+      [userId, advice, category, prompt]
+    );
+    console.log("AI advice saved successfully for user:", userId);
+  } catch (error) {
+    console.error("Error saving AI advice:", error);
+    throw new Error("Failed to save AI advice");
+  }
+};
+
+export const getSavedAdvice = async (
+  userId: string,
+  category: string
+): Promise<string> => {
+  try {
+    const response = await pool.query(
+      `
+    SELECT advice FROM user_advice
+    WHERE user_id = $1 AND advice_category = $2
+    ORDER BY created_at DESC
+    LIMIT 1
+    `,
+      [userId, category]
+    );
+    if (response.rows.length === 0) {
+      throw new Error("No advice found for the user in this category");
+    }
+    return response.rows[0];
+  } catch (error) {
+    console.error("Error fetching saved AI advice:", error);
+    throw new Error("Failed to fetch saved AI advice");
   }
 };
