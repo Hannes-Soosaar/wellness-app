@@ -4,7 +4,7 @@ The README file contains a clear project overview, setup instructions, and usage
 DONE// Explain section/
 
         Student can explain how PII removal affects AI model's ability to generate personalized recommendations
-                // the removal of PII does not affect the AI's ability to generate personalized recommendations, as all users are anonymouse and never get sent to the AI. any personalized touches to the replies are added in the FE.
+                // the removal of PII does not affect the AI's ability to generate personalized recommendations, as all users are anonymous and never get sent to the AI. any personalized touches to the replies are added in the FE.
 
         Student can explain their strategy for detecting and handling AI hallucinations in health recommendations
                 // my current model does not implement all safe guards but the following are known methods for health related recommendations.
@@ -119,9 +119,9 @@ TODO: Goal progress includes milestone tracking
         Activity: each additional day/week  -- implement at the very end
         Habits: streak achievements         -- implement at the very end  
 
+
 -- the below is done in several steps and on different pages---
         Comparison view shows current vs target metrics, weekly/monthly progress comparison, health trend analysis and AI recommendations
-
 DONE: AI insights are visually presented with priority-based highlighting -- Handle with markdown
 DONE: Verify insights are displayed with high/medium/low priority indicators and include expandable details // dunno what this mean.
 
@@ -140,8 +140,12 @@ DONE: Verify rate limit kicks in after [x] requests within 1 minute
 DONE: Dashboard loads placeholder UI when data is being fetched //very basic text for now, can be implemented as an Element 
 
 
-//Bugs
-TOOD: if there is no name yet, just display Welcome!
+//BUGS
+
+TODO: full reload on AccessToke update is require, touch home for quick fix.
+TODO: Divide the header menu such that home is on the left and Login/Logout Register is on the right 
+TODO: Link terms and conditions to the register pager 
+TODO: if there is no name yet, just display Welcome!
 TODO: Register retains values entered, if the T&C is accepted
 TODO: can only use one method of logon, if PW is set, one can logon with PW if registered with google of Discord
 TODO: user Name does not render on the welcome screen when profile update is done
@@ -155,51 +159,7 @@ DONE: password rest token has been compromised some how // changed BE token key,
 TODO: Have more than one assessment and get the latest so you can have a history
 TODO: Load goal value when a goal is selected
 TODO: handle refreshToken expire and reload grasefully when accessToken expires
-TODO: Minute restrictions are not understandable for the AI
-
-Extra
-Quality of AI-generated health insights and progress evaluations during testing
-Insights and evaluations generated are accurate, relevant, actionable
-Relevance and practicality of AI-generated weekly and monthly health summaries and recommendations
-System's handling of AI service limitations during testing (rate limits, availability)
-Student has implemented additional technologies, security enhancements and/or features beyond the core requirements
-
-
-//CORNERS 
-        -removed mfa and email verification for the oAuth for now. iplement once everything else is working
-
-occupation type
-activity level
-weight loss, muscle gain, general fitness, desired activity level
-
-Initial fitness assessment:
-
-Current weekly activity frequency (0-7 days)
-Exercise types (cardio, strength, flexibility, sports)
-Average session duration (15-30min, 30-60min, 60+ min)
-Self-assessed fitness level (beginner/intermediate/advanced)
-Preferred exercise environment (home, gym, outdoors)
-Time of day preference to exercise (morning, afternoon, evening)
-Current endurance level (can run/walk for X minutes)
-Basic strength indicators (can do X pushups/squats)
-...
-
-
-Profile Management:
-
-Edit/update health metrics 
-
-View historical changes
-
-Export personal data including historical metrics
-
-Privacy settings and data sharing preferences
-
-What data can be used
-What data is visible publicly
-
-Email notification preferences
-
+TODO: Minutes restrictions are not understandable for the AI
 
 
 TODO: Unify color schema
@@ -223,4 +183,17 @@ Button
 | **Text**        | White           | `#FFFFFF` | For contrast on the green background |
 | **Hover BG**    | Slightly darker | `#91B6A8` | Adds interactive feedback            |
 | **Disabled BG** | Light Gray      | `#E0E7E9` | Shows it’s not active or tappable    |
+
+
+
+Extra
+Quality of AI-generated health insights and progress evaluations during testing
+Insights and evaluations generated are accurate, relevant, actionable
+Relevance and practicality of AI-generated weekly and monthly health summaries and recommendations
+System's handling of AI service limitations during testing (rate limits, availability)
+Student has implemented additional technologies, security enhancements and/or features beyond the core requirements
+
+
+//CORNERS 
+-removed mfa and email verification for the oAuth for now. iplement once everything else is working
 

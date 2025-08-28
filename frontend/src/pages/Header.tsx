@@ -26,7 +26,8 @@ const Header: React.FC<Props> = ({ isLoggedIn }) => {
   return (
     <nav className="header-menu">
       <a href="/">Home</a>
-      {isLoggedIn ? null : <a href="/about">About</a>}
+      <div className="spacer"></div>
+      {/* {isLoggedIn ? null : <a href="/about">About</a>} */}
       {isLoggedIn ? null : <a href="/login">Login</a>}
       {isLoggedIn ? null : <a href="/register">Register</a>}
       {isLoggedIn ? <a href="/logout">Logout</a> : null}

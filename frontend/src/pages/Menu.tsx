@@ -1,16 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
-interface MenuProps {
-  userName: string;
-}
-
-let userName: string = "John Doe";
 
 const Menu: React.FC = () => {
   return (
     <>
       <nav className="vertical-container">
-        <h3>{userName}</h3>
+        <h3>Main Menu </h3>
         <ul>
           <li>
             <Link to="/user/profile">Profile</Link>
@@ -38,10 +33,10 @@ const Menu: React.FC = () => {
             <Link to="/user/activity">Activity</Link>
           </li>
           <li>
-            <Link to="/user/progress">Progress</Link>
+            <Link to="/user/progress">Physical Progress</Link>
           </li>
           <li>
-            <Link to="/user/pushupswalk">Traceable</Link>
+            <Link to="/user/pushupswalk">Performance Progress</Link>
           </li>
           {/*
           Commented out until v2 of the app

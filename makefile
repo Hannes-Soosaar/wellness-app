@@ -24,9 +24,6 @@ clear:
 
 startFe:
 	cd frontend && npm run dev
-stopFe:
-
-
 #BE commands
 startBe:
 	cd backend && npx nodemon --exec "npx tsx src/index.ts"
@@ -37,6 +34,3 @@ startBe:
 launchApp:
 	cd frontend && npm run dev &
 	cd backend && npx nodemon --exec "npx tsx src/index.ts"
-
-
-#Python utils
