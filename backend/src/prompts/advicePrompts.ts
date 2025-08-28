@@ -58,6 +58,8 @@ export const generatePrompt = async (
   - Use bold and italics to emphasize important points.
   - Include relevant emojis to make the content more engaging.
   - Ensure the content is clear, concise, and easy to understand.
+  - All input is in SI units kg, cm, meters, kilometers, Celsius, kcal, and time in Minutes.
+  - All responses and suggestions should also be in SI units  kg, cm, meters, kilometers, Celsius, kcal, and time in Minutes.
 `;
   prompt += formattingGuidelines;
 

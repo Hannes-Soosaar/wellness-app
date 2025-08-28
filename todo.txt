@@ -57,17 +57,12 @@ DONE// Explain section/
                 // I chose the data visualization with the most support, manuals and compatibility with  a React front end, as this was my fist time using visualization, having lots of info was the most important criteria. 
 
 
-
 DONE: User receives an email with verification link after registration
 DONE Access token expires after [x] minutes of inactivity
 DONE: The code is well-organized, properly commented, and follows best practices for the chosen programming language(s)
 DONE: Password reset is handled via email
-
-
-PROGRESS: Authentication options include email-password and at least 2 OAuth providers (Google/GIt +  1 more)
-
+DONE: Authentication options include email-password and at least 2 OAuth providers (Google/GIt +  1 more)
 DONE: Verify functionality of 2FA
-
 DONE: New access token is issued when valid refresh token is provided // add token logic
 DONE: User cannot access protected routes without verifying email // no login without being verified. 
     DONE: setup error handling on the FE 
@@ -77,9 +72,6 @@ DONE: Platform provides clear data usage consent with explicit user approval bef
         -At minimum, it includes what data is collected and how it's used
         DONE: formatting and 
 --        
-
-
-
 
 DONE: (FE implement): Users can optionally enable two-factor authentication
 DONE: Platform collects basic demographics, physical metrics, lifestyle indicators, dietary preferences and restrictions, wellness goals. (personalized to match my use case)
@@ -105,33 +97,22 @@ DONE: Update the values read from the DB as constants something more use full
 
 
 AI section
-
 DONE: System generates different health insights when user's goals change
 DONE: Verify insight adjustment after changing user goals from one type to another (e.g., weight loss to muscle gain)
 DONE: AI health insights exclude any personally identifiable information // personal details are to be added later communicate just user.
-
-
-TODO: AI recommendations include specific references to user's stated fitness goals
-TODO: Verify recommendations explicitly mention and align with the specific fitness goal set in user profile
-TODO: System implements response validation to filter out recommendations that don't match user's health restrictions
+DONE: AI recommendations include specific references to user's stated fitness goals
+DONE: Verify recommendations explicitly mention and align with the specific fitness goal set in user profile
+DONE: System implements response validation to filter out recommendations that don't match user's health restrictions
     - Ask the students to describe their approach
-
-
-TODO: System displays cached recommendations when AI service is unavailable // setupHistory
-TODO: Verify system shows most recent cached recommendations when AI service connection is disabled //
-
-
+DONE: System displays cached recommendations when AI service is unavailable // setupHistory
+DONE: Verify system shows most recent cached recommendations when AI service connection is disabled //
 DONE: System generates weekly and monthly health summaries including progress and key metrics       AI does it what ever we think is key we can ask.               // what are key metrics
-
-TODO: Verify health summary includes week's activity levels, wellness score changes, and progress towards goals   // 
-
-
+DONE: Verify health summary includes week's activity levels, wellness score changes, and progress towards goals   //  no wellness score is implemented beyond the assessment
 
 
 TODO: Weight progress chart displays goal weight as a reference line
 IN-PROGRESS: Health Dashboard shows BMI, wellness score, progress towards goals and AI insights based on user data  // this is the User main header element.
 TODO: Goal progress includes milestone tracking
-
     Miles stone example:
         Weight: every 5% towards goal
         ----
@@ -141,24 +122,16 @@ TODO: Goal progress includes milestone tracking
 -- the below is done in several steps and on different pages---
         Comparison view shows current vs target metrics, weekly/monthly progress comparison, health trend analysis and AI recommendations
 
-
-
-
 DONE: AI insights are visually presented with priority-based highlighting -- Handle with markdown
-O: Verify insights are displayed with high/medium/low priority indicators and include expandable details // dunno what this mean.
+DONE: Verify insights are displayed with high/medium/low priority indicators and include expandable details // dunno what this mean.
 
 
 -- CHARTS
-
 DONE: Charts resize without data loss on mobile devices (feature in recharts)
 DONE: Progress chart shows weight tracking over time, wellness score evolution and 
-
-
 DONE: separate chart: activity level changes // Implemented my vision with dimension metrics
 DONE: Error messages appear without page reload when API requests fail
 DONE: Submit health profile form with invalid BMI value (e.g., -1) and verify error message appears without page refresh //input error handling from FE not possible.
-
-
 
 // Rate limit
 DONE: System blocks rapid-fire API requests from the same user
@@ -182,6 +155,7 @@ DONE: password rest token has been compromised some how // changed BE token key,
 TODO: Have more than one assessment and get the latest so you can have a history
 TODO: Load goal value when a goal is selected
 TODO: handle refreshToken expire and reload grasefully when accessToken expires
+TODO: Minute restrictions are not understandable for the AI
 
 Extra
 Quality of AI-generated health insights and progress evaluations during testing
@@ -225,4 +199,28 @@ What data can be used
 What data is visible publicly
 
 Email notification preferences
+
+
+
+TODO: Unify color schema
+
+Color Schema
+
+| Purpose              | Color                    | Hex Code  | Notes                                      |
+| -------------------- | ------------------------ | --------- | ------------------------------------------ |
+| **Background**       | Soft White / Mist Gray   | `#F9FAF9` | Clean, soft base – keeps things light.     |
+| **Primary**          | Sage Green               | `#A8CABA` | Calming and organic, great for buttons.    |
+| **Accent**           | Blush Rose / Muted Coral | `#F3D9DC` | A gentle warmth – great for highlights.    |
+| **Text (Dark)**      | Charcoal / Graphite      | `#2E2E2E` | Clean and accessible on light backgrounds. |
+| **Secondary Text**   | Cool Gray                | `#7D8B8D` | Subtle contrast for labels, placeholders.  |
+| **Success / Active** | Fresh Mint               | `#BCE2D0` | Reinforces progress, calm energy.          |
+
+Button
+
+| Element         | Suggested Color | Hex       | Notes                                |
+| --------------- | --------------- | --------- | ------------------------------------ |
+| **Background**  | Sage Green      | `#A8CABA` | Main color of the button             |
+| **Text**        | White           | `#FFFFFF` | For contrast on the green background |
+| **Hover BG**    | Slightly darker | `#91B6A8` | Adds interactive feedback            |
+| **Disabled BG** | Light Gray      | `#E0E7E9` | Shows it’s not active or tappable    |
 

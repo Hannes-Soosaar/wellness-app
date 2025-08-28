@@ -1,4 +1,4 @@
-
+-- Not needed anymore
 
 -- Insert User 1
 INSERT INTO users (email, password, is_verified, last_login, verification_token, password_reset_token, password_reset_expires, role, status)
