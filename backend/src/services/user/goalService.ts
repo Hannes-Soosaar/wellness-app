@@ -7,7 +7,7 @@ export const getGoals = async (userId: string): Promise<GoalData> => {
   }
 
   const client = await pool.connect();
-
+  console.log("Connected to the database");
   try {
     client.query("BEGIN");
 
@@ -15,6 +15,7 @@ export const getGoals = async (userId: string): Promise<GoalData> => {
       "SELECT * FROM user_goals WHERE user_id = $1",
       [userId]
     );
+    console.log("Query result:", result.rows[0]);
 
     if (result.rows.length === 0) {
       const userGoal: UserGoal = {
@@ -23,11 +24,13 @@ export const getGoals = async (userId: string): Promise<GoalData> => {
         target_value: 0,
       };
     }
-    // how to proper assign the result to the userGoal
+
+    console.log("Fetched user goal:", result.rows[0]);
+
     const userGoal = {
       goal_id: result.rows[0]?.goal_id || 0,
-      end_date: result.rows[0]?.end_date || "",
-      target_value: result.rows[0]?.target_value || 0,
+      end_date: result.rows[0]?.end_at || "",
+      target_value: result.rows[0]?.goal_target_value || 0,
     };
 
     // No need to map could just say the query returns the type of <availableGoals>
@@ -85,8 +88,6 @@ export const updateGoal = async (
   };
 
   const client = await pool.connect();
-
-  //TODO: Add the start value from the user_profile
 
   try {
     client.query("BEGIN");

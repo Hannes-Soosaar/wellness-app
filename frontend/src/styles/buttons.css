@@ -15,8 +15,7 @@ button {
 }
 
 button:hover {
-  border-color: #2e2e2e;
-  background-color: #a8caba;
+  background-color: #7ea392;
 }
 
 button:focus,
@@ -32,4 +31,44 @@ button:focus-visible {
   cursor: pointer;
   font: inherit;
   padding: 0;
+}
+
+.login-container button,
+.google-register-button {
+  gap: 0.5rem;
+  width: 100%; /* make all buttons full width */
+  max-width: 300px; /* optional: cap max size */
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.google-register-button {
+  background-color: #db4437;
+  color: #fff;
+}
+.google-register-button:hover {
+  background-color: #c33d30;
+  border-color: #db4437;
+}
+
+.discord-register-button {
+  background-color: #5865f2;
+  color: #fff;
+}
+
+.discord-register-button:hover {
+  background-color: #4752c4;
+  border-color: #5865f2;
+}
+
+.login-container button[type="submit"] {
+  background-color: #91b6a8; /* green login button */
+  color: black;
+}
+
+.login-container button[type="submit"]:hover {
+  background-color: #7ea392;
+  border-color: #a8caba;
 }

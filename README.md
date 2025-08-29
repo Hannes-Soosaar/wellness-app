@@ -1,43 +1,47 @@
 
 # Wellness App
-**Last update 28.08.2025 by Hannes Soosaar**
 
 Was created by Hannes Soosaar with the focus on provide a friendly environment to replace that excel table you have that will keep you on track to reach your health related goals hitting the target every time.
 
-You can only improve what you measure and track. So the only thing you need to worry is keeping a record. you might be wondering how do I know what and when to log.No worries the wellness-app has your back, just set your goals and targets and our AI powered platform will let you know exactly what your next move should be. 
+You can only improve what you measure and track. So the only thing you need to worry is keeping a record. you might be wondering how do I know what and when to log.No worries the wellness-app has your back, just set your goals and targets and our AI powered platform will let you know exactly what your next move should be.
 
 - Exercise/Activity diary.
 - Calories/Food diary. (intake not implemented yet.)
 - Physical parameters diary, for body fat and composition tracking.
-- Wellness assessment. 
-- Simple strength and endurance tracking. 
+- Wellness assessment.
+- Simple strength and endurance tracking.
 
+*Last update 28.08.2025 by Hannes Soosaar*
 
-# Getting up and running
+## Getting up and running
 
-## Hosted live version
+### Hosted live version
+
 Coming soon!
 
 A functioning demo website can be found at `wellness-agent.eu`. Available after 30.08.2025
 
-## Script Setup
+### Script Setup
 
-    On Ubuntu machines using apt package manager there is a setup script.
+On Ubuntu machines using apt package manager there is a setup script.
 
-    The Script setup uses bash to check software installed if not present install required software also install all project dependencies.
+The Script setup uses bash to check software installed if not present install required software also install all project dependencies.
 
-    **How to use the script** 
+### How to use the script
 
-    1. Navigate to the project root where you have cloned the project from Gitea.
-`cd /path/to/project-root-folder/$`
+1. Navigate to the project root where you have cloned the project from Gitea
 
-    2. Make the setup file executable      
-`sudo chmod +x setup.sh`
+    `cd /path/to/project-root-folder/$`
 
-    3. Run the setup
-`./setup.sh`
+2. Make the setup file executable
 
-    The setup process will guide you through the rest of the process. In the end you will be asked if you would like to start services, If you do start the services using the *setup.sh* script please note that the front end and Backend console outputs and errors will be in one terminal.
+    `sudo chmod +x setup.sh`
+
+3. Run the setup
+
+    `./setup.sh`
+
+The setup process will guide you through the rest of the process. In the end you will be asked if you would like to start services, If you do start the services using the *setup.sh* script please note that the front end and Backend console outputs and errors will be in one terminal.
 
 ## Manual  Setup
 
@@ -50,16 +54,17 @@ A functioning demo website can be found at `wellness-agent.eu`. Available after 
 
 Other dependencies will be installed using the node package manager (npm). for a full list of dependencies and version pleas check the package.json file in both the backend and frontend folder
 examples of dependencies that will be installed through npm
+
 - TypeScript (will be installed with npm install)
 - React  ( will be installed with npm install)
 - Vite  ( will be installed with npm install)
-- . . . 
+- . . .
 
 ## Installing dependency
 
 The dependencies for the front end and backend are both managed by node package manager.
 
- **Front End**
+ ### Front End
 
 1. Navigate to the frontend folder withing the project.
 
@@ -69,7 +74,7 @@ The dependencies for the front end and backend are both managed by node package 
 
     `sudo npm install`
 
-**Backe End**
+### Backe End
 
 1. Navigate to the backend folder withing the project.
 
@@ -85,11 +90,11 @@ There are two ways of starting the serves and services. For best troubleshooting
 
 1. Using the makefile commands
 
-    -  Navigate to the the project root directory.
+    - Navigate to the the project root directory.
         `cd /path/to/project-root-folder/$`
-    -  Start the Database.
+    - Start the Database.
         ` make up `
-    - Open a new terminal to the project folder and run 
+    - Open a new terminal to the project folder and run
         `make startFe`
     - Open a new terminal to the project folder and run
         `makes startBe`
@@ -112,14 +117,14 @@ There are two ways of starting the serves and services. For best troubleshooting
 
  The app use HTTPS to ensure all data between servers and the client is moved securely and to comply with GDPR rule.
 
- As the development model currently uses self issued certification, the browser will still need some convincing the website is legitimate. 
+ As the development model currently uses self issued certification, the browser will still need some convincing the website is legitimate.
 
 for both the backend  localhost:5000 and front end localhost:5173 the browser exceptions must be set, in chrome click the *Not Secure* button before the webpage address and do the following.
 
 - Under *Cookies and Site Data* allow third party cookies
-- Under *Site Settings* there are more options, based on your configuration some changes might be needed. like *JS allowed* and /*images* 
+- Under *Site Settings* there are more options, based on your configuration some changes might be needed. like *JS allowed* and /*images*
 
-**Creating an account**
+## Creating an account
 
 *There is no password length of complexity checking during the development of the app so for testing you can use a simple password for real accounts its  reccomended to have a password that is at-least 12 characters that include numbers and symbols and is truely random*
 
@@ -129,29 +134,30 @@ for both the backend  localhost:5000 and front end localhost:5173 the browser ex
     - you can request to change the password from settings to be able to use a regular account too.
     - does not require email verification as this has been done by google or discord
 
-**First time login**
+## First time login
 
 you will not be allowed to login, before you have verified you email. Please verify your email before you login.
 
-When you first login, there will be a few errors shown and a generic Welcome is used.* 
+When you first login, there will be a few errors shown and a generic Welcome is used.*
     - As the first step, please fill in your profile details to get personalized and get rid of most errors.
 
  **This is a known bug and is on the fix-list with low priority.*
 
-
 ## login with MFA
 
-It is recommended to use MFA on all accounts, also the 
+It is recommended to use MFA on all accounts, also the
 
-    The app uses **TOTP** for *MFA* authentication.  MFA can be toggled from the user Settings page.
+The app uses **TOTP** for *MFA* authentication.  MFA can be toggled from the user Settings page.
 
-    The MFA login was tested with gooogle chrome and  the chrome extension **"Authenticator"** 
-    
-    link to the chrome extension website `https://chromewebstore.google.com/detail/authenticator/bhghoamapcdpbohphigoooaddinpkbai`
+The MFA login was tested with gooogle chrome and  the chrome extension **"Authenticator"**
 
-# The Wellness App
+link to the chrome extension website `https://chromewebstore.google.com/detail/authenticator/bhghoamapcdpbohphigoooaddinpkbai`
 
-## Profile page 
+## The Wellness App
+Overview of the app pages and possibilities.
+
+## Profile page
+
 The profile page holds your basic metrics, that will be used to calculate your BMI and body fat percentage , it is assumed this will be filled in once. and other subsequent changes are made through the Update menu. using the Physical Properties page
 
 ## Assessment page
@@ -165,8 +171,9 @@ Age is not considered when calculating your wellness score based on the assessme
 Give you a graphical and Table views of you progress and goals.The page uses folding menus, so pleas remember to open and expand  your overviews  
 
 Progress chart-
- Will show you the change of you  physical progress along with your goal if it is weight or body fat related. 
- TODO: a bug is preventing the chart from loading. 
+ Will show you the change of you  physical progress along with your goal if it is weight or body fat related.
+
+ TODO: a bug is preventing the chart from loading.
 
 Activities-
 the top level lets you summarize activities by day, by week or by month giving you an overview of the selected periods Activities
@@ -183,13 +190,16 @@ The functioning operations.
 - Update password.
 - Enable Two factor Authentication.
 - Enable AI
+  
     TODO: implement a check and conditional for getting the request using the DB.
 
-Semi functional but not restrictive yet.
+### *Semi functional but not restrictive yet.*
+
 - Enable Email notifications (no notification have been implemented, but require on script and function to run, best done as a separate service that runs once in a while.
 
-Not functional
-- Allow data sharing with third parties. This should lock your account until you login again and reaccept the terms and conditions and pricacy policy essentially suspending your account. 
+### *Not functional*
+
+- Allow data sharing with third parties. This should lock your account until you login again and reaccept the terms and conditions and pricacy policy essentially suspending your account.
 
 ## Advice page
 
@@ -212,11 +222,11 @@ It has the capable of taking in a date range, to give advice for the range of da
 
 You can choose from one of the following goals.
 
-* Targe body weight.
-* Targe body fat %.
-* Targe calories balance. (not active but can still set)
-* Target strength. aka pushups  (serves no purpose besides, its in a checklist )
-* Target endurance. aka. walking ( serves no purpose besides, its in a checklist)
+- Targe body weight.
+- Targe body fat %.
+- Targe calories balance. (not active but can still set)
+- Target strength. aka pushups  (serves no purpose besides, its in a checklist )
+- Target endurance. aka. walking ( serves no purpose besides, its in a checklist)
 
 All goals need to have a deadline, that the user must choose.
 Only one goal can be the focus as working on any of the goals as will have an effect on all other attributes.
@@ -224,14 +234,13 @@ Only one goal can be the focus as working on any of the goals as will have an ef
 The goal is calculated as StartValue - targetValue / daysToEnd this will be used to calculate if you are on track or not
 The goal progress is form 0 to 100. calculated  CurrentValue/TargetValue.
 
-
 ## Activity page
 
 On the activity page you can add activities that will count towards your activity and calories balance. The calories are estimated using intensity and duration, however they are not used utilized beyond sending the data to the AI assistant who will summarize them.
 
 *Bug? There is a date field, and currently you are able to add activities into the future, lets say for planning.
 
-##  Physical Progress page
+## Physical Progress page
 
 Here you are prompted to enter you physical metrics that should be measured in the real world. like weight and body measures. For any true results real life measures should be used any dummy data or wrong entries might affect the result or give unwanted errors.
 
@@ -250,12 +259,12 @@ On the restrictions page you can add restrictions that will be taken into accoun
 TODO: make the restrictions have a category also for better understanding
 example:
 
-` "restrictions": [
+`"restrictions": [
     "gluten",
     "running",
     "afternoon",
   ]`
 
-# Summary
+## Summary
 
-If there are any unknown bugs or any issues please contact hsoosaar@gmail.com with the description of your issue, or why not prase if praise is due.
+If there are any unknown bugs or any issues please contact <hsoosaar@gmail.com> with the description of your issue, or why not prase if praise is due.

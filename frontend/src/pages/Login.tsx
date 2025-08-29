@@ -101,27 +101,31 @@ const Login: React.FC = () => {
           onDismiss={() => setSuccessMessage("")}
         />
         {!tempToken ? (
-          <form onSubmit={handleLogin}>
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            <button type="submit">Login</button>
-          </form>
+          <>
+            <form onSubmit={handleLogin}>
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+              <label htmlFor="password">Password</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+
+              <button type="submit">Login</button>
+            </form>
+            <button onClick={handleUpdatePassword}>Forgot Password </button>
+          </>
         ) : (
           <div>
             {mfaUri && (
@@ -144,10 +148,8 @@ const Login: React.FC = () => {
         <GoogleRegisterButton />
         <DiscordRegisterButton />
         <div className="vertical-container">
-          <button onClick={handleUpdatePassword}>Forgot Password </button>
           <Link to="/register">Not a user Register an Account</Link>
         </div>
-        )
       </div>
       <Modal
         modalIsOpen={isModalOpen}

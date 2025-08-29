@@ -64,6 +64,16 @@ nav a:hover {
   padding: 1px;
 }
 
+.horizontal-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 1rem;
+  width: 100%;
+  padding: 1px;
+}
+
 .login-container {
   border: 1px solid #2e2e2e;
   border-radius: 30px;
@@ -71,7 +81,14 @@ nav a:hover {
   background-color: #f9faf9;
   width: 100%;
   max-width: 400px;
-  margin: auto;
+  margin-top: 20px;
+}
+
+.login-container button {
+  align-self: center;
+}
+.login-container a {
+  align-self: center;
 }
 
 .register-container {
@@ -85,8 +102,16 @@ nav a:hover {
 }
 
 .header-menu {
+  display: flex;
+  align-items: center;
   background-color: #a8caba;
   width: 100%;
+  padding: 0.5rem 1rem;
+  box-sizing: border-box;
+}
+
+.header-menu .spacer {
+  flex: 1;
 }
 
 .card-container {

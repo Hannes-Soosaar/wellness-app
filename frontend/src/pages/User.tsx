@@ -91,34 +91,43 @@ const User: React.FC = () => {
               Welcome {user.firstName} {user.lastName}
             </div>
           ) : (
-            <div> Loading user... </div>
+            <div> Welcome! </div>
           )}
         </div>
 
         <div>
           {" "}
           {dashboard ? (
-            <div>
-              <p>Dashboard Data:</p>
-              <p>Wellness Score: {dashboard.wellnessScore}</p>
-              <p>BMI: {dashboard.BMI}</p>
-              <p>Body fat:{dashboard.fatPercentage} %</p>
-              <div>
+            <div className="horizontal-container">
+              <details>
+                {" "}
+                <summary>My profile</summary>
+                <p>BMI: {dashboard.BMI}</p>
+                <p>Body fat:{dashboard.fatPercentage} %</p>
+                <p>Weight: {dashboard.currentWeight} kg</p>
+              </details>
+              <details>
+                {" "}
+                <summary>My progress</summary>
+                <p>Goal Progress: {dashboard.goalProgress} %</p>
+                <p>Wellness Score: {dashboard.wellnessScore}</p>
+              </details>
+              <details>
+                {" "}
+                <summary>My goal</summary>
                 <p>Goal: {dashboard.goal}</p>
                 <p>Current Progress : {dashboard.goalCurrentValue}</p>
                 <p>Goal Start Value : {dashboard.goalStartValue}</p>
                 <p>Goal Target Value : {dashboard.goalTargetValue}</p>
-              </div>
-
-              <div>
-                <p>Current Weight: {dashboard.currentWeight} kg</p>
                 <p>Goal Progress: {dashboard.goalProgress} %</p>
-              </div>
-              <p>...</p>
+              </details>
             </div>
           ) : (
             <>
-              <p>Loading ...</p>
+              <p>
+                Please fill in your profile, complete your personal assessment
+                and set a goal.
+              </p>
               <Loader />
             </>
           )}

@@ -142,24 +142,30 @@ DONE: Dashboard loads placeholder UI when data is being fetched //very basic tex
 
 //BUGS
 
+priority High 
+DONE: can only use one method of logon, if PW is set, one can logon with PW if registered with google of Discord
+
+priority medium
+TODO: handle refreshToken expire and reload grasefully when accessToken expires
 TODO: full reload on AccessToke update is require, touch home for quick fix.
-TODO: Divide the header menu such that home is on the left and Login/Logout Register is on the right 
-TODO: Link terms and conditions to the register pager 
-TODO: if there is no name yet, just display Welcome!
-TODO: Register retains values entered, if the T&C is accepted
-TODO: can only use one method of logon, if PW is set, one can logon with PW if registered with google of Discord
-TODO: user Name does not render on the welcome screen when profile update is done
-TODO: Error on userMeal
-TODO: Progress on update with same date 500  as there is uniqe on date, it needs to overwrite on conflict
-DONE: logout
-DONE: error messages component
-DONE: password change re-rout + logout
+
 TODO: CHECK: does not auto update the User Profile and Dashboard data.
-DONE: password rest token has been compromised some how // changed BE token key, probably that messed with the update
 TODO: Have more than one assessment and get the latest so you can have a history
 TODO: Load goal value when a goal is selected
-TODO: handle refreshToken expire and reload grasefully when accessToken expires
+
+?? TODO: Progress on update with same date 500  as there is uniqe on date, it needs to overwrite on conflict
+
+priority low
+TODO: Password reset Modal design
+DONE: Divide the header menu such that home is on the left and Login/Logout Register is on the right 
+DONE: Register retains values entered, if the T&C is accepted
+DONE: user Name does not render on the welcome screen when profile update is done
+DONE: Error on userMeal // Disabled for now
 TODO: Minutes restrictions are not understandable for the AI
+
+// DONE
+DONE: Link terms and conditions to the register pager 
+DONE: password rest token has been compromised some how // changed BE token key, probably that messed with the update
 
 
 TODO: Unify color schema
@@ -190,8 +196,8 @@ Extra
 Quality of AI-generated health insights and progress evaluations during testing
 Insights and evaluations generated are accurate, relevant, actionable
 Relevance and practicality of AI-generated weekly and monthly health summaries and recommendations
-System's handling of AI service limitations during testing (rate limits, availability)
-Student has implemented additional technologies, security enhancements and/or features beyond the core requirements
+Expalin what and how has been done - System's handling of AI service limitations during testing (rate limits, availability)
+ I belive I have added extra- Student has implemented additional technologies, security enhancements and/or features beyond the core requirements
 
 
 //CORNERS 
