@@ -20,6 +20,8 @@ import {
 } from "recharts";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import qs from "qs";
+import { stringify } from "qs";
 
 const ProgressHistory: React.FC = () => {
   type ViewMode = "measures" | "weight" | "physical" | "goal";
@@ -53,7 +55,11 @@ const ProgressHistory: React.FC = () => {
         setLoading(true);
         const data = await api.get<ResponseData<ProgressDataPoint[]>>(
           "api/progress/history",
-          { params: requestParams }
+          {
+            params: requestParams,
+            paramsSerializer: (params) =>
+              qs.stringify(params, { arrayFormat: "repeat" }),
+          }
         );
         setProgress(data.data?.data || []);
         if (data.data.success) {
@@ -115,7 +121,7 @@ const ProgressHistory: React.FC = () => {
   if (loading)
     return (
       <>
-        <p>Loading activity history...</p>
+        <p>Loading progress history...</p>
         <Loader />
       </>
     );

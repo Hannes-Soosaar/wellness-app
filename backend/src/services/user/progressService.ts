@@ -140,25 +140,13 @@ export const getUserProgressHistory = async (
 
   if (params.granularity === "none") {
     query = {
-      text: `SELECT
-    user_id,
-    date,
-    body_fat_percentage,
-    wellness_score,
-    neck_circumference,
-    waist_circumference,
-    hip_circumference,
-    max_pushups,
-    max_walking_time,
-    weight,
-    calories_required,
-    bmi,
-    note,
-    created_at
-FROM profile_history
-WHERE user_id = $1
-  AND date BETWEEN $2 AND  $3
-ORDER BY date DESC;`,
+      text: `
+      SELECT *
+      FROM profile_history
+      WHERE user_id = $1
+        AND date BETWEEN $2 AND $3
+      ORDER BY date DESC;
+    `,
       values: [
         userId, //1
         fromStr, //2
@@ -167,21 +155,25 @@ ORDER BY date DESC;`,
     };
   } else {
     query = {
-      text: `SELECT
-    ph.date,
-    ph.weight,
-    ph.bmi,
-    ph.body_fat_percentage,
-    ph.max_pushups,
-    ph.max_walking_time,
-    ph.neck_circumference,
-    ph.waist_circumference,
-    ph.hip_circumference,
-    ph.wellness_score
-FROM profile_history ph
-WHERE ph.user_id = $1
-  AND ph.date IN ($2, $3)
-ORDER BY ph.date DESC;`,
+      text: `
+      (
+        SELECT *
+        FROM profile_history
+        WHERE user_id = $1
+          AND date BETWEEN $2 AND $3
+        ORDER BY date ASC
+        LIMIT 1
+      )
+      UNION ALL
+      (
+        SELECT *
+        FROM profile_history
+        WHERE user_id = $1
+          AND date BETWEEN $2 AND $3
+        ORDER BY date DESC
+        LIMIT 1
+      );
+    `,
       values: [
         userId, //1
         fromStr, //2
@@ -189,6 +181,8 @@ ORDER BY ph.date DESC;`,
       ],
     };
   }
+
+  console.log("Executing query:", query);
 
   try {
     const result = await pool.query(query.text, query.values);
@@ -228,17 +222,32 @@ export const geRawUserProgressHistory = async (
   if (!userId) {
     throw new Error("User ID is required");
   }
-  // on year of data with 365 newest entries
+
   try {
     const result = await pool.query(
       `
-      SELECT weight, neck_circumference, waist_circumference, hip_circumference,max_pushups,max_walking_time, date, body_fat_percentage, BMI, wellness_score FROM profile_history
-      WHERE user_id = $1
-      AND date::date >= CURRENT_DATE - interval '365 days'
-      AND date::date < CURRENT_DATE
-      ORDER BY date DESC LIMIT 365`,
+SELECT 
+  weight,
+  neck_circumference,
+  waist_circumference,
+  hip_circumference,
+  max_pushups,
+  max_walking_time,
+  "date",
+  body_fat_percentage AS fat_percentage,
+  bmi,
+  wellness_score
+FROM profile_history
+WHERE user_id = $1
+ORDER BY "date" ASC;
+  `,
       [userId]
     );
+
+    //       AND "date"::date BETWEEN $2::date AND $3::date
+    // ORDER BY "date" DESC
+    // LIMIT 365;
+    console.log("Raw user progress history query result:", result);
 
     if (result.rows.length === 0) {
       throw new Error("No progress history found for the user");

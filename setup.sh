@@ -39,7 +39,34 @@ echo "Your current Docker version: $(docker --version 2>/dev/null || echo "Not i
 read -p "Do you want Install/Update Docker? (y/n): " docker_answer
 if [[ "$docker_answer" =~ ^[Yy]$ ]]; then
     echo "Continuing..."
-    sudo apt install docker.io
+# 1. Remove old versions
+sudo apt-get remove docker docker-engine docker.io containerd runc
+
+# 2. Update apt
+sudo apt-get update
+
+# 3. Install dependencies
+sudo apt-get install \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release
+
+# 4. Add Docker’s official GPG key
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+# 5. Set up the repository
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# 6. Install Docker Engine
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+# 7. Verify installation
+docker --version
 else
     echo "Exiting..."
 fi
